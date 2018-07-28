@@ -24,6 +24,12 @@ highlighting while in insert mode.
 
 ## Configuration
 
+Illuminate will delay before highlighting, this is not lag, it is to avoid the jarring experience of things illuminating too fast. This can be controlled with the `updatetime` (which is default to 4000 milliseconds) option as follows (in your vimrc):
+
+```
+set updatetime = 250
+```
+
 By default illuminate will highlight all words the cursor passes over, but
 for many languages, you will only want to highlight certain
 highlight-groups. You can define which highlight groups you want the
@@ -44,7 +50,7 @@ let g:Illuminate_ftblacklist = ['nerdtree']
 
 Lastly, by default the highlighting will be done with the hl-group cursorline
 since that is in my opinion the nicest. But it can be overriden using the
-following:
+following or something similar:
 ```
-hi link illuminatedWord cursorline
+hi illuminatedWord cterm=underline gui=underline
 ```
