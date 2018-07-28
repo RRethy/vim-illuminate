@@ -1,3 +1,8 @@
+" illuminate.vim - Vim plugin for illuminating other uses of current word
+" Last Change:	2018 July 27
+" Maintainer:	Adam P. Regasz-Rethy (RRethy) <rethy.spud@gmail.com>
+" Version: 0.1
+
 if exists('g:loaded_illuminate')
   finish
 endif
