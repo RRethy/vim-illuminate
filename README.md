@@ -1,6 +1,8 @@
 # vim-illuminate
 
-Vim plugin for selectively illuminating other uses of current word
+Vim plugin for selectively illuminating other uses of current word under the cursor
+
+![gif](https://media.giphy.com/media/ZO7QtQWoBP2TZ9mkXq/giphy.gif)
 
 ## Rational
 
@@ -22,14 +24,12 @@ highlighting while in insert mode.
 
 ## Configuration
 
-By default |illuminate| will highlight all words the cursor passes over, but
+By default illuminate will highlight all words the cursor passes over, but
 for many languages, you will only want to highlight certain
 highlight-groups. You can define which highlight groups you want the
-illuminating to apply to. This can be done with a dict mapping a |filetype| to
-a list of highlight-groups in your vimrc.
+illuminating to apply to. This can be done with a dict mapping a filetype to
+a list of highlight-groups in your vimrc such as:
 ```
-For example:
-
 let g:Illuminate_ftHighlightGroups = {
   \ 'vim': ['vimVar', 'vimFBVar', 'vimString', 'vimLineComment',
   \         'vimFuncName', 'vimFunction', 'vimUserFunc', 'vimFunc']
@@ -37,10 +37,8 @@ let g:Illuminate_ftHighlightGroups = {
 ```
 
 
-illuminate can also be disabled for various |filetypes|.
+illuminate can also be disabled for various filetypes using the following:
 ```
-For Example:
-
 let g:Illuminate_ftblacklist = ['nerdtree']
 ```
 
