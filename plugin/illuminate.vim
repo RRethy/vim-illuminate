@@ -68,7 +68,7 @@ fun! s:Handle_removal_autocmds()
   endif
 endf
 
-fun! g:Illuminate(timer) abort
+fun! g:Illuminate(...) abort
   if !s:enabled
     return
   endif
