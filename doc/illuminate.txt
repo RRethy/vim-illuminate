@@ -21,7 +21,6 @@ highlighting while in insert mode.
 CONFIGURATION                                   *illuminate-configuration*
 ================================================================
 
-
 By default |illuminate| will highlight all words the cursor passes over, but
 for many languages, you will only want to highlight certain
 |highlight-groups|. You can define which highlight groups you want the
@@ -48,5 +47,15 @@ since that is in my opinion the nicest. But it can be overriden using the
 following:
 >
     hi link illuminatedWord cursorline
+
+COMMANDS                                             *illuminate-commands*
+=========================================================================
+
+ ----------------------+-------------------------------------------------
+ Command               | List                                                                  ~
+ ----------------------+-------------------------------------------------
+  `DisableIllumination`  | Disable the illumination
+  `EnableIllumination`   | Enable the previously disabled illumination
+ ----------------------+-------------------------------------------------
 
 vim:tw=78:ts=8:ft=help:norl:
