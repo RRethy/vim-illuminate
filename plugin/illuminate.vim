@@ -1,5 +1,3 @@
-hi link illuminatedWord cursorline
-
 if exists('g:loaded_illuminate')
   finish
 endif
