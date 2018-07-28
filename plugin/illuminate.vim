@@ -33,7 +33,7 @@ endif
 " }}}
 
 " Some state variables {{{
-let s:match_id = 5
+let s:match_id = 1867
 let s:priority = 10
 let s:previous_match = ''
 let s:enabled = 1
