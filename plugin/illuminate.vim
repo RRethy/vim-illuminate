@@ -4,25 +4,51 @@ endif
 
 let g:loaded_illuminate = 1
 
+" Highlight group(s) {{{
 if !hlexists('illuminatedWord')
   hi link illuminatedWord cursorline
 endif
+" }}}
 
+" Autocommands {{{
 if has("autocmd")
   augroup illuminated_autocmd
     autocmd!
-    autocmd CursorMoved,WinLeave,BufLeave,InsertEnter * if s:Should_illuminate_file() | call s:MaybeRemove_illumination() | endif
-    autocmd WinLeave,BufLeave,InsertEnter * if s:Should_illuminate_file() | call s:Remove_illumination() | endif
-    autocmd CursorHold,InsertLeave * if s:Should_illuminate_file() | call s:Illuminate() | endif
+    autocmd CursorMoved,WinLeave,BufLeave,InsertEnter *
+          \ if illuminatehelper#should_illuminate_file()
+          \ |   call s:MaybeRemove_illumination()
+          \ | endif
+    autocmd WinLeave,BufLeave,InsertEnter *
+          \ if illuminatehelper#should_illuminate_file()
+          \ |   call s:Remove_illumination()
+          \ | endif
+    autocmd CursorHold,InsertLeave *
+          \ if illuminatehelper#should_illuminate_file()
+          \ |   call s:Illuminate()
+          \ | endif
   augroup END
 endif
+" }}}
 
-command RemoveIllumination call s:Remove_illumination()
-
+" Some state variables {{{
 let s:match_ids = -1
 let s:previous_match = ''
+let s:enabled = 1
+" }}}
 
+" Commands {{{
+command! -nargs=0 DisableIllumination let s:enabled = 0
+      \ | call s:Remove_illumination()
+command! -nargs=0 EnableIllumination let s:enabled = 1
+      \ | if illuminatehelper#should_illuminate_file() | call s:Illuminate() | endif
+" }}} Commands:
+
+" All the messy functions {{{
 fun! s:Illuminate() abort
+  if !s:enabled
+    return
+  endif
+
   call s:Remove_illumination()
 
   let l:matched_word = s:Cur_word()
@@ -63,12 +89,6 @@ fun! s:Remove_illumination()
     let s:match_ids = -1
   endif
 endf
+" }}}
 
-" TODO: This could be in autoload
-fun! s:Should_illuminate_file()
-  if !exists('g:Illuminate_ftblacklist')
-    let g:Illuminate_ftblacklist=['']
-  endif
-
-  return index(g:Illuminate_ftblacklist, &filetype) < 0
-endf
+" vim: foldlevel=0 foldmethod=marker
