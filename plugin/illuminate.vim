@@ -1,7 +1,12 @@
 if exists('g:loaded_illuminate')
   finish
 endif
+
 let g:loaded_illuminate = 1
+
+if !hlexists('illuminatedWord')
+  hi link illuminatedWord cursorline
+endif
 
 if has("autocmd")
   augroup illuminated_autocmd
