@@ -31,9 +31,9 @@ illuminating to apply to. This can be done with a dict mapping a filetype to
 a list of highlight-groups in your vimrc such as:
 ```
 let g:Illuminate_ftHighlightGroups = {
-  \ 'vim': ['vimVar', 'vimFBVar', 'vimString', 'vimLineComment',
-  \         'vimFuncName', 'vimFunction', 'vimUserFunc', 'vimFunc']
-  \ }
+      \ 'vim': ['vimVar', 'vimString', 'vimLineComment',
+      \         'vimFuncName', 'vimFunction', 'vimUserFunc', 'vimFunc']
+      \ }
 ```
 
 

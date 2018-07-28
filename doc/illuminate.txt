@@ -31,7 +31,7 @@ a list of |highlight-groups| in your vimrc.
     For example:
 
     let g:Illuminate_ftHighlightGroups = {
-          \ 'vim': ['vimVar', 'vimFBVar', 'vimString', 'vimLineComment',
+          \ 'vim': ['vimVar', 'vimString', 'vimLineComment',
           \         'vimFuncName', 'vimFunction', 'vimUserFunc', 'vimFunc']
           \ }
 

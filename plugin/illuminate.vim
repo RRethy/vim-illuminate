@@ -59,7 +59,7 @@ fun! s:Illuminate() abort
   let l:matched_word = s:Cur_word()
   if l:matched_word !~ @/ || !&hls || !v:hlsearch
     if exists('g:Illuminate_ftHighlightGroups') && has_key(g:Illuminate_ftHighlightGroups, &ft)
-      if index(g:Illuminate_ftHighlightGroups[&ft], synIDattr(synID(line('.'), col('.'), 1), "name")) >= 0
+      if index(g:Illuminate_ftHighlightGroups[&ft], synIDattr(synIDtrans(synID(line("."), col("."), 1)), "name")) >= 0
         let s:match_ids = matchadd("illuminatedWord", '\V' . l:matched_word)
         let s:previous_match = l:matched_word
       endif
