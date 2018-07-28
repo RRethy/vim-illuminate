@@ -24,10 +24,11 @@ highlighting while in insert mode.
 
 ## Configuration
 
-Illuminate will delay before highlighting, this is not lag, it is to avoid the jarring experience of things illuminating too fast. This can be controlled with the `updatetime` (which is default to 4000 milliseconds) option as follows (in your vimrc):
+Illuminate will delay before highlighting, this is not lag, it is to avoid the jarring experience of things illuminating too fast. This can be controlled with `g:Illuminate_delay` (which is default to 250 milliseconds) as follows (in your vimrc):
 
 ```
-set updatetime = 250
+" Time in millis (default 250)
+let g:Illuminate_delay = 250
 ```
 
 By default illuminate will highlight all words the cursor passes over, but
