@@ -58,7 +58,14 @@ fun! s:Handle_cursor_moved()
     if exists('s:timer_id') && s:timer_id > -1
       call timer_stop(s:timer_id)
     endif
-    let s:timer_id = timer_start(g:Illuminate_delay, 'g:Illuminate')
+
+    " Only use timer if it's needed
+    if g:Illuminate_delay > 0
+      let s:timer_id = timer_start(g:Illuminate_delay, 'g:Illuminate')
+    else
+      let s:timer_id = -1
+      call g:Illuminate()
+    endif
   endif
 endf
 
