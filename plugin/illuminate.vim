@@ -1,7 +1,7 @@
 " illuminate.vim - Vim plugin for selectively illuminating other uses of current word
-" Last Change:	2018 July 27
+" Last Change:	2018 July 28
 " Maintainer:	Adam P. Regasz-Rethy (RRethy) <rethy.spud@gmail.com>
-" Version: 0.1
+" Version: 0.2
 
 if exists('g:loaded_illuminate')
   finish
