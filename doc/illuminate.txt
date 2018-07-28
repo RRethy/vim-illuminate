@@ -42,11 +42,15 @@ a list of |highlight-groups| in your vimrc.
     let g:Illuminate_ftblacklist = ['nerdtree']
 
 
-Lastly, by default the highlighting will be done with the hl-group cursorline
+By default the highlighting will be done with the hl-group cursorline
 since that is in my opinion the nicest. But it can be overriden using the
 following:
 >
     hi link illuminatedWord cursorline
+
+
+To change the delay before the illumination shows up is controlled by the
+|`updatetime`| option.
 
 COMMANDS                                             *illuminate-commands*
 =========================================================================
