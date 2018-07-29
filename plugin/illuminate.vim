@@ -1,5 +1,5 @@
 " illuminate.vim - Vim plugin for selectively illuminating other uses of current word
-" Last Change:	2018 July 28
+" Last Change:	2018 July 29
 " Maintainer:	Adam P. Regasz-Rethy (RRethy) <rethy.spud@gmail.com>
 " Version: 0.2
 
@@ -53,24 +53,26 @@ command! -nargs=0 EnableIllumination :IlluminationEnable
 
 " All the messy functions {{{
 fun! s:Handle_cursor_moved()
+  if !illuminatehelper#should_illuminate_file()
+    return
+  endif
+
   if !has('timers')
     call g:Illuminate()
     return
   endif
 
-  if illuminatehelper#should_illuminate_file()
-    call s:MaybeRemove_illumination()
-    if exists('s:timer_id') && s:timer_id > -1
-      call timer_stop(s:timer_id)
-    endif
+  call s:MaybeRemove_illumination()
+  if exists('s:timer_id') && s:timer_id > -1
+    call timer_stop(s:timer_id)
+  endif
 
-    " Only use timer if it's needed
-    if g:Illuminate_delay > 0
-      let s:timer_id = timer_start(g:Illuminate_delay, 'g:Illuminate')
-    else
-      let s:timer_id = -1
-      call g:Illuminate()
-    endif
+  " Only use timer if it's needed
+  if g:Illuminate_delay > 0
+    let s:timer_id = timer_start(g:Illuminate_delay, 'g:Illuminate')
+  else
+    let s:timer_id = -1
+    call g:Illuminate()
   endif
 endf
 
