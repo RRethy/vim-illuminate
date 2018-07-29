@@ -40,10 +40,14 @@ let s:enabled = 1
 " }}}
 
 " Commands {{{
-command! -nargs=0 DisableIllumination let s:enabled = 0
-      \ | call s:Remove_illumination()
-command! -nargs=0 EnableIllumination let s:enabled = 1
-      \ | if illuminatehelper#should_illuminate_file() | call g:Illuminate() | endif
+command! -nargs=0 IlluminationDisable let s:enabled = 0
+      \| call s:Remove_illumination()
+command! -nargs=0 IlluminationEnable let s:enabled = 1
+      \| if illuminatehelper#should_illuminate_file() | call g:Illuminate() | endif
+
+" Keep these for backwards compatibility
+command! -nargs=0 DisableIllumination :IlluminationDisable
+command! -nargs=0 EnableIllumination :IlluminationEnable
 " }}} Commands:
 
 " All the messy functions {{{
