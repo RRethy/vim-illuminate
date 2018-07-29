@@ -32,8 +32,10 @@ let g:Illuminate_delay = 250
 
 By default illuminate will highlight all words the cursor passes over, but
 for many languages, you will only want to highlight certain
-highlight-groups. You can define which highlight groups you want the
-illuminating to apply to. This can be done with a dict mapping a filetype to
+highlight-groups (you can determine the highlight-group of a symbol under
+your cursor with `:echo synIDattr(synIDtrans(synID(line("."), col("."), 1)), "name")`).
+You can define which highlight groups you want the illuminating to apply to.
+This can be done with a dict mapping a filetype to
 a list of highlight-groups in your vimrc such as:
 ```
 let g:Illuminate_ftHighlightGroups = {
