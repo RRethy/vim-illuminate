@@ -1,63 +1,63 @@
-*illuminate.txt*  Vim plugin for selectively illuminating other uses of current word
+*illuminate.txt*  Vim plugin for selectively illuminating other uses of
+                current word
 
 Author:  Adam P. Regasz-Rethy (RRethy) <rethy.spud@gmail.com>
 License: Same terms as Vim itself (see |license|)
 
-INTRODUCTION                                    *illuminate*
-=======================================================
+INTRODUCTION                                                     *illuminate*
+=============================================================================
 
 This plugin is a tool for illuminating the other uses of the current word
 under the cursor.
 
 |illuminate| will by default highlight all uses of the word under the cursor,
-but will a little bit of configuration it can easily only highlight what you want
-it to highlight based on the file type and |highlight-groups|.
+but will a little bit of configuration it can easily only highlight what you
+want it to highlight based on the filetype and highlight-groups.
 
-|illuminate| will also do a few other nice such as delaying the highlight for
-|'updatetime'|, it will interact nicely with search highlighting, jumping
-around between buffers, jumping around between windows, and turning off
-highlighting while in insert mode.
+|illuminate| will also do a few other niceties such as delaying the highlight
+for a user-defined amount of time based on `g:Illuminate_delay` (by default
+250), it will interact nicely with search highlighting, jumping around
+between buffers, jumping around between windows, and won't illuminate
+while in insert mode.
 
-CONFIGURATION                                   *illuminate-configuration*
-================================================================
 
-Illuminate will delay before highlighting, this is not lag, it is to avoid
-the jarring experience of things illuminating too fast. This can be controlled
-with the following:
+CONFIGURATION                                      *illuminate-configuration*
+=============================================================================
+
+|illuminate| will delay before highlighting, this is not lag, it is to avoid
+the jarring experience of things illuminating too fast. This can be
+controlled with `g:Illuminate_delay` (which is default to 250 milliseconds):
 >
     " Time in millis (default 250)
     let g:Illuminate_delay = 250
 
 By default |illuminate| will highlight all words the cursor passes over, but
-for many languages, you will only want to highlight certain
-|highlight-groups|. You can define which highlight groups you want the
-illuminating to apply to. This can be done with a dict mapping a |filetype| to
-a list of |highlight-groups| in your vimrc.
->
-    For example:
+for many languages, you will only want to highlight certain |highlight-groups|
+(you can determine the highlight-group of a symbol under your cursor with
+`:echo synIDattr(synIDtrans(synID(line("."), col("."), 1)), "name")`).
 
+You can define which highlight groups you want the illuminating to apply to.
+This can be done with a dict mapping a filetype to a list of
+|highlight-groups| in your vimrc such as:
+>
     let g:Illuminate_ftHighlightGroups = {
           \ 'vim': ['vimVar', 'vimString', 'vimLineComment',
           \         'vimFuncName', 'vimFunction', 'vimUserFunc', 'vimFunc']
           \ }
 
 
-|illuminate| can also be disabled for various |filetypes|.
+|illuminate| can also be disabled for various |filetypes| using
+g:Illuminate_ftblacklist.
 >
-    For Example:
-
     let g:Illuminate_ftblacklist = ['nerdtree']
 
 
-By default the highlighting will be done with the hl-group cursorline
-since that is in my opinion the nicest. But it can be overriden using the
-following:
+Lastly, by default the highlighting will be done with the |highlight-group|
+`cursorline` since that is in my opinion the nicest. But it can be overriden
+using the following or something similar (this will under the words):
 >
-    hi link illuminatedWord cursorline
+    hi illuminatedWord cterm=underline gui=underline
 
-
-To change the delay before the illumination shows up is controlled by the
-|`updatetime`| option.
 
 COMMANDS                                             *illuminate-commands*
 =========================================================================
@@ -68,5 +68,24 @@ COMMANDS                                             *illuminate-commands*
   `DisableIllumination`  | Disable the illumination
   `EnableIllumination`   | Enable the previously disabled illumination
  ----------------------+-------------------------------------------------
+
+
+FAQ                                                        *illuminate-faq*
+=============================================================================
+
+Q: I am seeing by default an underline for the matched words
+
+A: The reason for the underline is that the highlighting is done with
+   `cursorline` by default, which defaults to an underline. Try this:
+>
+    :hi link illuminatedWord Visual.
+
+Q: Certain words get highlighted when my cursor is in the whitespace before
+   them
+
+A: This is since it will look for the first word adjacent to the cursor.
+   The same behaviour can be seen if you try `*` while in the same whitespace
+   before the word.
+
 
 vim:tw=78:ts=8:ft=help:norl:
