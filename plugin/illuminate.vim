@@ -24,7 +24,8 @@ if has("autocmd")
   augroup illuminated_autocmd
     autocmd!
     autocmd CursorMoved,InsertLeave * call s:Handle_cursor_moved()
-    autocmd WinLeave,BufLeave,InsertEnter * call s:Handle_removal_autocmds()
+    autocmd WinLeave,BufLeave * call s:Handle_removal_autocmds()
+    autocmd InsertEnter * call s:Handle_insert_entered()
   augroup END
 else
   echoerr 'Illuminate requires vim compiled with +autocmd'
@@ -76,6 +77,12 @@ endf
 fun! s:Handle_removal_autocmds()
   if illuminatehelper#should_illuminate_file()
     call s:MaybeRemove_illumination()
+  endif
+endf
+
+fun s:Handle_insert_entered()
+  if illuminatehelper#should_illuminate_file()
+    call s:Remove_illumination()
   endif
 endf
 
