@@ -17,10 +17,9 @@ illuminate will by default highlight all uses of the word under the cursor,
 but will a little bit of configuration it can easily only highlight what you want
 it to highlight based on the file type and highlight-groups.
 
-illuminate will also do a few other nice such as delaying the highlight for
-'updatetime', it will interact nicely with search highlighting, jumping
-around between buffers, jumping around between windows, and turning off
-highlighting while in insert mode.
+illuminate will also do a few other niceties such as delaying the highlight for
+'updatetime', it also will interact nicely with search highlighting, jumping
+around between buffers, jumping around between windows, and won't illuminate while in insert mode.
 
 ## Configuration
 
