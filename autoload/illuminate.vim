@@ -58,6 +58,14 @@ fun illuminate#on_insert_entered() abort
   endif
 endf
 
+fun! illuminate#toggle_illumination() abort
+  if (!s:enabled)
+      call illuminate#enable_illumination()
+  else
+      call illuminate#disable_illumination()
+  endif
+endf
+
 fun! illuminate#disable_illumination() abort
   let s:enabled = 0
   call s:remove_illumination()
