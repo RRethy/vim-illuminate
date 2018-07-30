@@ -1,17 +1,12 @@
 " illuminate.vim - Vim plugin for selectively illuminating other uses of current word
-" Last Change:	2018 July 29
 " Maintainer:	Adam P. Regasz-Rethy (RRethy) <rethy.spud@gmail.com>
-" Version: 0.2
+" Version: 0.3
 
 if exists('g:loaded_illuminate')
   finish
 endif
 
 let g:loaded_illuminate = 1
-
-if !exists('g:Illuminate_delay')
-  let g:Illuminate_delay = 250
-endif
 
 " Highlight group(s) {{{
 if !hlexists('illuminatedWord')
@@ -23,9 +18,9 @@ endif
 if has("autocmd")
   augroup illuminated_autocmd
     autocmd!
-    autocmd CursorMoved,InsertLeave * call s:Handle_cursor_moved()
-    autocmd WinLeave,BufLeave * call s:Handle_removal_autocmds()
-    autocmd InsertEnter * call s:Handle_insert_entered()
+    autocmd CursorMoved,InsertLeave * call illuminate#on_cursor_moved()
+    autocmd WinLeave,BufLeave * call illuminate#on_leaving_autocmds()
+    autocmd InsertEnter * call illuminate#on_insert_entered()
   augroup END
 else
   echoerr 'Illuminate requires vim compiled with +autocmd'
@@ -33,105 +28,13 @@ else
 endif
 " }}}
 
-" Some state variables {{{
-let s:match_id = 1867
-let s:priority = 10
-let s:previous_match = ''
-let s:enabled = 1
-" }}}
-
 " Commands {{{
-command! -nargs=0 IlluminationDisable let s:enabled = 0
-      \| call s:Remove_illumination()
-command! -nargs=0 IlluminationEnable let s:enabled = 1
-      \| if illuminatehelper#should_illuminate_file() | call g:Illuminate() | endif
+command! -nargs=0 IlluminationDisable call illuminate#disable_illumination()
+command! -nargs=0 IlluminationEnable call illuminate#enable_illumination()
 
 " Keep these for backwards compatibility
 command! -nargs=0 DisableIllumination :IlluminationDisable
 command! -nargs=0 EnableIllumination :IlluminationEnable
 " }}} Commands:
-
-" All the messy functions {{{
-fun! s:Handle_cursor_moved()
-  if !illuminatehelper#should_illuminate_file()
-    return
-  endif
-
-  if (s:previous_match != s:Get_cur_word())
-    call s:Remove_illumination()
-  else
-    return
-  endif
-
-  if !has('timers')
-    call g:Illuminate()
-    return
-  endif
-
-  if exists('s:timer_id') && s:timer_id > -1
-    call timer_stop(s:timer_id)
-  endif
-
-  " Only use timer if it's needed
-  if g:Illuminate_delay > 0
-    let s:timer_id = timer_start(g:Illuminate_delay, 'g:Illuminate')
-  else
-    let s:timer_id = -1
-    call g:Illuminate()
-  endif
-endf
-
-fun! s:Handle_removal_autocmds()
-  if illuminatehelper#should_illuminate_file()
-    call s:Remove_illumination()
-  endif
-endf
-
-fun s:Handle_insert_entered()
-  if illuminatehelper#should_illuminate_file()
-    call s:Remove_illumination()
-  endif
-endf
-
-fun! g:Illuminate(...) abort
-  if !s:enabled
-    return
-  endif
-
-  call s:Remove_illumination()
-
-  let l:matched_word = s:Get_cur_word()
-  if l:matched_word !~ @/ || !&hls || !v:hlsearch
-    if exists('g:Illuminate_ftHighlightGroups') && has_key(g:Illuminate_ftHighlightGroups, &ft)
-      if index(g:Illuminate_ftHighlightGroups[&ft], synIDattr(synIDtrans(synID(line("."), col("."), 1)), "name")) >= 0
-        call s:Match_word(l:matched_word)
-      endif
-    else
-      call s:Match_word(l:matched_word)
-    endif
-  endif
-endf
-
-fun! s:Match_word(word)
-  silent! call matchadd("illuminatedWord", '\V' . a:word, s:priority, s:match_id)
-  let s:previous_match = a:word
-endf
-
-fun! s:Get_cur_word()
-  return '\<' . expand("<cword>") . '\>'
-endf
-
-fun! s:Remove_illumination()
-  if has('timers') && exists('s:timer_id') && s:timer_id > -1
-    call timer_stop(s:timer_id)
-    let s:timer_id = -1
-  endif
-
-  try
-    call matchdelete(s:match_id)
-  catch /E803/
-  endtry
-endf
-" }}}
 
 " vim: foldlevel=0 foldmethod=marker
