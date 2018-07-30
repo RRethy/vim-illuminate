@@ -4,7 +4,7 @@
 
 " Some local variables {{{
 let s:match_id = 1867
-let s:priority = 10
+let s:priority = -1
 let s:previous_match = ''
 let s:enabled = 1
 " }}}
@@ -79,15 +79,12 @@ fun! s:illuminate(...) abort
 
   call s:remove_illumination()
 
-  let l:matched_word = s:get_cur_word()
-  if l:matched_word !~ @/ || !&hls || !v:hlsearch
-    if exists('g:Illuminate_ftHighlightGroups') && has_key(g:Illuminate_ftHighlightGroups, &ft)
-      if index(g:Illuminate_ftHighlightGroups[&ft], synIDattr(synIDtrans(synID(line("."), col("."), 1)), "name")) >= 0
-        call s:match_word(l:matched_word)
-      endif
-    else
-      call s:match_word(l:matched_word)
+  if exists('g:Illuminate_ftHighlightGroups') && has_key(g:Illuminate_ftHighlightGroups, &ft)
+    if index(g:Illuminate_ftHighlightGroups[&ft], synIDattr(synIDtrans(synID(line("."), col("."), 1)), "name")) >= 0
+      call s:match_word(s:get_cur_word())
     endif
+  else
+    call s:match_word(s:get_cur_word())
   endif
 endf
 
