@@ -57,12 +57,17 @@ fun! s:Handle_cursor_moved()
     return
   endif
 
+  if (s:previous_match != s:Get_cur_word())
+    call s:Remove_illumination()
+  else
+    return
+  endif
+
   if !has('timers')
     call g:Illuminate()
     return
   endif
 
-  call s:MaybeRemove_illumination()
   if exists('s:timer_id') && s:timer_id > -1
     call timer_stop(s:timer_id)
   endif
@@ -78,7 +83,7 @@ endf
 
 fun! s:Handle_removal_autocmds()
   if illuminatehelper#should_illuminate_file()
-    call s:MaybeRemove_illumination()
+    call s:Remove_illumination()
   endif
 endf
 
@@ -95,7 +100,7 @@ fun! g:Illuminate(...) abort
 
   call s:Remove_illumination()
 
-  let l:matched_word = s:Cur_word()
+  let l:matched_word = s:Get_cur_word()
   if l:matched_word !~ @/ || !&hls || !v:hlsearch
     if exists('g:Illuminate_ftHighlightGroups') && has_key(g:Illuminate_ftHighlightGroups, &ft)
       if index(g:Illuminate_ftHighlightGroups[&ft], synIDattr(synIDtrans(synID(line("."), col("."), 1)), "name")) >= 0
@@ -112,14 +117,8 @@ fun! s:Match_word(word)
   let s:previous_match = a:word
 endf
 
-fun! s:Cur_word()
+fun! s:Get_cur_word()
   return '\<' . expand("<cword>") . '\>'
-endf
-
-fun! s:MaybeRemove_illumination()
-  if (s:previous_match != s:Cur_word())
-    call s:Remove_illumination()
-  endif
 endf
 
 fun! s:Remove_illumination()
