@@ -94,7 +94,10 @@ fun! s:match_word(word) abort
 endf
 
 fun! s:get_cur_word() abort
-  return '\<' . expand("<cword>") . '\>'
+  let l:line = getline('.')
+  let l:col = col('.') - 1
+  let l:word = matchstr(l:line[:l:col], '\k*$') . matchstr(l:line[l:col:], '^\k*')[1:]
+  return '\<' . l:word . '\>'
 endf
 
 fun! s:remove_illumination() abort
