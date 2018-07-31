@@ -51,7 +51,3 @@ hi illuminatedWord cterm=underline gui=underline
 > I am seeing by default an underline for the matched words
 
 Try this: `hi link illuminatedWord Visual`. The reason for the underline is that the highlighting is done with `cursorline` by default, which defaults to an underline.
-
-> Certain words get highlighted when my cursor is in the whitespace before them
-
-This is since it will look for the first word adjacent to the cursor. The same behaviour can be seen if you try `*` while in the same whitespace before the word.
