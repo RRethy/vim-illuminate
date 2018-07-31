@@ -24,6 +24,12 @@ Illuminate will delay before highlighting, this is not lag, it is to avoid the j
 " Time in millis (default 250)
 let g:Illuminate_delay = 250
 ```
+Illuminate will by default highlight the word under the cursor to match the behaviour seen in Intellij and VSCode. However, to make it not highlight the word under the cursor, use the following:
+
+```
+" Don't highlight word under cursor (default: 1)
+let g:Illuminate_highlightUnderCursor = 0
+```
 
 By default illuminate will highlight all words the cursor passes over, but for many languages, you will only want to highlight certain highlight-groups (you can determine the highlight-group of a symbol under your cursor with `:echo synIDattr(synIDtrans(synID(line("."), col("."), 1)), "name")`).
 
