@@ -31,6 +31,13 @@ controlled with `g:Illuminate_delay` (which is default to 250 milliseconds):
     " Time in millis (default 250)
     let g:Illuminate_delay = 250
 
+|illuminate| will by default highlight the word under the cursor to match the
+behaviour seen in Intellij and VSCode. However, to make it not highlight the
+word under the cursor, use the following:
+>
+    " Don't highlight word under cursor (default: 1)
+    let g:Illuminate_highlightUnderCursor = 0
+
 By default |illuminate| will highlight all words the cursor passes over, but
 for many languages, you will only want to highlight certain |highlight-groups|
 (you can determine the highlight-group of a symbol under your cursor with

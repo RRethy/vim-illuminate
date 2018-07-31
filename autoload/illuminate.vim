@@ -1,6 +1,6 @@
 " illuminate.vim - Vim plugin for selectively illuminating other uses of current word
 " Maintainer:	Adam P. Regasz-Rethy (RRethy) <rethy.spud@gmail.com>
-" Version: 0.3
+" Version: 0.4
 
 " Some local variables {{{
 let s:match_id = 1867
@@ -94,9 +94,9 @@ endf
 
 fun! s:match_word(word) abort
   if g:Illuminate_highlightUnderCursor
-    silent! call matchadd("illuminatedWord", '\V\(\k\*\%#\k\*\)\@\!\&' . a:word, s:priority, s:match_id)
-  else
     silent! call matchadd("illuminatedWord", '\V' . a:word, s:priority, s:match_id)
+  else
+    silent! call matchadd("illuminatedWord", '\V\(\k\*\%#\k\*\)\@\!\&' . a:word, s:priority, s:match_id)
   endif
   let s:previous_match = a:word
 endf
