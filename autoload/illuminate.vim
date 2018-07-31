@@ -9,9 +9,13 @@ let s:previous_match = ''
 let s:enabled = 1
 " }}}
 
-" g:Illuminate_delay init {{{
+" Global variables init {{{
 if !exists('g:Illuminate_delay')
   let g:Illuminate_delay = 250
+endif
+
+if !exists('g:Illuminate_highlightUnderCursor')
+  let g:Illuminate_highlightUnderCursor = 1
 endif
 " }}}
 
@@ -89,7 +93,11 @@ fun! s:illuminate(...) abort
 endf
 
 fun! s:match_word(word) abort
-  silent! call matchadd("illuminatedWord", '\V' . a:word, s:priority, s:match_id)
+  if g:Illuminate_highlightUnderCursor
+    silent! call matchadd("illuminatedWord", '\V\(\k\*\%#\k\*\)\@\!\&' . a:word, s:priority, s:match_id)
+  else
+    silent! call matchadd("illuminatedWord", '\V' . a:word, s:priority, s:match_id)
+  endif
   let s:previous_match = a:word
 endf
 
@@ -97,7 +105,7 @@ fun! s:get_cur_word() abort
   let l:line = getline('.')
   let l:col = col('.') - 1
   let l:word = matchstr(l:line[:l:col], '\k*$') . matchstr(l:line[l:col:], '^\k*')[1:]
-  return '\<' . l:word . '\>'
+  return '\<' . escape(l:word, '/\?') . '\>'
 endf
 
 fun! s:remove_illumination() abort
