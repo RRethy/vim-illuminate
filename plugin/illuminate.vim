@@ -31,6 +31,7 @@ endif
 " Commands {{{
 command! -nargs=0 IlluminationDisable call illuminate#disable_illumination()
 command! -nargs=0 IlluminationEnable call illuminate#enable_illumination()
+command! -nargs=0 IlluminationToggle call illuminate#toggle_illumination()
 
 " Keep these for backwards compatibility
 command! -nargs=0 DisableIllumination :IlluminationDisable

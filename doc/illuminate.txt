@@ -74,6 +74,7 @@ COMMANDS                                             *illuminate-commands*
  ----------------------+-------------------------------------------------
   `IlluminationDisable`  | Disable the illumination
   `IlluminationEnable`   | Enable the previously disabled illumination
+  `IlluminationToggle`   | Toggle the illumination
  ----------------------+-------------------------------------------------
 
 
