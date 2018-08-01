@@ -31,7 +31,7 @@ fun! illuminate#on_cursor_moved() abort
     return
   endif
 
-  if !has('timers')
+  if !has('timers') || g:Illuminate_delay <= 0
     call s:illuminate()
     return
   endif
@@ -40,14 +40,7 @@ fun! illuminate#on_cursor_moved() abort
     call timer_stop(s:timer_id)
   endif
 
-  " Only use timer if it's needed
-  if g:Illuminate_delay > 0
-    let IlluminateFn = function('s:illuminate')
-    let s:timer_id = timer_start(g:Illuminate_delay, IlluminateFn)
-  else
-    let s:timer_id = -1
-    call s:illuminate()
-  endif
+  let s:timer_id = timer_start(g:Illuminate_delay, function('s:illuminate'))
 endf
 
 fun! illuminate#on_leaving_autocmds() abort
