@@ -10,13 +10,8 @@ let s:enabled = 1
 " }}}
 
 " Global variables init {{{
-if !exists('g:Illuminate_delay')
-  let g:Illuminate_delay = 250
-endif
-
-if !exists('g:Illuminate_highlightUnderCursor')
-  let g:Illuminate_highlightUnderCursor = 1
-endif
+let g:Illuminate_delay = get(g:, 'Illuminate_delay', 250)
+let g:Illuminate_highlightUnderCursor = get(g:, 'Illuminate_highlightUnderCursor', 1)
 " }}}
 
 " Exposed functions {{{
