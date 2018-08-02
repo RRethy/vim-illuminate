@@ -88,12 +88,5 @@ A: The reason for the underline is that the highlighting is done with
 >
     :hi link illuminatedWord Visual.
 
-Q: Certain words get highlighted when my cursor is in the whitespace before
-   them
-
-A: This is since it will look for the first word adjacent to the cursor.
-   The same behaviour can be seen if you try `*` while in the same whitespace
-   before the word.
-
 
 vim:tw=78:ts=8:ft=help:norl:
