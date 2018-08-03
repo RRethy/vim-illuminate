@@ -51,10 +51,10 @@ fun illuminate#on_insert_entered() abort
 endf
 
 fun! illuminate#toggle_illumination() abort
-  if (!s:enabled)
-      call illuminate#enable_illumination()
+  if !s:enabled
+    call illuminate#enable_illumination()
   else
-      call illuminate#disable_illumination()
+    call illuminate#disable_illumination()
   endif
 endf
 
@@ -112,7 +112,7 @@ fun! s:remove_illumination() abort
 
   try
     call matchdelete(s:match_id)
-  catch /E803/
+  catch /\v(E803|E802)/
   endtry
 endf
 
@@ -125,4 +125,4 @@ fun! s:should_illuminate_file()
 endf
 " }}}
 
-" vim: foldlevel=0 foldmethod=marker
+" vim: foldlevel=1 foldmethod=marker
