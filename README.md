@@ -1,6 +1,6 @@
 # vim-illuminate
 
-Vim plugin for selectively illuminating other uses of current word under the cursor
+Vim plugin for selectively illuminating other uses of the current word under the cursor
 
 ![gif](https://media.giphy.com/media/ZO7QtQWoBP2TZ9mkXq/giphy.gif)
 
@@ -12,7 +12,7 @@ All modern IDEs and editors will highlight the word under the cursor which is a 
 
 This plugin is a tool for illuminating the other uses of the current word under the cursor.
 
-Illuminate will by default highlight all uses of the word under the cursor, but will a little bit of configuration it can easily only highlight what you want it to highlight based on the filetype and highlight-groups.
+Illuminate will by default highlight all uses of the word under the cursor, but with a little bit of configuration it can easily only highlight what you want it to highlight based on the filetype and highlight-groups.
 
 Illuminate will also do a few other niceties such as delaying the highlight for a user-defined amount of time based on `g:Illuminate_delay` (by default 250), it will interact nicely with search highlighting, jumping around between buffers, jumping around between windows, and won't illuminate while in insert mode.
 
@@ -21,7 +21,7 @@ Illuminate will also do a few other niceties such as delaying the highlight for 
 Illuminate will delay before highlighting, this is not lag, it is to avoid the jarring experience of things illuminating too fast. This can be controlled with `g:Illuminate_delay` (which is default to 250 milliseconds):
 
 ```
-" Time in millis (default 250)
+" Time in milliseconds (default 250)
 let g:Illuminate_delay = 250
 ```
 Illuminate will by default highlight the word under the cursor to match the behaviour seen in Intellij and VSCode. However, to make it not highlight the word under the cursor, use the following:
@@ -47,7 +47,7 @@ illuminate can also be disabled for various filetypes using the following:
 let g:Illuminate_ftblacklist = ['nerdtree']
 ```
 
-Lastly, by default the highlighting will be done with the hl-group `cursorline` since that is in my opinion the nicest. But it can be overriden using the following or something similar:
+Lastly, by default the highlighting will be done with the hl-group `CursorLine` since that is in my opinion the nicest. It can however be overridden using the following or something similar:
 ```
 hi illuminatedWord cterm=underline gui=underline
 ```
@@ -56,4 +56,4 @@ hi illuminatedWord cterm=underline gui=underline
 
 > I am seeing by default an underline for the matched words
 
-Try this: `hi link illuminatedWord Visual`. The reason for the underline is that the highlighting is done with `cursorline` by default, which defaults to an underline.
+Try this: `hi link illuminatedWord Visual`. The reason for the underline is that the highlighting is done with `CursorLine` by default, which defaults to an underline.
