@@ -26,7 +26,8 @@ fun! illuminate#on_cursor_moved() abort
     return
   endif
 
-  if !has('timers') || g:Illuminate_delay <= 0
+  " Any delay at or below 17 milliseconds gets counted as no delay
+  if !has('timers') || g:Illuminate_delay <= 17
     call s:illuminate()
     return
   endif
