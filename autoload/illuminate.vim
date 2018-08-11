@@ -87,6 +87,7 @@ fun! s:illuminate(...) abort
   else
     call s:match_word(s:get_cur_word())
   endif
+  let s:previous_match = s:get_cur_word()
 endf
 
 fun! s:match_word(word) abort
@@ -95,7 +96,6 @@ fun! s:match_word(word) abort
   else
     silent! call matchadd("illuminatedWord", '\V\(\k\*\%#\k\*\)\@\!\&' . a:word, s:priority, s:match_id)
   endif
-  let s:previous_match = a:word
 endf
 
 fun! s:get_cur_word() abort
