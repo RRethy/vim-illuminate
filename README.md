@@ -52,6 +52,24 @@ Lastly, by default the highlighting will be done with the hl-group `CursorLine` 
 hi illuminatedWord cterm=underline gui=underline
 ```
 
+## Installation
+
+### Neovim
+
+```
+mkdir -p ~/.config/nvim/pack/plugins/start
+cd ~/.config/nvim/pack/plugins/start
+git clone https://github.com/RRethy/vim-illuminate.git
+```
+
+### Vim
+
+```
+mkdir -p ~/.vim/pack/plugins/start
+cd ~/.vim/pack/plugins/start
+git clone https://github.com/RRethy/vim-illuminate.git
+```
+
 ## FAQs
 
 > I am seeing by default an underline for the matched words
