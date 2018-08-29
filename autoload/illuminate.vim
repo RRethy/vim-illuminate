@@ -70,6 +70,7 @@ fun! illuminate#enable_illumination() abort
     call s:illuminate()
   endif
 endf
+
 " }}}
 
 " Abstracted functions {{{
@@ -115,6 +116,8 @@ fun! s:remove_illumination() abort
     call matchdelete(s:match_id)
   catch /\v(E803|E802)/
   endtry
+
+  let s:previous_match = ''
 endf
 
 fun! s:should_illuminate_file()
