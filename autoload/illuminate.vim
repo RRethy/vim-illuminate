@@ -92,6 +92,9 @@ fun! s:illuminate(...) abort
 endf
 
 fun! s:match_word(word) abort
+  if (a:word ==# '\<\>') " ignore blank
+    return
+  endif 
   if g:Illuminate_highlightUnderCursor
     silent! call matchadd("illuminatedWord", '\V' . a:word, s:priority, s:match_id)
   else
