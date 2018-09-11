@@ -20,6 +20,8 @@ Illuminate will also do a few other niceties such as delaying the highlight for 
 
 Illuminate will delay before highlighting, this is not lag, it is to avoid the jarring experience of things illuminating too fast. This can be controlled with `g:Illuminate_delay` (which is default to 250 milliseconds):
 
+**Note**: Delay only works for Vim8 and Neovim.
+
 ```
 " Time in milliseconds (default 250)
 let g:Illuminate_delay = 250
@@ -53,6 +55,8 @@ hi illuminatedWord cterm=underline gui=underline
 ```
 
 ## Installation
+
+This assumes you have the packages feature. If not, any plugin manager will suffice.
 
 ### Neovim
 
