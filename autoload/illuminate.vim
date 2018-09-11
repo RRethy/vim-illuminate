@@ -100,10 +100,14 @@ fun! s:match_word(word) abort
 endf
 
 fun! s:get_cur_word() abort
-  let l:line = getline('.')
-  let l:col = col('.') - 1
-  let l:word = matchstr(l:line[:l:col], '\k*$') . matchstr(l:line[l:col:], '^\k*')[1:]
-  return '\<' . escape(l:word, '/\?') . '\>'
+  let line = getline('.')
+  let col = col('.') - 1
+  if version < 800
+    let word = expand("<cword>")
+  else
+    let word = matchstr(line[:col], '\k*$') . matchstr(line[col:], '^\k*')[1:]
+  endif
+  return '\<' . escape(word, '/\?') . '\>'
 endf
 
 fun! s:remove_illumination() abort
