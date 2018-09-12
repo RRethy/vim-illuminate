@@ -33,7 +33,16 @@ Illuminate will by default highlight the word under the cursor to match the beha
 let g:Illuminate_highlightUnderCursor = 0
 ```
 
-By default illuminate will highlight all words the cursor passes over, but for many languages, you will only want to highlight certain highlight-groups (you can determine the highlight-group of a symbol under your cursor with `:echo synIDattr(synIDtrans(synID(line("."), col("."), 1)), "name")`).
+By default illuminate will highlight all words the cursor passes over, but for many languages, you will only want to highlight certain highlight-groups
+
+You can determine the highlight-group of a symbol under your cursor with `:echo synIDattr(synIDtrans(synID(line("."), col("."), 1)), "name")`.
+Note: an empty hightlight-group is valid. In this case the above command will return nothing. This is useful in some languages (Python, Jenkinsfile, ...) to only highlight variables. e.g.
+```
+let g:Illuminate_ftHighlightGroups = {
+      \ 'python': ['']
+      \ 'Jenkinsfile': ['']
+      \ }
+```
 
 You can define which highlight groups you want the illuminating to apply to. This can be done with a dict mapping a filetype to a list of highlight-groups in your vimrc such as:
 ```
