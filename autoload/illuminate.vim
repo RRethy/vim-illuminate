@@ -81,8 +81,8 @@ fun! s:illuminate(...) abort
 
   call s:remove_illumination()
 
-  if exists('g:Illuminate_ftHighlightGroups') && has_key(g:Illuminate_ftHighlightGroups, &ft)
-    if index(g:Illuminate_ftHighlightGroups[&ft], synIDattr(synIDtrans(synID(line("."), col("."), 1)), "name")) >= 0
+  if exists('g:Illuminate_ftHighlightGroups') && has_key(g:Illuminate_ftHighlightGroups, &filetype)
+    if index(g:Illuminate_ftHighlightGroups[&filetype], synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')) >= 0
       call s:match_word(s:get_cur_word())
     endif
   else
@@ -96,17 +96,17 @@ fun! s:match_word(word) abort
     return
   endif
   if g:Illuminate_highlightUnderCursor
-    silent! call matchadd("illuminatedWord", '\V' . a:word, s:priority, s:match_id)
+    silent! call matchadd('illuminatedWord', '\V' . a:word, s:priority, s:match_id)
   else
-    silent! call matchadd("illuminatedWord", '\V\(\k\*\%#\k\*\)\@\!\&' . a:word, s:priority, s:match_id)
+    silent! call matchadd('illuminatedWord', '\V\(\k\*\%#\k\*\)\@\!\&' . a:word, s:priority, s:match_id)
   endif
 endf
 
 fun! s:get_cur_word() abort
   let line = getline('.')
   let col = col('.') - 1
-  if version < 800
-    let word = expand("<cword>")
+  if v:version < 800
+    let word = expand('<cword>')
   else
     let word = matchstr(line[:col], '\k*$') . matchstr(line[col:], '^\k*')[1:]
   endif
