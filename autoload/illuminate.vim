@@ -127,7 +127,7 @@ fun! s:remove_illumination() abort
   let s:previous_match = ''
 endf
 
-fun! s:should_illuminate_file()
+fun! s:should_illuminate_file() abort
   if !exists('g:Illuminate_ftblacklist')
     let g:Illuminate_ftblacklist=['']
   endif
