@@ -19,7 +19,7 @@ fun! illuminate#on_cursor_moved() abort
     return
   endif
 
-  if (s:previous_match != s:get_cur_word())
+  if (s:previous_match !=# s:get_cur_word())
     call s:remove_illumination()
   else
     return
