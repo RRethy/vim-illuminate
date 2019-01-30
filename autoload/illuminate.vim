@@ -106,6 +106,7 @@ fun! s:get_cur_word() abort
   let line = getline('.')
   let col = col('.') - 1
   if v:version < 800
+    " https://github.com/RRethy/vim-illuminate/pull/24
     let word = expand('<cword>')
   else
     let word = matchstr(line[:col], '\k*$') . matchstr(line[col:], '^\k*')[1:]
