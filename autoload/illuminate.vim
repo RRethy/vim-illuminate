@@ -104,12 +104,10 @@ endf
 fun! s:get_cur_word() abort
   let line = getline('.')
   let col = col('.') - 1
-  if v:version < 800
-    " https://github.com/RRethy/vim-illuminate/pull/24
-    let word = expand('<cword>')
-  else
-    let word = matchstr(line[:col], '\k*$') . matchstr(line[col:], '^\k*')[1:]
-  endif
+  let left_part = strpart(line, 0, col + 1)
+  let right_part = strpart(line, col, col('$'))
+  let word = matchstr(left_part, '\k*$') . matchstr(right_part, '^\k*')[1:]
+
   return '\<' . escape(word, '/\?') . '\>'
 endf
 

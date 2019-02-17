@@ -23,7 +23,7 @@ if has("autocmd")
     autocmd InsertEnter * call illuminate#on_insert_entered()
   augroup END
 else
-  echoerr 'Illuminate requires vim compiled with +autocmd'
+  echoerr 'Illuminate requires Vim compiled with +autocmd'
   finish
 endif
 " }}}
