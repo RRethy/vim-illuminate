@@ -4,7 +4,7 @@ Vim plugin for selectively illuminating other uses of the current word under the
 
 ![gif](https://media.giphy.com/media/ZO7QtQWoBP2TZ9mkXq/giphy.gif)
 
-## Rational
+## Rationale
 
 All modern IDEs and editors will highlight the word under the cursor which is a great way to see other uses of the current variable without having to look for it.
 
