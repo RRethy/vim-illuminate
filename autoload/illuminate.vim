@@ -82,7 +82,7 @@ fun! s:illuminate(...) abort
 
   if exists('g:Illuminate_ftHighlightGroups') && has_key(g:Illuminate_ftHighlightGroups, &filetype)
     if index(g:Illuminate_ftHighlightGroups[&filetype], synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')) >= 0
-       || index(g:Illuminate_ftHighlightGroups[&filetype], synIDattr(synID(line('.'), col('.'), 1), 'name')) >= 0
+       \ || index(g:Illuminate_ftHighlightGroups[&filetype], synIDattr(synID(line('.'), col('.'), 1), 'name')) >= 0
        call s:match_word(s:get_cur_word())
     endif
   else
