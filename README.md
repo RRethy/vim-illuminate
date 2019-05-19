@@ -22,13 +22,13 @@ Illuminate will delay before highlighting, this is not lag, it is to avoid the j
 
 **Note**: Delay only works for Vim8 and Neovim.
 
-```
+```vim
 " Time in milliseconds (default 250)
 let g:Illuminate_delay = 250
 ```
 Illuminate will by default highlight the word under the cursor to match the behaviour seen in Intellij and VSCode. However, to make it not highlight the word under the cursor, use the following:
 
-```
+```vim
 " Don't highlight word under cursor (default: 1)
 let g:Illuminate_highlightUnderCursor = 0
 ```
@@ -36,7 +36,7 @@ let g:Illuminate_highlightUnderCursor = 0
 By default illuminate will highlight all words the cursor passes over, but for many languages, you will only want to highlight certain highlight-groups (you can determine the highlight-group of a symbol under your cursor with `:echo synIDattr(synID(line("."), col("."), 1), "name")`).
 
 You can define which highlight groups you want the illuminating to apply to. This can be done with a dict mapping a filetype to a list of highlight-groups in your vimrc such as:
-```
+```vim
 let g:Illuminate_ftHighlightGroups = {
       \ 'vim': ['vimVar', 'vimString', 'vimLineComment',
       \         'vimFuncName', 'vimFunction', 'vimUserFunc', 'vimFunc']
@@ -44,7 +44,7 @@ let g:Illuminate_ftHighlightGroups = {
 ```
 
 A blacklist of highlight groups can also be setup by adding the suffix `:blacklist` to the filetype. However, if the whitelist for that filetype already exists, it will override the blacklist.
-```
+```vim
 let g:Illuminate_ftHighlightGroups = {
       \ 'vim:blacklist': ['vimVar', 'vimString', 'vimLineComment',
       \         'vimFuncName', 'vimFunction', 'vimUserFunc', 'vimFunc']
@@ -52,12 +52,12 @@ let g:Illuminate_ftHighlightGroups = {
 ```
 
 illuminate can also be disabled for various filetypes using the following:
-```
+```vim
 let g:Illuminate_ftblacklist = ['nerdtree']
 ```
 
 Lastly, by default the highlighting will be done with the hl-group `CursorLine` since that is in my opinion the nicest. It can however be overridden using the following or something similar:
-```
+```vim
 hi illuminatedWord cterm=underline gui=underline
 ```
 
