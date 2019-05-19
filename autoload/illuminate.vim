@@ -2,18 +2,13 @@
 " Maintainer:	Adam P. Regasz-Rethy (RRethy) <rethy.spud@gmail.com>
 " Version: 0.4
 
-" Some local variables {{{
 let s:priority = -1
 let s:previous_match = ''
 let s:enabled = 1
-" }}}
 
-" Global variables init {{{
 let g:Illuminate_delay = get(g:, 'Illuminate_delay', 250)
 let g:Illuminate_highlightUnderCursor = get(g:, 'Illuminate_highlightUnderCursor', 1)
-" }}}
 
-" Exposed functions {{{
 fun! illuminate#on_cursor_moved() abort
   if !s:should_illuminate_file()
     return
@@ -70,9 +65,6 @@ fun! illuminate#enable_illumination() abort
   endif
 endf
 
-" }}}
-
-" Abstracted functions {{{
 fun! s:illuminate(...) abort
   if !s:enabled
     return
@@ -80,12 +72,7 @@ fun! s:illuminate(...) abort
 
   call s:remove_illumination()
 
-  if exists('g:Illuminate_ftHighlightGroups') && has_key(g:Illuminate_ftHighlightGroups, &filetype)
-    if index(g:Illuminate_ftHighlightGroups[&filetype], synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')) >= 0
-       \ || index(g:Illuminate_ftHighlightGroups[&filetype], synIDattr(synID(line('.'), col('.'), 1), 'name')) >= 0
-       call s:match_word(s:get_cur_word())
-    endif
-  else
+  if s:should_illuminate_word()
     call s:match_word(s:get_cur_word())
   endif
   let s:previous_match = s:get_cur_word()
@@ -135,6 +122,22 @@ fun! s:should_illuminate_file() abort
 
   return index(g:Illuminate_ftblacklist, &filetype) < 0
 endf
-" }}}
+
+fun! s:should_illuminate_word() abort
+  let ft_hl_groups = get(g:, 'Illuminate_ftHighlightGroups', {})
+  let hl_groups_whitelist = get(ft_hl_groups, &filetype, [])
+  if empty(hl_groups_whitelist)
+    let hl_groups_blacklist = get(ft_hl_groups, &filetype.':blacklist', [])
+    if empty(hl_groups_blacklist)
+      return 1
+    else
+      return index(hl_groups_blacklist, synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')) < 0
+            \ && index(hl_groups_blacklist, synIDattr(synID(line('.'), col('.'), 1), 'name')) < 0
+    endif
+  endif
+
+  return index(ft_hl_groups[&filetype], synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')) >= 0
+        \ || index(ft_hl_groups[&filetype], synIDattr(synID(line('.'), col('.'), 1), 'name')) >= 0
+endf
 
 " vim: foldlevel=1 foldmethod=marker

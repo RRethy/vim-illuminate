@@ -52,6 +52,17 @@ This can be done with a dict mapping a filetype to a list of
           \         'vimFuncName', 'vimFunction', 'vimUserFunc', 'vimFunc']
           \ }
 
+This can also be used to create a blacklist of highlight groups by adding the
+suffix ':blacklist' onto the filetype. However, if the whitelist for that
+filetype already exists, it will override the blacklist.
+>
+    let g:Illuminate_ftHighlightGroups = {
+          \ 'vim:blacklist': ['vimVar', 'vimString', 'vimLineComment',
+          \         'vimFuncName', 'vimFunction', 'vimUserFunc', 'vimFunc']
+          \ }
+
+Note: The blacklist of highlight groups will be overriden by any whitelist for
+the filetype.
 
 |illuminate| can also be disabled for various |filetypes| using
 g:Illuminate_ftblacklist.

@@ -43,6 +43,13 @@ let g:Illuminate_ftHighlightGroups = {
       \ }
 ```
 
+A blacklist of highlight groups can also be setup by adding the suffix `:blacklist` to the filetype. However, if the whitelist for that filetype already exists, it will override the blacklist.
+```
+let g:Illuminate_ftHighlightGroups = {
+      \ 'vim:blacklist': ['vimVar', 'vimString', 'vimLineComment',
+      \         'vimFuncName', 'vimFunction', 'vimUserFunc', 'vimFunc']
+      \ }
+```
 
 illuminate can also be disabled for various filetypes using the following:
 ```
