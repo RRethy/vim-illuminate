@@ -96,7 +96,7 @@ fun! s:get_cur_word() abort
   let right_part = strpart(line, col, col('$'))
   let word = matchstr(left_part, '\k*$') . matchstr(right_part, '^\k*')[1:]
 
-  return '\<' . escape(word, '/\?') . '\>'
+  return '\<' . escape(word, '/\') . '\>'
 endf
 
 fun! s:remove_illumination() abort
