@@ -56,6 +56,11 @@ illuminate can also be disabled for various filetypes using the following:
 let g:Illuminate_ftblacklist = ['nerdtree']
 ```
 
+Or you can enable it only for certain filetypes with:
+```vim
+let g:Illuminate_ftwhitelist = ['vim', 'sh', 'python']
+```
+
 Lastly, by default the highlighting will be done with the hl-group `CursorLine` since that is in my opinion the nicest. It can however be overridden using the following or something similar:
 ```vim
 hi illuminatedWord cterm=underline gui=underline
