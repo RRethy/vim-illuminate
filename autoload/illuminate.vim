@@ -117,10 +117,15 @@ endf
 
 fun! s:should_illuminate_file() abort
   if !exists('g:Illuminate_ftblacklist')
+    " Blacklist empty filetype by default
     let g:Illuminate_ftblacklist=['']
+  endif
+  if !exists('g:Illuminate_ftwhitelist')
+    let g:Illuminate_ftwhitelist=[]
   endif
 
   return index(g:Illuminate_ftblacklist, &filetype) < 0
+        \ && (empty(g:Illuminate_ftwhitelist) || index(g:Illuminate_ftwhitelist, &filetype) >= 0)
 endf
 
 fun! s:should_illuminate_word() abort
