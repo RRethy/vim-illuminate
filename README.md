@@ -35,7 +35,7 @@ let g:Illuminate_highlightUnderCursor = 0
 
 ```vim
 " Highlight priority (default: -1)
-let g:Illuminate_highlight_priority = -1
+let g:Illuminate_highlightPriority = -1
 ```
 
 By default illuminate will highlight all words the cursor passes over, but for many languages, you will only want to highlight certain highlight-groups (you can determine the highlight-group of a symbol under your cursor with `:echo synIDattr(synID(line("."), col("."), 1), "name")`).
