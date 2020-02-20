@@ -33,6 +33,10 @@ Illuminate will by default highlight the word under the cursor to match the beha
 let g:Illuminate_highlightUnderCursor = 0
 ```
 
+Illuminate sets highlight with priority -1.
+This may conflict with other settings and not work as expected.
+To change priority of highlight, use the following:
+
 ```vim
 " Highlight priority (default: -1)
 let g:Illuminate_highlightPriority = -1
