@@ -2,12 +2,12 @@
 " Maintainer:	Adam P. Regasz-Rethy (RRethy) <rethy.spud@gmail.com>
 " Version: 0.4
 
-let s:priority = -1
 let s:previous_match = ''
 let s:enabled = 1
 
 let g:Illuminate_delay = get(g:, 'Illuminate_delay', 250)
 let g:Illuminate_highlightUnderCursor = get(g:, 'Illuminate_highlightUnderCursor', 1)
+let g:Illuminate_highlightPriority = get(g:, 'Illuminate_highlightPriority', -1)
 
 fun! illuminate#on_cursor_moved() abort
   if !s:should_illuminate_file()
@@ -83,9 +83,9 @@ fun! s:match_word(word) abort
     return
   endif
   if g:Illuminate_highlightUnderCursor
-    let w:match_id = matchadd('illuminatedWord', '\V' . a:word, s:priority)
+    let w:match_id = matchadd('illuminatedWord', '\V' . a:word, g:Illuminate_highlightPriority)
   else
-    let w:match_id = matchadd('illuminatedWord', '\V\(\k\*\%#\k\*\)\@\!\&' . a:word, s:priority)
+    let w:match_id = matchadd('illuminatedWord', '\V\(\k\*\%#\k\*\)\@\!\&' . a:word, g:Illuminate_highlightPriority)
   endif
 endf
 
