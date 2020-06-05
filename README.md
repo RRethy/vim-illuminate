@@ -61,9 +61,14 @@ Or you can enable it only for certain filetypes with:
 let g:Illuminate_ftwhitelist = ['vim', 'sh', 'python']
 ```
 
-Lastly, by default the highlighting will be done with the hl-group `CursorLine` since that is in my opinion the nicest. It can however be overridden using the following or something similar:
+Lastly, by default the highlighting will be done with the highlight-group `CursorLine` since that is in my opinion the nicest. It can however be overridden using the following (use standard Vim highlighting syntax):
+Note: Use this wrapper instead of setting illuminatedWord manually.
 ```vim
-hi illuminatedWord cterm=underline gui=underline
+let g:Illuminate_hl_link = 'hi link illuminatedWord CursorLine'
+
+" or
+
+let g:Illuminate_hl_link = 'hi illuminatedWord cterm=underline gui=underline'
 ```
 
 ## Installation

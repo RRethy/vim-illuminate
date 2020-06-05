@@ -10,12 +10,12 @@ let g:loaded_illuminate = 1
 
 " Highlight group(s) {{{
 if !hlexists('illuminatedWord')
-  hi link illuminatedWord cursorline
+  exe get(g:, 'Illuminate_hl_link', 'hi link illuminatedWord cursorline')
 endif
 " }}}
 
 " Autocommands {{{
-if has("autocmd")
+if has('autocmd')
   augroup illuminated_autocmd
     autocmd!
     autocmd CursorMoved,InsertLeave * call illuminate#on_cursor_moved()
