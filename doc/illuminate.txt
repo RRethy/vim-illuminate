@@ -18,7 +18,7 @@ want it to highlight based on the filetype and highlight-groups.
 for a user-defined amount of time based on `g:Illuminate_delay` (by default
 250), it will interact nicely with search highlighting, jumping around
 between buffers, jumping around between windows, and won't illuminate
-while in insert mode.
+while in insert mode (unless told to).
 
 
 CONFIGURATION                                      *illuminate-configuration*
@@ -107,6 +107,9 @@ differs from all other matches using the following higlight group:
         autocmd VimEnter * hi illuminatedCurWord cterm=italic gui=italic
     augroup END
 
+Illumination can be done in insert mode with the following:
+>
+    let g:Illuminate_insert_mode_highlight = 1
 
 COMMANDS                                             *illuminate-commands*
 =========================================================================

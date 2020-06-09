@@ -39,8 +39,14 @@ fun! illuminate#on_leaving_autocmds() abort
   endif
 endf
 
+fun! illuminate#on_cursor_moved_i() abort
+  if get(g:, 'Illuminate_insert_mode_highlight', 0)
+    call illuminate#on_cursor_moved()
+  endif
+endf
+
 fun! illuminate#on_insert_entered() abort
-  if s:should_illuminate_file()
+  if !get(g:, 'Illuminate_insert_mode_highlight', 0) && s:should_illuminate_file()
     call s:remove_illumination()
   endif
 endf

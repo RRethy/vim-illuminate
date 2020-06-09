@@ -25,6 +25,7 @@ if has('autocmd')
     autocmd!
     autocmd CursorMoved,InsertLeave * call illuminate#on_cursor_moved()
     autocmd WinLeave,BufLeave * call illuminate#on_leaving_autocmds()
+    autocmd CursorMovedI * call illuminate#on_cursor_moved_i()
     autocmd InsertEnter * call illuminate#on_insert_entered()
   augroup END
 else
