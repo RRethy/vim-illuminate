@@ -88,13 +88,24 @@ For example, with:
 
 only `python` and `sh` will be illuminated.
 
-Lastly, by default the highlighting will be done with the |highlight-group|
+By default the highlighting will be done with the |highlight-group|
 `CursorLine` since that is in my opinion the nicest. It can however be
 overridden using the following (use standard Vim highlighting syntax):
 
-Note: Use this wrapper instead of setting illuminatedWord manually.
+Note: It must be in an autocmd to get around a weird Neovim behaviour.
 >
-    let g:Illuminate_hl_link = 'hi illuminatedWord cterm=underline gui=underline'
+    augroup illuminate_augroup
+        autocmd!
+        autocmd VimEnter * hi illuminatedWord cterm=underline gui=underline
+    augroup END
+
+You can also specify a specific highlight for the word under the cursor so it
+differs from all other matches using the following higlight group:
+>
+    augroup illuminate_augroup
+        autocmd!
+        autocmd VimEnter * hi illuminatedCurWord cterm=italic gui=italic
+    augroup END
 
 
 COMMANDS                                             *illuminate-commands*

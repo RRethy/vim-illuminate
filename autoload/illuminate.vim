@@ -83,7 +83,12 @@ fun! s:match_word(word) abort
     return
   endif
   if g:Illuminate_highlightUnderCursor
-    let w:match_id = matchadd('illuminatedWord', '\V' . a:word, g:Illuminate_highlightPriority)
+    if hlexists('illuminatedCurWord')
+      let w:match_id = matchadd('illuminatedWord', '\V\(\k\*\%#\k\*\)\@\!\&' . a:word, g:Illuminate_highlightPriority)
+      let w:match_curword_id = matchadd('illuminatedCurWord', '\V\(\k\*\%#\k\*\)\&' . a:word, g:Illuminate_highlightPriority)
+    else
+      let w:match_id = matchadd('illuminatedWord', '\V' . a:word, g:Illuminate_highlightPriority)
+    endif
   else
     let w:match_id = matchadd('illuminatedWord', '\V\(\k\*\%#\k\*\)\@\!\&' . a:word, g:Illuminate_highlightPriority)
   endif
@@ -108,6 +113,13 @@ fun! s:remove_illumination() abort
   if exists('w:match_id')
     try
       call matchdelete(w:match_id)
+    catch /\v(E803|E802)/
+    endtry
+  endif
+
+  if exists('w:match_curword_id')
+    try
+      call matchdelete(w:match_curword_id)
     catch /\v(E803|E802)/
     endtry
   endif
