@@ -10,7 +10,11 @@ let g:loaded_illuminate = 1
 
 " Highlight group(s) {{{
 if !hlexists('illuminatedWord')
-  exe get(g:, 'Illuminate_hl_link', 'hi link illuminatedWord cursorline')
+  if !empty(get(g:, 'Illuminate_hl_link', ''))
+    exe get(g:, 'Illuminate_hl_link', '')
+  else
+    hi link illuminatedWord cursorline
+  endif
 endif
 " }}}
 
