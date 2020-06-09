@@ -45,28 +45,45 @@ fun! illuminate#on_insert_entered() abort
   endif
 endf
 
-fun! illuminate#toggle_illumination() abort
-  if !s:enabled
-    call illuminate#enable_illumination()
+fun! illuminate#toggle_illumination(bufonly) abort
+  if a:bufonly
+    let b:illuminate_enabled = get(b:, 'illuminate_enabled', s:enabled)
+    if !b:illuminate_enabled
+      call illuminate#enable_illumination(1)
+    else
+      call illuminate#disable_illumination(1)
+    endif
   else
-    call illuminate#disable_illumination()
+    if !s:enabled
+      call illuminate#enable_illumination(0)
+    else
+      call illuminate#disable_illumination(0)
+    endif
   endif
 endf
 
-fun! illuminate#disable_illumination() abort
-  let s:enabled = 0
+fun! illuminate#disable_illumination(bufonly) abort
+  if a:bufonly
+    let b:illuminate_enabled = 0
+  else
+    let s:enabled = 0
+  endif
   call s:remove_illumination()
 endf
 
-fun! illuminate#enable_illumination() abort
-  let s:enabled = 1
+fun! illuminate#enable_illumination(bufonly) abort
+  if a:bufonly
+    let b:illuminate_enabled = 1
+  else
+    let s:enabled = 1
+  endif
   if s:should_illuminate_file()
     call s:illuminate()
   endif
 endf
 
 fun! s:illuminate(...) abort
-  if !s:enabled
+  if !get(b:, 'illuminate_enabled', s:enabled)
     return
   endif
 
@@ -157,4 +174,4 @@ fun! s:should_illuminate_word() abort
         \ || index(ft_hl_groups[&filetype], synIDattr(synID(line('.'), col('.'), 1), 'name')) >= 0
 endf
 
-" vim: foldlevel=1 foldmethod=marker
+" vim: foldlevel=1 foldmethod=expr tabstop=2 softtabstop=2 shiftwidth=2

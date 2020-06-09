@@ -10,6 +10,7 @@ let g:loaded_illuminate = 1
 
 " Highlight group(s) {{{
 if !hlexists('illuminatedWord')
+  " this is for backwards compatibility
   if !empty(get(g:, 'Illuminate_hl_link', ''))
     exe get(g:, 'Illuminate_hl_link', '')
   else
@@ -33,13 +34,13 @@ endif
 " }}}
 
 " Commands {{{
-command! -nargs=0 IlluminationDisable call illuminate#disable_illumination()
-command! -nargs=0 IlluminationEnable call illuminate#enable_illumination()
-command! -nargs=0 IlluminationToggle call illuminate#toggle_illumination()
+command! -nargs=0 -bang IlluminationDisable call illuminate#disable_illumination(<bang>0)
+command! -nargs=0 -bang IlluminationEnable call illuminate#enable_illumination(<bang>0)
+command! -nargs=0 -bang IlluminationToggle call illuminate#toggle_illumination(<bang>0)
 
 " Keep these for backwards compatibility
 command! -nargs=0 DisableIllumination :IlluminationDisable
 command! -nargs=0 EnableIllumination :IlluminationEnable
 " }}} Commands:
 
-" vim: foldlevel=0 foldmethod=marker
+" vim: foldlevel=1 foldmethod=marker
