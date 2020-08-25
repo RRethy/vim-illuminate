@@ -166,8 +166,10 @@ endf
 fun! s:should_illuminate_word() abort
   let ft_hl_groups = get(g:, 'Illuminate_ftHighlightGroups', {})
   let hl_groups_whitelist = get(ft_hl_groups, &filetype, [])
+  call extend(hl_groups_whitelist, get(ft_hl_groups, '*', []))
   if empty(hl_groups_whitelist)
     let hl_groups_blacklist = get(ft_hl_groups, &filetype.':blacklist', [])
+    call extend(hl_groups_blacklist, get(ft_hl_groups, '*:blacklist', []))
     if empty(hl_groups_blacklist)
       return 1
     else
