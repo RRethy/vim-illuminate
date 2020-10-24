@@ -161,6 +161,7 @@ fun! s:should_illuminate_file() abort
 
   return index(g:Illuminate_ftblacklist, &filetype) < 0
         \ && (empty(g:Illuminate_ftwhitelist) || index(g:Illuminate_ftwhitelist, &filetype) >= 0)
+				\ && !get(b:, 'Illuminate_disabled', 0)
 endf
 
 fun! s:should_illuminate_word() abort
