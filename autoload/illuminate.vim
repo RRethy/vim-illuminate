@@ -5,10 +5,6 @@
 let s:previous_match = ''
 let s:enabled = 1
 
-let g:Illuminate_delay = get(g:, 'Illuminate_delay', 250)
-let g:Illuminate_highlightUnderCursor = get(g:, 'Illuminate_highlightUnderCursor', 1)
-let g:Illuminate_highlightPriority = get(g:, 'Illuminate_highlightPriority', -1)
-
 fun! illuminate#on_cursor_moved() abort
   if !s:should_illuminate_file()
     return
@@ -151,16 +147,10 @@ fun! s:remove_illumination() abort
 endf
 
 fun! s:should_illuminate_file() abort
-  if !exists('g:Illuminate_ftblacklist')
-    " Blacklist empty filetype by default
-    let g:Illuminate_ftblacklist=['']
-  endif
-  if !exists('g:Illuminate_ftwhitelist')
-    let g:Illuminate_ftwhitelist=[]
-  endif
-
   return index(g:Illuminate_ftblacklist, &filetype) < 0
+        \ && (empty(g:Illuminate_ftblacklist_regex) || &filetype !~ g:Illuminate_ftblacklist_regex)
         \ && (empty(g:Illuminate_ftwhitelist) || index(g:Illuminate_ftwhitelist, &filetype) >= 0)
+        \ && (empty(g:Illuminate_ftwhitelist_regex) || &filetype =~ g:Illuminate_ftwhitelist_regex)
 endf
 
 fun! s:should_illuminate_word() abort
