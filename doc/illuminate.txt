@@ -50,11 +50,9 @@ while in insert mode (unless told to).
 <
                 Sample values: >
                   " match the following three vimscript highlight groups
-                  " Match Identifier for any filetype ending in c
                   " Don't match strings for python filetypes
                   let g:Illuminate_ftHighlightGroups = {
                           \ 'vim': ['vimVar', 'vimString', 'vimLineComment'],
-                          \ '.*c$': ['Identifier'],
                           \ 'python:blacklist': ['String'],
                           \ }
 <
@@ -86,7 +84,7 @@ while in insert mode (unless told to).
 
                 Type: |List| of |String|
 
-                Which |'filetype'| to fully ignore.
+                Which |'filetype'| to fully ignore. Can provide a regex.
 
                 Default value: >
                   let g:Illuminate_ftblacklist = []
@@ -96,7 +94,7 @@ while in insert mode (unless told to).
                 Type: |List| of |String|
 
                 Which |'filetype'| to exclusively highlight. This overrides
-                the blacklist.
+                the blacklist. Can provide a regex.
 
                 Default value: >
                   let g:Illuminate_ftwhitelist = []

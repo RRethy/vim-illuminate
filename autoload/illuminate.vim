@@ -151,16 +151,11 @@ fun! s:remove_illumination() abort
 endf
 
 fun! s:should_illuminate_file() abort
-  if !exists('g:Illuminate_ftblacklist')
-    " Blacklist empty filetype by default
-    let g:Illuminate_ftblacklist=['']
-  endif
-  if !exists('g:Illuminate_ftwhitelist')
-    let g:Illuminate_ftwhitelist=[]
-  endif
+  let g:Illuminate_ftblacklist = get(g:, 'Illuminate_ftblacklist', [])
+  let g:Illuminate_ftwhitelist = get(g:, 'Illuminate_ftwhitelist', [])
 
-  return index(g:Illuminate_ftblacklist, &filetype) < 0
-        \ && (empty(g:Illuminate_ftwhitelist) || index(g:Illuminate_ftwhitelist, &filetype) >= 0)
+  return !s:regex_contains(g:Illuminate_ftblacklist, &filetype)
+        \ && (empty(g:Illuminate_ftwhitelist) || s:regex_contains(g:Illuminate_ftwhitelist, &filetype))
 endf
 
 fun! s:should_illuminate_word() abort
@@ -181,5 +176,23 @@ fun! s:should_illuminate_word() abort
   return index(ft_hl_groups[&filetype], synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')) >= 0
         \ || index(ft_hl_groups[&filetype], synIDattr(synID(line('.'), col('.'), 1), 'name')) >= 0
 endf
+
+fun! s:regex_has_key(d, key) abort
+  for [k, v] in items(a:d)
+    if key =~# '^'..k..'$'
+      return 1
+    endif
+  endfor
+  return 0
+endfun
+
+fun! s:regex_contains(list, val) abort
+  for pat in a:list
+    if a:val =~# '^'..pat..'$'
+      return 1
+    endif
+  endfor
+  return 0
+endfun
 
 " vim: foldlevel=1 foldmethod=expr tabstop=2 softtabstop=2 shiftwidth=2
