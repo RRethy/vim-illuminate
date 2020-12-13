@@ -154,8 +154,8 @@ fun! s:should_illuminate_file() abort
   let g:Illuminate_ftblacklist = get(g:, 'Illuminate_ftblacklist', [])
   let g:Illuminate_ftwhitelist = get(g:, 'Illuminate_ftwhitelist', [])
 
-  return !s:regex_contains(g:Illuminate_ftblacklist, &filetype)
-        \ && (empty(g:Illuminate_ftwhitelist) || s:regex_contains(g:Illuminate_ftwhitelist, &filetype))
+  return !s:list_contains_pat(g:Illuminate_ftblacklist, &filetype)
+        \ && (empty(g:Illuminate_ftwhitelist) || s:list_contains_pat(g:Illuminate_ftwhitelist, &filetype))
 endf
 
 fun! s:should_illuminate_word() abort
@@ -177,7 +177,7 @@ fun! s:should_illuminate_word() abort
         \ || index(ft_hl_groups[&filetype], synIDattr(synID(line('.'), col('.'), 1), 'name')) >= 0
 endf
 
-fun! s:regex_has_key(d, key) abort
+fun! s:dict_has_key_pat(d, key) abort
   for [k, v] in items(a:d)
     if key =~# '^'..k..'$'
       return 1
@@ -186,7 +186,7 @@ fun! s:regex_has_key(d, key) abort
   return 0
 endfun
 
-fun! s:regex_contains(list, val) abort
+fun! s:list_contains_pat(list, val) abort
   for pat in a:list
     if a:val =~# '^'..pat..'$'
       return 1
