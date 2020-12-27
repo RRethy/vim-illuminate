@@ -8,11 +8,6 @@ endif
 
 let g:loaded_illuminate = 1
 
-if get(g:, 'Illuminate_experimental', 0)
-  lua require 'illuminate'
-  finish
-endif
-
 " Highlight group(s) {{{
 if !hlexists('illuminatedWord')
   " this is for backwards compatibility
