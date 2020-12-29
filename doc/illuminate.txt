@@ -9,14 +9,19 @@ License: Same terms as Vim itself (see |license|)
 CONTENTS                                                  *illuminate-contents*
 
   1. Introduction.........................|illuminate-introduction|
-  2. Configuration........................|illuminate-configuration|
-  3. Commands.............................|illuminate-commands|
+  2. LSP Integration......................|illuminate-lsp|
+  3. Configuration........................|illuminate-configuration|
+  4. Commands.............................|illuminate-commands|
 
 ===============================================================================
 1. Introduction                                       *illuminate-introduction*
 
 This plugin is a tool for illuminating the other uses of the current word
 under the cursor.
+
+If you are using Neovim's builtin LSP client (and https://github.com/neovim/nvim-lspconfig)
+then this can be used to intelligently highlight the symbol under the cursor,
+see |illuminate-lsp| for more info. Otherwise a simple regex will be used.
 
 vim-illuminate will by default highlight all uses of the word under the cursor,
 but with a little bit of configuration it can easily only highlight what you
@@ -29,7 +34,34 @@ between buffers, jumping around between windows, and won't illuminate
 while in insert mode (unless told to).
 
 ===============================================================================
-2. Configuration                                     *illuminate-configuration*
+2. LSP Integration                                            *illuminate-lsp*
+
+vim-illuminate can use Neovim's builtin LSP client to intelligently highlight.
+This is not compatible with |illuminate-configuration| with a few exceptions
+explained below.
+
+To set it up, simply call `on_attach` when the LSP client attaches to a
+buffer. For example, if you want `gopls` to be used by vim-illuminate:
+>
+  lsp.gopls.setup {
+    on_attach = function(client)
+      -- [[ other on_attach code ]]
+      require 'illuminate'.on_attach(client)
+    end,
+  }
+<
+Highlighting is done using the same highlight groups as the builtin LSP which
+is `LspReferenceText`, `LspReferenceRead`, and `LspReferenceWrite`. However,
+most servers just use `LspReferenceText`. You can define this highlight group
+as follows:
+>
+  vim.api.nvim_command [[ hi def link LspReferenceText CursorLine ]]
+<
+The other additional configuration currently supported is
+|g:Illuminate_delay|.
+
+===============================================================================
+3. Configuration                                     *illuminate-configuration*
 
 *g:Illuminate_ftHighlightGroups*
 
@@ -133,7 +165,7 @@ while in insert mode (unless told to).
                   let g:Illuminate_insert_mode_highlight = 0
 <
 ===============================================================================
-3. Commands                                               *illuminate-commands*
+4. Commands                                               *illuminate-commands*
 
 Supplying a `!` after any of the following commands will cause them to act on
 the current buffer rather than globally.
