@@ -20,6 +20,10 @@ function M.on_attach(_)
 end
 
 function M.on_cursor_moved()
+    bufnr = vim.api.nvim_get_current_buf()
+    if not cursor_in_references(bufnr) then
+        vim.lsp.util.buf_clear_references(bufnr)
+    end
     vim.lsp.buf.document_highlight()
 end
 
@@ -27,9 +31,6 @@ function handle_document_highlight(err, method, result, client_id, bufnr, config
     btimer = timers[bufnr]
     if btimer then
         vim.loop.timer_stop(btimer)
-    end
-    if not cursor_in_references(bufnr) then
-        vim.lsp.util.buf_clear_references(bufnr)
     end
     timers[bufnr] = vim.defer_fn(function()
         vim.lsp.util.buf_clear_references(bufnr)
@@ -50,11 +51,11 @@ function cursor_in_references(bufnr)
     for _, reference in pairs(references[bufnr]) do
         local range = reference.range
         -- check for cursor row in [start,end]
-        -- check for cursor col in [start,end)
+        -- check for cursor col in [start,end]
         if crow >= range['start'].line and
             crow <= range['end'].line and
             ccol >= range['start'].character and
-            ccol < range['end'].character then
+            ccol <= range['end'].character then
             return true
         end
     end
