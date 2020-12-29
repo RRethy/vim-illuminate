@@ -4,6 +4,7 @@ local timers = {}
 local references = {}
 
 function M.on_attach(_)
+    vim.api.nvim_command [[ IlluminationDisable! ]]
     vim.api.nvim_command [[ autocmd CursorMoved,CursorMovedI <buffer> lua require'illuminate'.on_cursor_moved() ]]
     vim.lsp.handlers['textDocument/documentHighlight'] = handle_document_highlight
     vim.lsp.buf.document_highlight()
