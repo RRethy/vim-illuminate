@@ -43,7 +43,7 @@ explained below.
 To set it up, simply call `on_attach` when the LSP client attaches to a
 buffer. For example, if you want `gopls` to be used by vim-illuminate:
 >
-  lsp.gopls.setup {
+  require'lspconfig'.gopls.setup {
     on_attach = function(client)
       -- [[ other on_attach code ]]
       require 'illuminate'.on_attach(client)
