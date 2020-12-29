@@ -12,9 +12,37 @@ All modern IDEs and editors will highlight the word under the cursor which is a 
 
 This plugin is a tool for illuminating the other uses of the current word under the cursor.
 
-Illuminate will by default highlight all uses of the word under the cursor, but with a little bit of configuration it can easily only highlight what you want it to highlight based on the filetype and highlight-groups.
+If Neovim's builtin LSP is available, it can be used to highlight more intelligently.
+
+Otherwise, Illuminate will by default highlight all uses of the word under the cursor, but with a little bit of configuration it can easily only highlight what you want it to highlight based on the filetype and highlight-groups.
 
 Illuminate will also do a few other niceties such as delaying the highlight for a user-defined amount of time based on `g:Illuminate_delay` (by default 250), it will interact nicely with search highlighting, jumping around between buffers, jumping around between windows, and won't illuminate while in insert mode (unless told to).
+
+## LSP Configuration
+
+vim-illuminate can use Neovim's builtin LSP client to intelligently highlight.
+
+To set it up, simply call `on_attach` when the LSP client attaches to a
+buffer. For example, if you want `gopls` to be used by vim-illuminate:
+
+```lua
+  lsp.gopls.setup {
+    on_attach = function(client)
+      -- [[ other on_attach code ]]
+      require 'illuminate'.on_attach(client)
+    end,
+  }
+```
+
+Highlighting is done using the same highlight groups as the builtin LSP which is `LspReferenceText`, `LspReferenceRead`, and `LspReferenceWrite`. However, most servers just use `LspReferenceText`. You can define this highlight group as follows:
+
+```lua
+  vim.api.nvim_command [[ hi def link LspReferenceText CursorLine ]]
+```
+
+The other additional configuration currently supported is |g:Illuminate_delay|. All other configuration options below are not supported when using LSP.
+
+NOTE: `require 'illuminate'.on_attach` will override vim-illuminate's regex based highlighting, no need to disable it yourself.
 
 ## Configuration
 
