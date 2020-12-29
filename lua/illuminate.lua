@@ -1,16 +1,9 @@
--- TODO clear old highlighting on different cword
--- TODO delay as needed
--- TODO hi def link maybe
--- TODO change highlighting of word under cursor
--- TODO highlights can overlap (for return values likes `return true`), they should maybe have different highlighting
-
 local M = {}
 
 local timers = {}
 local references = {}
 
 function M.on_attach(_)
-    vim.api.nvim_command [[ hi def link LspReferenceText CursorLine ]]
     vim.api.nvim_command [[ autocmd CursorMoved,CursorMovedI <buffer> lua require'illuminate'.on_cursor_moved() ]]
     vim.lsp.handlers['textDocument/documentHighlight'] = handle_document_highlight
     vim.lsp.buf.document_highlight()
