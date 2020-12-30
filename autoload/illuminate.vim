@@ -5,7 +5,7 @@
 let s:previous_match = ''
 let s:enabled = 1
 
-let g:Illuminate_delay = get(g:, 'Illuminate_delay', 0)
+let g:Illuminate_delay = get(g:, 'Illuminate_delay', 250)
 let g:Illuminate_highlightUnderCursor = get(g:, 'Illuminate_highlightUnderCursor', 1)
 let g:Illuminate_highlightPriority = get(g:, 'Illuminate_highlightPriority', -1)
 

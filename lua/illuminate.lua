@@ -28,7 +28,7 @@ function handle_document_highlight(err, method, result, client_id, bufnr, config
         if result then
             vim.lsp.util.buf_highlight_references(bufnr, result)
         end
-    end, vim.g.Illuminate_delay or 0)
+    end, vim.g.Illuminate_delay or 250)
     references[bufnr] = result
 end
 
