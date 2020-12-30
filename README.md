@@ -2,7 +2,7 @@
 
 Vim plugin for automatically highlighting other uses of the current word under the cursor
 
-![gif](https://media.giphy.com/media/ZO7QtQWoBP2TZ9mkXq/giphy.gif)
+![gif](https://giphy.com/gifs/mSG0nwAHDt3Fl7WyoL/giphy.gif)
 
 ## Rationale
 
