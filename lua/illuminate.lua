@@ -19,15 +19,15 @@ function M.on_cursor_moved()
 end
 
 function handle_document_highlight(err, method, result, client_id, bufnr, config)
+    if not bufnr then return end
     btimer = timers[bufnr]
     if btimer then
         vim.loop.timer_stop(btimer)
     end
+    if not type(result) == 'table' then return end
     timers[bufnr] = vim.defer_fn(function()
         vim.lsp.util.buf_clear_references(bufnr)
-        if result then
-            vim.lsp.util.buf_highlight_references(bufnr, result)
-        end
+        vim.lsp.util.buf_highlight_references(bufnr, result)
     end, vim.g.Illuminate_delay or 250)
     references[bufnr] = result
 end
