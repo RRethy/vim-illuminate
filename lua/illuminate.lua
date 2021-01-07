@@ -45,12 +45,13 @@ function cursor_in_references(bufnr)
         local range = reference.range
         -- check for cursor row in [start,end]
         -- check for cursor col in [start,end]
-        if crow >= range['start'].line and
-            crow <= range['end'].line and
-            ccol >= range['start'].character and
-            ccol <= range['end'].character then
-            return true
+        if crow == range['start']['line'] and ccol < range['start']['character'] then
+            return false
         end
+        if crow == range['end']['line'] and ccol > range['end']['character'] then
+            return false
+        end
+        return crow >= range['start']['line'] and crow <= range['end']['line']
     end
     return false
 end
