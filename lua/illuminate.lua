@@ -3,28 +3,14 @@ local M = {}
 local timers = {}
 local references = {}
 
-function M.on_attach(_)
-    vim.api.nvim_command [[ IlluminationDisable! ]]
-    vim.api.nvim_command [[ autocmd CursorMoved,CursorMovedI <buffer> lua require'illuminate'.on_cursor_moved() ]]
-    vim.lsp.handlers['textDocument/documentHighlight'] = handle_document_highlight
-    vim.lsp.buf.document_highlight()
-end
-
-function M.on_cursor_moved()
-    bufnr = vim.api.nvim_get_current_buf()
-    if not cursor_in_references(bufnr) then
-        vim.lsp.util.buf_clear_references(bufnr)
-    end
-    vim.lsp.buf.document_highlight()
-end
-
-function handle_document_highlight(err, method, result, client_id, bufnr, config)
+local function handle_document_highlight(_, _, result, _, bufnr, _) -- TODO use client_id
     if not bufnr then return end
-    btimer = timers[bufnr]
+    local btimer = timers[bufnr]
     if btimer then
         vim.loop.timer_stop(btimer)
     end
     if type(result) ~= 'table' then return end
+    -- TODO fix getting out of sync when doing a macro
     timers[bufnr] = vim.defer_fn(function()
         vim.lsp.util.buf_clear_references(bufnr)
         vim.lsp.util.buf_highlight_references(bufnr, result)
@@ -32,7 +18,7 @@ function handle_document_highlight(err, method, result, client_id, bufnr, config
     references[bufnr] = result
 end
 
-function cursor_in_references(bufnr)
+local function cursor_in_references(bufnr)
     if not references[bufnr] then
         return false
     end
@@ -54,6 +40,21 @@ function cursor_in_references(bufnr)
         return crow >= range['start']['line'] and crow <= range['end']['line']
     end
     return false
+end
+
+function M.on_attach(_)
+    vim.api.nvim_command [[ IlluminationDisable! ]]
+    vim.api.nvim_command [[ autocmd CursorMoved,CursorMovedI <buffer> lua require'illuminate'.on_cursor_moved() ]]
+    vim.lsp.handlers['textDocument/documentHighlight'] = handle_document_highlight
+    vim.lsp.buf.document_highlight()
+end
+
+function M.on_cursor_moved()
+    local bufnr = vim.api.nvim_get_current_buf()
+    if not cursor_in_references(bufnr) then
+        vim.lsp.util.buf_clear_references(bufnr)
+    end
+    vim.lsp.buf.document_highlight()
 end
 
 return M
