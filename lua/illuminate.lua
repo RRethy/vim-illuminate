@@ -18,6 +18,19 @@ local function handle_document_highlight(_, _, result, _, bufnr, _) -- TODO use 
     references[bufnr] = result
 end
 
+-- check for cursor row in [start,end]
+-- check for cursor col in [start,end]
+-- While the end is technically exclusive based on the highlighting, we treat it as inclusive to match the server.
+local function in_range(point, range)
+    if point.row == range['start']['line'] and point.col < range['start']['character'] then
+        return false
+    end
+    if point.row == range['end']['line'] and point.col > range['end']['character'] then
+        return false
+    end
+    return point.row >= range['start']['line'] and point.row <= range['end']['line']
+end
+
 local function cursor_in_references(bufnr)
     if not references[bufnr] then
         return false
@@ -29,15 +42,9 @@ local function cursor_in_references(bufnr)
     crow = crow - 1 -- reference ranges are (0,0)-indexed for (row,col)
     for _, reference in pairs(references[bufnr]) do
         local range = reference.range
-        -- check for cursor row in [start,end]
-        -- check for cursor col in [start,end]
-        if crow == range['start']['line'] and ccol < range['start']['character'] then
-            return false
+        if in_range({row=crow,col=ccol}, range) then
+            return true
         end
-        if crow == range['end']['line'] and ccol > range['end']['character'] then
-            return false
-        end
-        return crow >= range['start']['line'] and crow <= range['end']['line']
     end
     return false
 end
@@ -53,6 +60,7 @@ function M.on_cursor_moved()
     local bufnr = vim.api.nvim_get_current_buf()
     if not cursor_in_references(bufnr) then
         vim.lsp.util.buf_clear_references(bufnr)
+    else
     end
     vim.lsp.buf.document_highlight()
 end
