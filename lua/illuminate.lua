@@ -60,7 +60,6 @@ function M.on_cursor_moved()
     local bufnr = vim.api.nvim_get_current_buf()
     if not cursor_in_references(bufnr) then
         vim.lsp.util.buf_clear_references(bufnr)
-    else
     end
     vim.lsp.buf.document_highlight()
 end
