@@ -51,14 +51,19 @@ buffer. For example, if you want `gopls` to be used by vim-illuminate:
   }
 <
 Highlighting is done using the same highlight groups as the builtin LSP which
-is `LspReferenceText`, `LspReferenceRead`, and `LspReferenceWrite`. However,
-most servers just use `LspReferenceText`. You can define this highlight group
-as follows:
+is `LspReferenceText`, `LspReferenceRead`, and `LspReferenceWrite`.
 >
   vim.api.nvim_command [[ hi def link LspReferenceText CursorLine ]]
+  vim.api.nvim_command [[ hi def link LspReferenceWrite CursorLine ]]
+  vim.api.nvim_command [[ hi def link LspReferenceRead CursorLine ]]
 <
-The other additional configuration currently supported is
-|g:Illuminate_delay|.
+The other additional configuration currently supported is |g:Illuminate_delay|.
+
+*illuminate.next_reference()*
+You can cycle through these document highlights with these mappings: >
+	vim.api.nvim_set_keymap('n', '<a-n>', '<cmd>lua require"illuminate".next_reference{wrap=true}<cr>', {noremap=true})
+	vim.api.nvim_set_keymap('n', '<a-p>', '<cmd>lua require"illuminate".next_reference{reverse=true,wrap=true}<cr>', {noremap=true})
+<
 
 ===============================================================================
 3. Configuration                                     *illuminate-configuration*

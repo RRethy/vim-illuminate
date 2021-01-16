@@ -21,10 +21,11 @@ Illuminate will also do a few other niceties such as delaying the highlight for 
 ## LSP Configuration
 
 vim-illuminate can use Neovim's builtin LSP client to intelligently highlight.
+This is not compatible with |illuminate-configuration| with a few exceptions
+explained below.
 
 To set it up, simply call `on_attach` when the LSP client attaches to a
 buffer. For example, if you want `gopls` to be used by vim-illuminate:
-
 ```lua
   require'lspconfig'.gopls.setup {
     on_attach = function(client)
@@ -33,16 +34,23 @@ buffer. For example, if you want `gopls` to be used by vim-illuminate:
     end,
   }
 ```
-
-Highlighting is done using the same highlight groups as the builtin LSP which is `LspReferenceText`, `LspReferenceRead`, and `LspReferenceWrite`. However, most servers just use `LspReferenceText`. You can define this highlight group as follows:
-
+Highlighting is done using the same highlight groups as the builtin LSP which
+is `LspReferenceText`, `LspReferenceRead`, and `LspReferenceWrite`.
 ```lua
   vim.api.nvim_command [[ hi def link LspReferenceText CursorLine ]]
+  vim.api.nvim_command [[ hi def link LspReferenceWrite CursorLine ]]
+  vim.api.nvim_command [[ hi def link LspReferenceRead CursorLine ]]
 ```
 
-The other additional configuration currently supported is |g:Illuminate_delay|. All other configuration options below are not supported when using LSP.
+The other additional configuration currently supported is `g:Illuminate_delay`.
 
-NOTE: `require 'illuminate'.on_attach` will override vim-illuminate's regex based highlighting, no need to disable it yourself.
+You can cycle through these document highlights with these mappings:
+```lua
+vim.api.nvim_set_keymap('n', '<a-n>', '<cmd>lua require"illuminate".next_reference{wrap=true}<cr>', {noremap=true})
+vim.api.nvim_set_keymap('n', '<a-p>', '<cmd>lua require"illuminate".next_reference{reverse=true,wrap=true}<cr>', {noremap=true})
+```
+
+I used alt+n and alt+p but you can map to whatever.
 
 ## Configuration
 
