@@ -49,9 +49,59 @@ local function cursor_in_references(bufnr)
     return false
 end
 
+-- returns true if r1 is before r2 by starting position, otherwise false
+local function before(r1, r2)
+    if r1.start.line < r2.start.line then return true end
+    if r2.start.line < r1.start.line then return false end
+    if r1.start.character < r2.start.character then return true end
+    return false
+end
+
+local function valid(bufnr, range)
+    return range.start.line < vim.api.nvim_buf_line_count(bufnr) and range.start.character < #vim.fn.getline(range.start.line + 1)
+end
+
+local function next_ref(bufnr)
+    local crow, ccol = unpack(vim.api.nvim_win_get_cursor(0))
+    crow = crow - 1 -- reference ranges are (0,0)-indexed for (row,col) while cursor it (1,0)-indexed
+    local refs = M.get_document_highlights(bufnr)
+    if not refs then return nil end
+
+    local next = nil
+    local first = nil
+    for _, ref in pairs(refs) do
+        local range = ref.range
+        if valid(bufnr, range) then
+            if first then
+                if before(range, first) then first = range end
+            else
+                first = range
+            end
+            if before({start={line=crow,character=ccol}}, range) then
+                if next and before(range, next) or not next then next = range end
+            end
+        end
+    end
+    -- if we didn't find a next, then return the first range
+    return next and next or first
+end
+
+local function augroup(autocmds)
+    vim.cmd('augroup vim_illuminate_lsp')
+    vim.cmd('autocmd!')
+    autocmds()
+    vim.cmd('augroup END')
+end
+
+local function autocmd()
+    vim.cmd('autocmd CursorMoved,CursorMovedI <buffer> lua require"illuminate".on_cursor_moved()')
+end
+
 function M.on_attach(_)
     vim.api.nvim_command [[ IlluminationDisable! ]]
-    vim.api.nvim_command [[ autocmd CursorMoved,CursorMovedI <buffer> lua require'illuminate'.on_cursor_moved() ]]
+    augroup(function()
+        autocmd()
+    end)
     vim.lsp.handlers['textDocument/documentHighlight'] = handle_document_highlight
     vim.lsp.buf.document_highlight()
 end
@@ -62,6 +112,23 @@ function M.on_cursor_moved()
         vim.lsp.util.buf_clear_references(bufnr)
     end
     vim.lsp.buf.document_highlight()
+end
+
+function M.get_document_highlights(bufnr)
+    return references[bufnr]
+end
+
+function M.jump_next_document_highlight()
+    -- this will avoid triggering another CursorMoved autocmd when moving the cursor
+    -- we do a autocmd! to clear the autocmd and then redefine it
+    augroup(function()
+        local bufnr = vim.api.nvim_get_current_buf()
+        local range = next_ref(bufnr)
+        if range then
+            vim.api.nvim_win_set_cursor(0, {range.start.line + 1, range.start.character})
+        end
+        autocmd()
+    end)
 end
 
 return M
