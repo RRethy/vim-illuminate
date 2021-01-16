@@ -77,6 +77,13 @@ local function autocmd()
     vim.cmd('autocmd CursorMoved,CursorMovedI <buffer> lua require"illuminate".on_cursor_moved()')
 end
 
+local function move_cursor(row, col)
+    augroup(function()
+        vim.api.nvim_win_set_cursor(0, {row, col})
+        autocmd()
+    end)
+end
+
 function M.on_attach(_)
     vim.api.nvim_command [[ IlluminationDisable! ]]
     augroup(function()
@@ -98,63 +105,42 @@ function M.get_document_highlights(bufnr)
     return references[bufnr]
 end
 
-local function move_cursor(row, col)
-    augroup(function()
-        vim.api.nvim_win_set_cursor(0, {row, col})
-        autocmd()
-    end)
-end
+function M.next_reference(opt)
+    opt = vim.tbl_extend('force', {reverse=false, wrap=false}, opt or {})
 
-function M.next_reference(wrap)
-    local bufnr = vim.api.nvim_get_current_buf()
-    local refs = M.get_document_highlights(bufnr)
-    if not refs then return nil end
+	local bufnr = vim.api.nvim_get_current_buf()
+	local refs = M.get_document_highlights(bufnr)
+	if not refs then return nil end
 
-    local next = nil
-    local crow, ccol = unpack(vim.api.nvim_win_get_cursor(0))
-    local crange = {start={line=crow-1,character=ccol}}
+	local next = nil
+	local crow, ccol = unpack(vim.api.nvim_win_get_cursor(0))
+	local crange = {start={line=crow-1,character=ccol}}
 
     for _, ref in ipairs(refs) do
         local range = ref.range
         if valid(bufnr, range) then
-            if before(crange, range) and (not next or before(range, next)) then
-                next = range
+            if opt.reverse then
+                if before(range, crange) and (not next or before(next, range)) then
+                    next = range
+                end
+            else
+                if before(crange, range) and (not next or before(range, next)) then
+                    next = range
+                end
             end
         end
     end
-    if not next and wrap then
-        next = refs[1].range
+    if not next and opt.wrap then
+        if opt.reverse then
+            next = refs[#refs].range
+        else
+            next = refs[1].range
+        end
     end
     if next then
         move_cursor(next.start.line + 1, next.start.character)
     end
     return next
-end
-
-function M.previous_reference(wrap)
-    local bufnr = vim.api.nvim_get_current_buf()
-    local refs = M.get_document_highlights(bufnr)
-    if not refs then return nil end
-
-    local prev = nil
-    local crow, ccol = unpack(vim.api.nvim_win_get_cursor(0))
-    local crange = {start={line=crow-1,character=ccol}}
-
-    for _, ref in ipairs(refs) do
-        local range = ref.range
-        if valid(bufnr, range) then
-            if before(range, crange) and (not prev or before(prev, range)) then
-                prev = range
-            end
-        end
-    end
-    if not prev and wrap then
-        prev = refs[#refs].range
-    end
-    if prev then
-        move_cursor(prev.start.line + 1, prev.start.character)
-    end
-    return prev
 end
 
 return M
