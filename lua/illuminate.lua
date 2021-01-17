@@ -113,32 +113,33 @@ function M.next_reference(opt)
 	if not refs then return nil end
 
 	local next = nil
+    local nexti = nil
 	local crow, ccol = unpack(vim.api.nvim_win_get_cursor(0))
 	local crange = {start={line=crow-1,character=ccol}}
 
-    for _, ref in ipairs(refs) do
+    for i, ref in ipairs(refs) do
         local range = ref.range
         if valid(bufnr, range) then
             if opt.reverse then
                 if before(range, crange) and (not next or before(next, range)) then
                     next = range
+                    nexti = i
                 end
             else
                 if before(crange, range) and (not next or before(range, next)) then
                     next = range
+                    nexti = i
                 end
             end
         end
     end
     if not next and opt.wrap then
-        if opt.reverse then
-            next = refs[#refs].range
-        else
-            next = refs[1].range
-        end
+        nexti = opt.reverse and #refs or 1
+        next = refs[nexti].range
     end
     if next then
         move_cursor(next.start.line + 1, next.start.character)
+        print('['..nexti..'/'..#refs..']')
     end
     return next
 end
