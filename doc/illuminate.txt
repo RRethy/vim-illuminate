@@ -29,7 +29,7 @@ want it to highlight based on the filetype and highlight-groups.
 
 vim-illuminate will also do a few other niceties such as delaying the highlight
 for a user-defined amount of time based on `g:Illuminate_delay` (by default
-250), it will interact nicely with search highlighting, jumping around
+0), it will interact nicely with search highlighting, jumping around
 between buffers, jumping around between windows, and won't illuminate
 while in insert mode (unless told to).
 
@@ -142,7 +142,7 @@ You can cycle through these document highlights with these mappings: >
                 Amount of time to wait before highlighting
 
                 Default value: >
-                  let g:Illuminate_delay = 250
+                  let g:Illuminate_delay = 0
 
 *g:Illuminate_highlightUnderCursor*
 

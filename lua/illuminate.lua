@@ -22,7 +22,7 @@ local function handle_document_highlight(_, _, result, _, bufnr, _) -- TODO use 
     timers[bufnr] = vim.defer_fn(function()
         vim.lsp.util.buf_clear_references(bufnr)
         vim.lsp.util.buf_highlight_references(bufnr, result)
-    end, vim.g.Illuminate_delay or 250)
+    end, vim.g.Illuminate_delay or 0)
     table.sort(result, function(a, b)
         return before(a.range, b.range)
     end)
