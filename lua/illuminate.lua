@@ -109,8 +109,8 @@ function M.next_reference(opt)
     opt = vim.tbl_extend('force', {reverse=false, wrap=false}, opt or {})
 
 	local bufnr = vim.api.nvim_get_current_buf()
-	local refs = M.get_document_highlights(bufnr)
-	if not refs then return nil end
+    local refs = M.get_document_highlights(bufnr)
+    if not refs or #refs == 0 then return nil end
 
 	local next = nil
     local nexti = nil
