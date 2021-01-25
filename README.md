@@ -54,13 +54,13 @@ I used alt+n and alt+p but you can map to whatever.
 
 ## Configuration
 
-Illuminate will delay before highlighting, this is not lag, it is to avoid the jarring experience of things illuminating too fast. This can be controlled with `g:Illuminate_delay` (which is default to 250 milliseconds):
+Illuminate will delay before highlighting, this is not lag, it is to avoid the jarring experience of things illuminating too fast. This can be controlled with `g:Illuminate_delay` (which is default to 0 milliseconds):
 
 **Note**: Delay only works for Vim8 and Neovim.
 
 ```vim
-" Time in milliseconds (default 250)
-let g:Illuminate_delay = 250
+" Time in milliseconds (default 0)
+let g:Illuminate_delay = 0
 ```
 Illuminate will by default highlight the word under the cursor to match the behaviour seen in Intellij and VSCode. However, to make it not highlight the word under the cursor, use the following:
 
