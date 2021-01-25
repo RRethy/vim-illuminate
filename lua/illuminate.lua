@@ -66,8 +66,8 @@ local function valid(bufnr, range)
         and range.start.character < #vim.fn.getline(range.start.line + 1)
 end
 
-local function augroup(autocmds)
-    vim.cmd('augroup vim_illuminate_lsp')
+local function augroup(bufnr, autocmds)
+    vim.cmd('augroup vim_illuminate_lsp'..bufnr)
     vim.cmd('autocmd!')
     autocmds()
     vim.cmd('augroup END')
@@ -78,7 +78,7 @@ local function autocmd()
 end
 
 local function move_cursor(row, col)
-    augroup(function()
+    augroup(vim.api.nvim_get_current_buf(), function()
         vim.api.nvim_win_set_cursor(0, {row, col})
         autocmd()
     end)
@@ -86,7 +86,7 @@ end
 
 function M.on_attach(_)
     vim.api.nvim_command [[ IlluminationDisable! ]]
-    augroup(function()
+    augroup(vim.api.nvim_get_current_buf(), function()
         autocmd()
     end)
     vim.lsp.handlers['textDocument/documentHighlight'] = handle_document_highlight
