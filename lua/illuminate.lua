@@ -11,24 +11,6 @@ local function before(r1, r2)
     return false
 end
 
-local function handle_document_highlight(_, _, result, _, bufnr, _) -- TODO use client_id
-    if not bufnr then return end
-    local btimer = timers[bufnr]
-    if btimer then
-        vim.loop.timer_stop(btimer)
-    end
-    if type(result) ~= 'table' then return end
-    -- TODO fix getting out of sync when doing a macro
-    timers[bufnr] = vim.defer_fn(function()
-        vim.lsp.util.buf_clear_references(bufnr)
-        vim.lsp.util.buf_highlight_references(bufnr, result)
-    end, vim.g.Illuminate_delay or 0)
-    table.sort(result, function(a, b)
-        return before(a.range, b.range)
-    end)
-    references[bufnr] = result
-end
-
 -- check for cursor row in [start,end]
 -- check for cursor col in [start,end]
 -- While the end is technically exclusive based on the highlighting, we treat it as inclusive to match the server.
@@ -58,6 +40,26 @@ local function cursor_in_references(bufnr)
         end
     end
     return false
+end
+
+local function handle_document_highlight(_, _, result, _, bufnr, _) -- TODO use client_id
+    if not bufnr then return end
+    local btimer = timers[bufnr]
+    if btimer then
+        vim.loop.timer_stop(btimer)
+    end
+    if type(result) ~= 'table' then return end
+    -- TODO fix getting out of sync when doing a macro
+    timers[bufnr] = vim.defer_fn(function()
+        vim.lsp.util.buf_clear_references(bufnr)
+        if not cursor_in_references(bufnr) then
+            vim.lsp.util.buf_highlight_references(bufnr, result)
+        end
+    end, vim.g.Illuminate_delay or 0)
+    table.sort(result, function(a, b)
+        return before(a.range, b.range)
+    end)
+    references[bufnr] = result
 end
 
 local function valid(bufnr, range)
