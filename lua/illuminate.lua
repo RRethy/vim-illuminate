@@ -52,7 +52,7 @@ local function handle_document_highlight(_, _, result, _, bufnr, _) -- TODO use 
     -- TODO fix getting out of sync when doing a macro
     timers[bufnr] = vim.defer_fn(function()
         vim.lsp.util.buf_clear_references(bufnr)
-        if not cursor_in_references(bufnr) then
+        if cursor_in_references(bufnr) then
             vim.lsp.util.buf_highlight_references(bufnr, result)
         end
     end, vim.g.Illuminate_delay or 0)
