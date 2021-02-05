@@ -48,8 +48,10 @@ local function handle_document_highlight(_, _, result, _, bufnr, _) -- TODO use 
     if btimer then
         vim.loop.timer_stop(btimer)
     end
-    if type(result) ~= 'table' then return end
-    -- TODO fix getting out of sync when doing a macro
+    if type(result) ~= 'table' then
+        vim.lsp.util.buf_clear_references(bufnr)
+        return
+    end
     timers[bufnr] = vim.defer_fn(function()
         vim.lsp.util.buf_clear_references(bufnr)
         if cursor_in_references(bufnr) then
