@@ -179,7 +179,7 @@ endf
 
 fun! s:dict_has_key_pat(d, key) abort
   for [k, v] in items(a:d)
-    if key =~# '^'..k..'$'
+    if key =~# '^'.k.'$'
       return 1
     endif
   endfor
@@ -188,7 +188,7 @@ endfun
 
 fun! s:list_contains_pat(list, val) abort
   for pat in a:list
-    if a:val =~# '^'..pat..'$'
+    if a:val =~# '^'.pat.'$'
       return 1
     endif
   endfor
