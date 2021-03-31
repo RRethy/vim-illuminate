@@ -4,10 +4,18 @@ local timers = {}
 local references = {}
 
 -- returns r1 < r2 based on start of range
-local function before(r1, r2)
+local function before_by_start(r1, r2)
     if r1.start.line < r2.start.line then return true end
     if r2.start.line < r1.start.line then return false end
     if r1.start.character < r2.start.character then return true end
+    return false
+end
+
+-- returns r1 < r2 base on start and if they are disjoint
+local function before_disjoint(r1, r2)
+    if r1['end'].line < r2.start.line then return true end
+    if r2.start.line < r1['end'].line then return false end
+    if r1['end'].character < r2.start.character then return true end
     return false
 end
 
@@ -59,7 +67,7 @@ local function handle_document_highlight(_, _, result, _, bufnr, _) -- TODO use 
         end
     end, vim.g.Illuminate_delay or 0)
     table.sort(result, function(a, b)
-        return before(a.range, b.range)
+        return before_by_start(a.range, b.range)
     end)
     references[bufnr] = result
 end
@@ -110,8 +118,14 @@ function M.get_document_highlights(bufnr)
 end
 
 function M.next_reference(opt)
-    opt = vim.tbl_extend('force', {reverse=false, wrap=false}, opt or {})
+    opt = vim.tbl_extend('force', {reverse=false, wrap=false, range_ordering='start'}, opt or {})
 
+    local before
+    if opt.range_ordering == 'start' then
+        before = before_by_start
+    else
+        before = before_disjoint
+    end
 	local bufnr = vim.api.nvim_get_current_buf()
     local refs = M.get_document_highlights(bufnr)
     if not refs or #refs == 0 then return nil end
