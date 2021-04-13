@@ -16,7 +16,7 @@ fun! illuminate#on_cursor_moved() abort
 
   if s:previous_match !=# s:get_cur_word()
     call s:remove_illumination()
-  elseif get(g:, 'Illuminate_highlightUnderCursor', 1) != 0 || hlexists('illuminatedCurWord')
+  elseif get(g:, 'Illuminate_highlightUnderCursor', 1) == 0 || hlexists('illuminatedCurWord')
     call s:remove_illumination()
     call s:illuminate()
     return
