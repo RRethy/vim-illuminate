@@ -91,10 +91,14 @@ local function autocmd()
 end
 
 local function move_cursor(row, col)
-    augroup(vim.api.nvim_get_current_buf(), function()
+    if not paused_bufs[vim.api.nvim_get_current_buf()] then
+        augroup(vim.api.nvim_get_current_buf(), function()
+            vim.api.nvim_win_set_cursor(0, {row, col})
+            autocmd()
+        end)
+    else
         vim.api.nvim_win_set_cursor(0, {row, col})
-        autocmd()
-    end)
+    end
 end
 
 function M.on_attach(client)
