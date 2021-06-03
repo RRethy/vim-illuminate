@@ -2,20 +2,21 @@ local M = {}
 
 local timers = {}
 local references = {}
+local paused_bufs = {}
 
 -- returns r1 < r2 based on start of range
 local function before_by_start(r1, r2)
-    if r1.start.line < r2.start.line then return true end
-    if r2.start.line < r1.start.line then return false end
-    if r1.start.character < r2.start.character then return true end
+    if r1['start'].line < r2['start'].line then return true end
+    if r2['start'].line < r1['start'].line then return false end
+    if r1['start'].character < r2['start'].character then return true end
     return false
 end
 
 -- returns r1 < r2 base on start and if they are disjoint
 local function before_disjoint(r1, r2)
-    if r1['end'].line < r2.start.line then return true end
-    if r2.start.line < r1['end'].line then return false end
-    if r1['end'].character < r2.start.character then return true end
+    if r1['end'].line < r2['start'].line then return true end
+    if r2['start'].line < r1['end'].line then return false end
+    if r1['end'].character < r2['start'].character then return true end
     return false
 end
 
@@ -81,7 +82,7 @@ end
 local function augroup(bufnr, autocmds)
     vim.cmd('augroup vim_illuminate_lsp'..bufnr)
     vim.cmd('autocmd!')
-    autocmds()
+    if autocmds then autocmds() end
     vim.cmd('augroup END')
 end
 
@@ -97,7 +98,7 @@ local function move_cursor(row, col)
 end
 
 function M.on_attach(client)
-    if client and (not client.supports_method('textDocument/documentHighlight')) then
+    if client and not client.supports_method('textDocument/documentHighlight') then
         return
     end
     vim.api.nvim_command [[ IlluminationDisable! ]]
@@ -163,6 +164,18 @@ function M.next_reference(opt)
         print('['..nexti..'/'..#refs..']')
     end
     return next
+end
+
+function M.toggle_pause()
+    if paused_bufs[vim.api.nvim_get_current_buf()] then
+        paused_bufs[vim.api.nvim_get_current_buf()] = nil
+        augroup(vim.api.nvim_get_current_buf(), function()
+            autocmd()
+        end)
+    else
+        paused_bufs[vim.api.nvim_get_current_buf()] = true
+        augroup(vim.api.nvim_get_current_buf(), nil)
+    end
 end
 
 return M

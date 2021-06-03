@@ -65,6 +65,11 @@ You can cycle through these document highlights with these mappings: >
 	vim.api.nvim_set_keymap('n', '<a-p>', '<cmd>lua require"illuminate".next_reference{reverse=true,wrap=true}<cr>', {noremap=true})
 <
 
+*illuminate.toggle_pause()*
+You can pause LSP functionality and leave the highlighting in place until it is resumed: >
+	vim.api.nvim_set_keymap('n', '<a-i>', '<cmd>lua require"illuminate".toggle_pause()<cr>', {noremap=true})
+<
+
 ===============================================================================
 3. Configuration                                     *illuminate-configuration*
 
