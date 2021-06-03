@@ -168,10 +168,11 @@ end
 
 function M.toggle_pause()
     if paused_bufs[vim.api.nvim_get_current_buf()] then
-        paused_bufs[vim.api.nvim_get_current_buf()] = nil
+        paused_bufs[vim.api.nvim_get_current_buf()] = false
         augroup(vim.api.nvim_get_current_buf(), function()
             autocmd()
         end)
+        M.on_cursor_moved()
     else
         paused_bufs[vim.api.nvim_get_current_buf()] = true
         augroup(vim.api.nvim_get_current_buf(), nil)
