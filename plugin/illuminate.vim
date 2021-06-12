@@ -14,7 +14,7 @@ if !hlexists('illuminatedWord')
   if !empty(get(g:, 'Illuminate_hl_link', ''))
     exe get(g:, 'Illuminate_hl_link', '')
   else
-    hi link illuminatedWord cursorline
+    hi def link illuminatedWord cursorline
   endif
 endif
 " }}}
