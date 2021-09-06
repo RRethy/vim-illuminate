@@ -44,4 +44,8 @@ command! -nargs=0 DisableIllumination :IlluminationDisable
 command! -nargs=0 EnableIllumination :IlluminationEnable
 " }}} Commands:
 
+" if has('nvim')
+"     lua require("illuminate.treesitter").init()
+" end
+
 " vim: foldlevel=1 foldmethod=marker

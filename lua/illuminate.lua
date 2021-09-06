@@ -66,7 +66,7 @@ local function handle_document_highlight(_, _, result, _, bufnr, _) -- TODO use 
         if cursor_in_references(bufnr) then
             vim.lsp.util.buf_highlight_references(bufnr, result)
         end
-    end, vim.g.Illuminate_delay or 0)
+    end, vim.g.Illuminate_delay or 17)
     table.sort(result, function(a, b)
         return before_by_start(a.range, b.range)
     end)
@@ -82,19 +82,24 @@ end
 local function augroup(bufnr, autocmds)
     vim.cmd('augroup vim_illuminate_lsp'..bufnr)
     vim.cmd('autocmd!')
-    if autocmds then autocmds() end
+    if autocmds then
+        vim.b.illuminate_lsp_enabled = true
+        autocmds()
+    else
+        vim.b.illuminate_lsp_enabled = false
+    end
     vim.cmd('augroup END')
 end
 
-local function autocmd()
-    vim.cmd('autocmd CursorMoved,CursorMovedI <buffer> lua require"illuminate".on_cursor_moved()')
+local function autocmd(bufnr)
+    vim.cmd(string.format('autocmd CursorMoved,CursorMovedI <buffer=%d> lua require"illuminate".on_cursor_moved(%d)', bufnr, bufnr))
 end
 
 local function move_cursor(row, col)
     if not paused_bufs[vim.api.nvim_get_current_buf()] then
         augroup(vim.api.nvim_get_current_buf(), function()
             vim.api.nvim_win_set_cursor(0, {row, col})
-            autocmd()
+            autocmd(vim.api.nvim_get_current_buf())
         end)
     else
         vim.api.nvim_win_set_cursor(0, {row, col})
@@ -106,15 +111,15 @@ function M.on_attach(client)
         return
     end
     vim.api.nvim_command [[ IlluminationDisable! ]]
+    require('illuminate.treesitter').detach(vim.api.nvim_get_current_buf())
     augroup(vim.api.nvim_get_current_buf(), function()
-        autocmd()
+        autocmd(vim.api.nvim_get_current_buf())
     end)
     vim.lsp.handlers['textDocument/documentHighlight'] = handle_document_highlight
     vim.lsp.buf.document_highlight()
 end
 
-function M.on_cursor_moved()
-    local bufnr = vim.api.nvim_get_current_buf()
+function M.on_cursor_moved(bufnr)
     if not cursor_in_references(bufnr) then
         vim.lsp.util.buf_clear_references(bufnr)
     end
@@ -174,9 +179,9 @@ function M.toggle_pause()
     if paused_bufs[vim.api.nvim_get_current_buf()] then
         paused_bufs[vim.api.nvim_get_current_buf()] = false
         augroup(vim.api.nvim_get_current_buf(), function()
-            autocmd()
+            autocmd(vim.api.nvim_get_current_buf())
         end)
-        M.on_cursor_moved()
+        M.on_cursor_moved(vim.api.nvim_get_current_buf())
     else
         paused_bufs[vim.api.nvim_get_current_buf()] = true
         augroup(vim.api.nvim_get_current_buf(), nil)
