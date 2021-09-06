@@ -51,7 +51,7 @@ local function cursor_in_references(bufnr)
     return false
 end
 
-local function handle_document_highlight(_, _, result, _, bufnr, _) -- TODO use client_id
+local function handle_document_highlight(result, bufnr)
     if not bufnr then return end
     local btimer = timers[bufnr]
     if btimer then
@@ -115,7 +115,13 @@ function M.on_attach(client)
     augroup(vim.api.nvim_get_current_buf(), function()
         autocmd(vim.api.nvim_get_current_buf())
     end)
-    vim.lsp.handlers['textDocument/documentHighlight'] = handle_document_highlight
+    vim.lsp.handlers['textDocument/documentHighlight'] = function(...)
+        if vim.fn.has('nvim-0.5.1') == 1 then
+            handle_document_highlight(select(2, ...), select(3, ...).bufnr)
+        else
+            handle_document_highlight(select(3, ...), select(5, ...))
+        end
+    end
     vim.lsp.buf.document_highlight()
 end
 
