@@ -111,7 +111,6 @@ function M.on_attach(client)
         return
     end
     vim.api.nvim_command [[ IlluminationDisable! ]]
-    require('illuminate.treesitter').detach(vim.api.nvim_get_current_buf())
     augroup(vim.api.nvim_get_current_buf(), function()
         autocmd(vim.api.nvim_get_current_buf())
     end)
