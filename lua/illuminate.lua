@@ -51,7 +51,7 @@ local function cursor_in_references(bufnr)
     return false
 end
 
-local function handle_document_highlight(result, bufnr)
+local function handle_document_highlight(result, bufnr, client_id)
     if not bufnr then return end
     local btimer = timers[bufnr]
     if btimer then
@@ -64,7 +64,7 @@ local function handle_document_highlight(result, bufnr)
     timers[bufnr] = vim.defer_fn(function()
         vim.lsp.util.buf_clear_references(bufnr)
         if cursor_in_references(bufnr) then
-            vim.lsp.util.buf_highlight_references(bufnr, result)
+            vim.lsp.util.buf_highlight_references(bufnr, result, client_id)
         end
     end, vim.g.Illuminate_delay or 17)
     table.sort(result, function(a, b)
@@ -116,9 +116,9 @@ function M.on_attach(client)
     end)
     vim.lsp.handlers['textDocument/documentHighlight'] = function(...)
         if vim.fn.has('nvim-0.5.1') == 1 then
-            handle_document_highlight(select(2, ...), select(3, ...).bufnr)
+            handle_document_highlight(select(2, ...), select(3, ...).bufnr, select(3, ...).client_id)
         else
-            handle_document_highlight(select(3, ...), select(5, ...))
+            handle_document_highlight(select(3, ...), select(5, ...), nil)
         end
     end
     vim.lsp.buf.document_highlight()
