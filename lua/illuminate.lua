@@ -136,7 +136,7 @@ function M.get_document_highlights(bufnr)
 end
 
 function M.next_reference(opt)
-    opt = vim.tbl_extend('force', {reverse=false, wrap=false, range_ordering='start'}, opt or {})
+    opt = vim.tbl_extend('force', {reverse=false, wrap=false, range_ordering='start', silent=false}, opt or {})
 
     local before
     if opt.range_ordering == 'start' then
@@ -175,7 +175,9 @@ function M.next_reference(opt)
     end
     if next then
         move_cursor(next.start.line + 1, next.start.character)
-        print('['..nexti..'/'..#refs..']')
+        if not opt.silent then
+            print('['..nexti..'/'..#refs..']')
+        end
     end
     return next
 end
