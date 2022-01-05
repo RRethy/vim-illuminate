@@ -122,13 +122,7 @@ fun! s:match_word(word) abort
 endf
 
 fun! s:get_cur_word() abort
-  let line = getline('.')
-  let col = col('.') - 1
-  let left_part = strpart(line, 0, col + 1)
-  let right_part = strpart(line, col, col('$'))
-  let word = matchstr(left_part, '\k*$') . matchstr(right_part, '^\k*')[1:]
-
-  return '\<' . escape(word, '/\') . '\>'
+  return luaeval("require'illuminate'.get_cur_word()") 
 endf
 
 fun! s:remove_illumination() abort

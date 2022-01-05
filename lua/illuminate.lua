@@ -135,6 +135,15 @@ function M.get_document_highlights(bufnr)
     return references[bufnr]
 end
 
+function M.get_cur_word()
+    local line = vim.fn.getline('.')
+    local col = vim.fn.col('.') - 1
+    local left_part = vim.fn.strpart(line, 0, col + 1)
+    local right_part = vim.fn.strpart(line, col, vim.fn.col('$'))
+    local word = vim.fn.matchstr(left_part, [[\k*$]]) .. string.sub(vim.fn.matchstr(right_part, [[^\k*]]), 2)
+    return [[\<]] .. vim.fn.escape(word, [[/\]]) .. [[\>]]
+end
+
 function M.next_reference(opt)
     opt = vim.tbl_extend('force', {reverse=false, wrap=false, range_ordering='start', silent=false}, opt or {})
 
@@ -146,7 +155,18 @@ function M.next_reference(opt)
     end
 	local bufnr = vim.api.nvim_get_current_buf()
     local refs = M.get_document_highlights(bufnr)
-    if not refs or #refs == 0 then return nil end
+    if not refs or #refs == 0 then
+        local word = M.get_cur_word()
+        if word == [[\<\>]] then
+            return
+        end
+        local flag = ''
+        if opt.reverse then
+            flag = 'b'
+        end
+        vim.fn.search(word, flag)
+        return
+    end
 
 	local next = nil
     local nexti = nil
