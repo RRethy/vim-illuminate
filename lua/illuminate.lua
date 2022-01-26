@@ -64,7 +64,8 @@ local function handle_document_highlight(result, bufnr, client_id)
     timers[bufnr] = vim.defer_fn(function()
         vim.lsp.util.buf_clear_references(bufnr)
         if cursor_in_references(bufnr) then
-            vim.lsp.util.buf_highlight_references(bufnr, result, client_id)
+            local client = vim.lsp.get_client_by_id(client_id)
+            vim.lsp.util.buf_highlight_references(bufnr, result, client.offset_encoding)
         end
     end, vim.g.Illuminate_delay or 17)
     table.sort(result, function(a, b)
