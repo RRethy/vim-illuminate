@@ -51,12 +51,16 @@ local function cursor_in_references(bufnr)
     return false
 end
 
-local function handle_document_highlight(result, bufnr, client_id)
-    if not bufnr then return end
+local function timer_stop(bufnr)
     local btimer = timers[bufnr]
     if btimer then
         vim.loop.timer_stop(btimer)
     end
+end
+
+local function handle_document_highlight(result, bufnr, client_id)
+    if not bufnr then return end
+    timer_stop(bufnr)
     if type(result) ~= 'table' then
         vim.lsp.util.buf_clear_references(bufnr)
         return
@@ -93,7 +97,10 @@ local function augroup(bufnr, autocmds)
 end
 
 local function autocmd(bufnr)
-    vim.cmd(string.format('autocmd CursorMoved,CursorMovedI <buffer=%d> lua require"illuminate".on_cursor_moved(%d)', bufnr, bufnr))
+    vim.cmd(string.format('autocmd CursorMoved,InsertLeave <buffer=%d> lua require"illuminate".on_cursor_moved(%d)', bufnr, bufnr))
+    vim.cmd(string.format('autocmd WinLeave,BufLeave <buffer=%d> lua require"illuminate".on_leaving_autocmds(%d)', bufnr, bufnr))
+    vim.cmd(string.format('autocmd CursorMovedI <buffer=%d> lua require"illuminate".on_cursor_moved_i(%d)', bufnr, bufnr))
+    vim.cmd(string.format('autocmd InsertEnter <buffer=%d> lua require"illuminate".on_insert_entered(%d)', bufnr, bufnr))
 end
 
 local function move_cursor(row, col)
@@ -125,11 +132,29 @@ function M.on_attach(client)
     vim.lsp.buf.document_highlight()
 end
 
+function M.on_cursor_moved_i(bufnr)
+    if vim.F.if_nil(vim.g.Illuminate_insert_mode_highlight, 0) == 1 then
+        M.on_cursor_moved(bufnr)
+    end
+end
+
 function M.on_cursor_moved(bufnr)
     if not cursor_in_references(bufnr) then
         vim.lsp.util.buf_clear_references(bufnr)
     end
     vim.lsp.buf.document_highlight()
+end
+
+function M.on_insert_entered(bufnr)
+    if vim.F.if_nil(vim.g.Illuminate_insert_mode_highlight, 0) == 0 then
+        timer_stop(bufnr)
+        vim.lsp.util.buf_clear_references(bufnr)
+    end
+end
+
+function M.on_leaving_autocmds(bufnr)
+    timer_stop(bufnr)
+    vim.lsp.util.buf_clear_references(bufnr)
 end
 
 function M.get_document_highlights(bufnr)
