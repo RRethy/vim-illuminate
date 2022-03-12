@@ -52,7 +52,7 @@ local function cursor_in_references(bufnr)
 end
 
 local function handle_document_highlight(result, bufnr, client_id)
-    if not bufnr then return end
+    if not (bufnr and vim.api.nvim_buf_is_loaded(bufnr)) then return end
     local btimer = timers[bufnr]
     if btimer then
         vim.loop.timer_stop(btimer)
