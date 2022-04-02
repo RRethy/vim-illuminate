@@ -62,6 +62,7 @@ local function handle_document_highlight(result, bufnr, client_id)
         return
     end
     timers[bufnr] = vim.defer_fn(function()
+        if not bufnr or not vim.api.nvim_buf_is_loaded(bufnr) then return end
         vim.lsp.util.buf_clear_references(bufnr)
         if cursor_in_references(bufnr) then
             local client = vim.lsp.get_client_by_id(client_id)
