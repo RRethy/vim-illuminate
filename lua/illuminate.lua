@@ -130,7 +130,21 @@ function M.on_cursor_moved(bufnr)
     if not cursor_in_references(bufnr) then
         vim.lsp.util.buf_clear_references(bufnr)
     end
-    vim.lsp.buf.document_highlight()
+
+    -- Best-effort check if any client support textDocument/documentHighlight
+    local supported = nil
+    if vim.lsp.for_each_buffer_client then
+        supported = false
+        vim.lsp.for_each_buffer_client(bufnr, function(client)
+            if client.supports_method('textDocument/documentHighlight') then
+                supported = true
+            end
+        end)
+    end
+
+    if supported == nil or supported then
+        vim.lsp.buf.document_highlight()
+    end
 end
 
 function M.get_document_highlights(bufnr)
