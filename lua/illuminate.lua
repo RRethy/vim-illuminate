@@ -67,6 +67,9 @@ local function handle_document_highlight(result, bufnr, client_id)
         if cursor_in_references(bufnr) then
             local client = vim.lsp.get_client_by_id(client_id)
             vim.lsp.util.buf_highlight_references(bufnr, result, client.offset_encoding)
+            if client then
+                vim.lsp.util.buf_highlight_references(bufnr, result, client.offset_encoding)
+            end
         end
     end, vim.g.Illuminate_delay or 17)
     table.sort(result, function(a, b)
