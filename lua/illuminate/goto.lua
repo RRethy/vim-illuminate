@@ -1,5 +1,6 @@
 local util = require('illuminate.util')
 local ref = require('illuminate.reference')
+local engine = require('illuminate.engine')
 
 local M = {}
 
@@ -21,7 +22,9 @@ function M.goto_next_reference()
     local pos, _ = unpack(ref.buf_get_references(bufnr)[i])
     local new_cursor_pos = { pos[1] + 1, pos[2] }
     vim.cmd('normal! m`')
+    engine.freeze_buf(bufnr)
     vim.api.nvim_win_set_cursor(winid, new_cursor_pos)
+    engine.unfreeze_buf(bufnr)
 end
 
 function M.goto_prev_reference()
@@ -42,7 +45,9 @@ function M.goto_prev_reference()
     local pos, _ = unpack(ref.buf_get_references(bufnr)[i])
     local new_cursor_pos = { pos[1] + 1, pos[2] }
     vim.cmd('normal! m`')
+    engine.freeze_buf(bufnr)
     vim.api.nvim_win_set_cursor(winid, new_cursor_pos)
+    engine.unfreeze_buf(bufnr)
 end
 
 return M

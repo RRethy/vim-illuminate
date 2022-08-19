@@ -249,6 +249,14 @@ function M.resume_buf()
     require('illuminate.engine').resume_buf()
 end
 
+function M.freeze_buf()
+    require('illuminate.engine').freeze_buf()
+end
+
+function M.unfreeze_buf()
+    require('illuminate.engine').unfreeze_buf()
+end
+
 function M.goto_next_reference()
     require('illuminate.goto').goto_next_reference()
 end

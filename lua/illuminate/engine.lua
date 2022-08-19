@@ -12,6 +12,7 @@ local stopped_bufs = {}
 local is_paused = false
 local written = {}
 local error_timestamps = {}
+local frozen_bufs = {}
 
 local function buf_should_illuminate(bufnr)
     if is_paused or paused_bufs[bufnr] or stopped_bufs[bufnr] then
@@ -64,6 +65,10 @@ end
 function M.refresh_references(bufnr, winid)
     bufnr = bufnr or vim.api.nvim_get_current_buf()
     winid = winid or vim.api.nvim_get_current_win()
+
+    if frozen_bufs[bufnr] then
+        return
+    end
 
     if not buf_should_illuminate(bufnr) then
         hl.buf_clear_references(bufnr)
@@ -199,8 +204,16 @@ function M.resume_buf(bufnr)
 end
 
 function M.stop_buf(bufnr)
-    stopped_bufs[bufnr or vim.api.nvim_get_current_buf()] = nil
+    stopped_bufs[bufnr or vim.api.nvim_get_current_buf()] = true
     M.refresh_references()
+end
+
+function M.freeze_buf(bufnr)
+    frozen_bufs[bufnr or vim.api.nvim_get_current_buf()] = true
+end
+
+function M.unfreeze_buf(bufnr)
+    frozen_bufs[bufnr or vim.api.nvim_get_current_buf()] = nil
 end
 
 return M

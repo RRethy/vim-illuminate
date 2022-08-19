@@ -129,6 +129,14 @@ Buffer-local pause of vim-illuminate.
 
 Buffer-local resume of vim-illuminate.
 
+> require('illuminate').freeze_buf()
+
+Freeze the illumination on the buffer, this won't clear the highlights.
+
+> require('illuminate').unfreeze_buf()
+
+Unfreeze the illumination on the buffer.
+
 > require('illuminate').goto_next_reference()
 
 Move the cursor to the closest references after the cursor which it is not currently on. Wraps the buffer if on the last reference.
