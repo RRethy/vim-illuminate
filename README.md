@@ -101,43 +101,43 @@ Buffer-local toggle of the pause/resume for vim-illuminate.
 
 # Functions
 
-### require('illuminate').configure(config)
+> require('illuminate').configure(config)
 
 Override the default configuration with `config`
 
-### require('illuminate').pause()
+> require('illuminate').pause()
 
 Globally pause vim-illuminate.
 
-### require('illuminate').resume()
+> require('illuminate').resume()
 
 Globally resume vim-illuminate.
 
-### require('illuminate').toggle()
+> require('illuminate').toggle()
 
 Globally toggle the pause/resume for vim-illuminate.
 
-### require('illuminate').toggle_buf()
+> require('illuminate').toggle_buf()
 
 Buffer-local toggle of the pause/resume for vim-illuminate.
 
-### require('illuminate').pause_buf()
+> require('illuminate').pause_buf()
 
 Buffer-local pause of vim-illuminate.
 
-### require('illuminate').resume_buf()
+> require('illuminate').resume_buf()
 
 Buffer-local resume of vim-illuminate.
 
-### require('illuminate').goto_next_reference()
+> require('illuminate').goto_next_reference()
 
 Move the cursor to the closest references after the cursor which it is not currently on. Wraps the buffer if on the last reference.
 
-### require('illuminate').goto_prev_reference()
+> require('illuminate').goto_prev_reference()
 
 Move the cursor to the closest references before the cursor which it is not currently on. Wraps the buffer if on the first reference.
 
-### require('illuminate').textobj_select()
+> require('illuminate').textobj_select()
 
 Selects the reference the cursor is currently on for use as a text-object.
 
