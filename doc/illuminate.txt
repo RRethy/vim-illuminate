@@ -1,9 +1,9 @@
-*illuminate.txt*Vim plugin for automatically highlighting other uses of the word under the cursor using either LSP, Tree-sitter, or regex matching.
+*illuminate.txt*          For NVIM v0.8.0          Last change: 2022 August 19
 
 ==============================================================================
 Table of Contents                               *illuminate-table-of-contents*
 
-1. vim-illuminate                                  |illuminate-vim-illuminate|
+1. Overview                                              |illuminate-overview|
 2. Quickstart                                          |illuminate-quickstart|
 3. Configuration                                    |illuminate-configuration|
 4. Highlight Groups                              |illuminate-highlight-groups|
@@ -12,7 +12,7 @@ Table of Contents                               *illuminate-table-of-contents*
 7. Vim Users                                            |illuminate-vim-users|
 
 ==============================================================================
-1. vim-illuminate                                  *illuminate-vim-illuminate*
+1. Overview                                              *illuminate-overview*
 
 Vim plugin for automatically highlighting other uses of the word under the
 cursor using either LSP, Tree-sitter, or regex matching.
@@ -73,28 +73,34 @@ and `<a-i\>` as a textobject for the reference illuminated under the cursor.
 ==============================================================================
 4. Highlight Groups                              *illuminate-highlight-groups*
 
-ILLUMINATEDWORDTEXT ~
+                                             *illuminate-:IlluminatedWordText*
 
-Default highlight group used for references if no kind information is
-available.
+:IlluminatedWordText                   Default highlight group used for
+                                       references if no kind information is
+                                       available.
+
 
 >
     hi def IlluminatedWordText gui=underline
 <
 
 
-ILLUMINATEDWORDREAD ~
+                                             *illuminate-:IlluminatedWordRead*
 
-Highlight group used for references of kind read.
+:IlluminatedWordRead                   Highlight group used for references of
+                                       kind read.
+
 
 >
     hi def IlluminatedWordRead gui=underline
 <
 
 
-ILLUMINATEDWORDWRITE ~
+                                            *illuminate-:IlluminatedWordWrite*
 
-Highlight group used for references of kind write.
+:IlluminatedWordWrite                  Highlight group used for references of
+                                       kind write.
+
 
 >
     hi def IlluminatedWordWrite gui=underline
@@ -104,94 +110,111 @@ Highlight group used for references of kind write.
 ==============================================================================
 5. Commands                                              *illuminate-commands*
 
-:ILLUMINATEPAUSE ~
+                                                 *illuminate-:IlluminatePause*
 
-Globally pause vim-illuminate.
+:IlluminatePause                       Globally pause vim-illuminate.
 
-:ILLUMINATERESUME ~
 
-Globally resume vim-illuminate.
+                                                *illuminate-:IlluminateResume*
 
-:ILLUMINATETOGGLE ~
+:IlluminateResume                      Globally resume vim-illuminate.
 
-Globally toggle the pause/resume for vim-illuminate.
 
-:ILLUMINATEPAUSEBUF ~
+                                                *illuminate-:IlluminateToggle*
 
-Buffer-local pause of vim-illuminate.
+:IlluminateToggle                      Globally toggle the pause/resume for
+                                       vim-illuminate.
 
-:ILLUMINATERESUMEBUF ~
 
-Buffer-local resume of vim-illuminate.
+                                              *illuminate-:IlluminatePauseBuf*
 
-:ILLUMINATETOGGLEBUF ~
+:IlluminatePauseBuf                    Buffer-local pause of vim-illuminate.
 
-Buffer-local toggle of the pause/resume for vim-illuminate.
+
+                                             *illuminate-:IlluminateResumeBuf*
+
+:IlluminateResumeBuf                   Buffer-local resume of vim-illuminate.
+
+
+                                             *illuminate-:IlluminateToggleBuf*
+
+:IlluminateToggleBuf                   Buffer-local toggle of the pause/resume
+                                       for vim-illuminate.
+
 
 ==============================================================================
 6. Functions                                            *illuminate-functions*
 
+                          *illuminate-require('illuminate').configure(config)*
 
-  require('illuminate').configure(config)
-
-
-Override the default configuration with `config`
-
-
-  require('illuminate').pause()
+require('illuminate').configure(config) Override the default configuration with
+                                       `config`
 
 
-Globally pause vim-illuminate.
+                                    *illuminate-require('illuminate').pause()*
+
+require('illuminate').pause()          Globally pause vim-illuminate.
 
 
-  require('illuminate').resume()
+                                   *illuminate-require('illuminate').resume()*
+
+require('illuminate').resume()         Globally resume vim-illuminate.
 
 
-Globally resume vim-illuminate.
+                                   *illuminate-require('illuminate').toggle()*
+
+require('illuminate').toggle()         Globally toggle the pause/resume for
+                                       vim-illuminate.
 
 
-  require('illuminate').toggle()
+                               *illuminate-require('illuminate').toggle_buf()*
+
+require('illuminate').toggle_buf()     Buffer-local toggle of the pause/resume
+                                       for vim-illuminate.
 
 
-Globally toggle the pause/resume for vim-illuminate.
+                                *illuminate-require('illuminate').pause_buf()*
+
+require('illuminate').pause_buf()      Buffer-local pause of vim-illuminate.
 
 
-  require('illuminate').toggle_buf()
+                               *illuminate-require('illuminate').resume_buf()*
+
+require('illuminate').resume_buf()     Buffer-local resume of vim-illuminate.
 
 
-Buffer-local toggle of the pause/resume for vim-illuminate.
+                               *illuminate-require('illuminate').freeze_buf()*
+
+require('illuminate').freeze_buf()     Freeze the illumination on the buffer,
+                                       this won’t clear the highlights.
 
 
-  require('illuminate').pause_buf()
+                             *illuminate-require('illuminate').unfreeze_buf()*
+
+require('illuminate').unfreeze_buf()   Unfreeze the illumination on the buffer.
 
 
-Buffer-local pause of vim-illuminate.
+                      *illuminate-require('illuminate').goto_next_reference()*
+
+require('illuminate').goto_next_reference() Move the cursor to the closest
+                                       references after the cursor which it is
+                                       not currently on. Wraps the buffer if on
+                                       the last reference.
 
 
-  require('illuminate').resume_buf()
+                      *illuminate-require('illuminate').goto_prev_reference()*
+
+require('illuminate').goto_prev_reference() Move the cursor to the closest
+                                       references before the cursor which it is
+                                       not currently on. Wraps the buffer if on
+                                       the first reference.
 
 
-Buffer-local resume of vim-illuminate.
+                           *illuminate-require('illuminate').textobj_select()*
 
+require('illuminate').textobj_select() Selects the reference the cursor is
+                                       currently on for use as a text-object.
 
-  require('illuminate').goto_next_reference()
-
-
-Move the cursor to the closest references after the cursor which it is not
-currently on. Wraps the buffer if on the last reference.
-
-
-  require('illuminate').goto_prev_reference()
-
-
-Move the cursor to the closest references before the cursor which it is not
-currently on. Wraps the buffer if on the first reference.
-
-
-  require('illuminate').textobj_select()
-
-
-Selects the reference the cursor is currently on for use as a text-object.
 
 ==============================================================================
 7. Vim Users                                            *illuminate-vim-users*
@@ -223,9 +246,9 @@ word under the cursor, use the following:
 
 
 By default illuminate will highlight all words the cursor passes over, but for
-many languages, you will only want to highlight certain highlight-groups (you
+many languages, you will only want to highlight certain highlight-groups. You
 can determine the highlight-group of a symbol under your cursor with `:echo
-synIDattr(synID(line("."), col("."), 1), "name")`).
+synIDattr(synID(line("."), col("."), 1), "name")`.
 
 You can define which highlight groups you want the illuminating to apply to.
 This can be done with a dict mapping a filetype to a list of highlight-groups
