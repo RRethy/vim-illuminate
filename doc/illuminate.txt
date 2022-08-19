@@ -73,9 +73,9 @@ and `<a-i\>` as a textobject for the reference illuminated under the cursor.
 ==============================================================================
 4. Highlight Groups                              *illuminate-highlight-groups*
 
-                                             *illuminate-:IlluminatedWordText*
+                                              *illuminate-IlluminatedWordText*
 
-:IlluminatedWordText                   Default highlight group used for
+IlluminatedWordText                    Default highlight group used for
                                        references if no kind information is
                                        available.
 
@@ -85,9 +85,9 @@ and `<a-i\>` as a textobject for the reference illuminated under the cursor.
 <
 
 
-                                             *illuminate-:IlluminatedWordRead*
+                                              *illuminate-IlluminatedWordRead*
 
-:IlluminatedWordRead                   Highlight group used for references of
+IlluminatedWordRead                    Highlight group used for references of
                                        kind read.
 
 
@@ -96,9 +96,9 @@ and `<a-i\>` as a textobject for the reference illuminated under the cursor.
 <
 
 
-                                            *illuminate-:IlluminatedWordWrite*
+                                             *illuminate-IlluminatedWordWrite*
 
-:IlluminatedWordWrite                  Highlight group used for references of
+IlluminatedWordWrite                   Highlight group used for references of
                                        kind write.
 
 
