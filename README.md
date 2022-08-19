@@ -49,7 +49,7 @@ require('illuminate').configure({
 
 # Highlight Groups
 
-#### :IlluminatedWordText
+#### IlluminatedWordText
 
 Default highlight group used for references if no kind information is available.
 
@@ -57,7 +57,7 @@ Default highlight group used for references if no kind information is available.
 hi def IlluminatedWordText gui=underline
 ```
 
-#### :IlluminatedWordRead
+#### IlluminatedWordRead
 
 Highlight group used for references of kind read.
 
@@ -65,7 +65,7 @@ Highlight group used for references of kind read.
 hi def IlluminatedWordRead gui=underline
 ```
 
-#### :IlluminatedWordWrite
+#### IlluminatedWordWrite
 
 Highlight group used for references of kind write.
 
