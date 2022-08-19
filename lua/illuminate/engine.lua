@@ -146,12 +146,6 @@ function M.refresh_references(bufnr, winid)
     end))
 end
 
---- Gets a table which conforms to the Provider API for @bufnr. This is
---- typically either a Tree-sitter, LSP based, or a regex based provider.
---- This is configured by the user in their call to require('illuminate').configure(...)
----
---- @bufnr (number)
---- @returns (table) a table which conforms to the Calculator API show at the top of this file
 function M.get_provider(bufnr)
     for _, provider in ipairs(config.get().providers) do
         local name
