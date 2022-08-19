@@ -8,7 +8,7 @@ endif
 
 let g:loaded_illuminate = 1
 
-if has('nvim-0.8.0') && get(g:, 'Illuminate_useDeprecated', 0) != 1
+if has('nvim-0.7.2') && get(g:, 'Illuminate_useDeprecated', 0) != 1
 lua << EOF
     local ok, ts = pcall(require, 'nvim-treesitter')
     if ok then
