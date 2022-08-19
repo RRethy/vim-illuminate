@@ -20,6 +20,7 @@ function M.goto_next_reference()
 
     local pos, _ = unpack(ref.buf_get_references(bufnr)[i])
     local new_cursor_pos = { pos[1] + 1, pos[2] }
+    vim.cmd('normal! m`')
     vim.api.nvim_win_set_cursor(winid, new_cursor_pos)
 end
 
@@ -40,6 +41,7 @@ function M.goto_prev_reference()
 
     local pos, _ = unpack(ref.buf_get_references(bufnr)[i])
     local new_cursor_pos = { pos[1] + 1, pos[2] }
+    vim.cmd('normal! m`')
     vim.api.nvim_win_set_cursor(winid, new_cursor_pos)
 end
 
