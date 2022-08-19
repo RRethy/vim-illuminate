@@ -1,0 +1,24 @@
+name: panvimdoc
+
+on:
+  push:
+    branches:
+      - wip-rewrite
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    name: pandoc to vimdoc
+    steps:
+      - uses: actions/checkout@v2
+      - name: illuminate
+        uses: kdheepak/panvimdoc@main
+        with:
+          vimdoc: illuminate
+          pandoc: "README.md"
+          toc: true
+          version: "NVIM v0.8.0"
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: 'Auto generate docs'
+          branch: ${{ github.head_ref }}

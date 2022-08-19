@@ -1,192 +1,322 @@
-*vim-illuminate.txt*
-*illuminate.txt*  Vim plugin for selectively illuminating other uses of
-                the current word
+*illuminate.txt*          For NVIM v0.8.0          Last change: 2022 August 19
 
-Author:  Adam P. Regasz-Rethy (RRethy) <rethy.spud@gmail.com>
-License: Same terms as Vim itself (see |license|)
+==============================================================================
+Table of Contents                               *illuminate-table-of-contents*
 
-===============================================================================
-CONTENTS                                                  *illuminate-contents*
+1. Overview                                              |illuminate-overview|
+2. Quickstart                                          |illuminate-quickstart|
+3. Configuration                                    |illuminate-configuration|
+4. Highlight Groups                              |illuminate-highlight-groups|
+5. Commands                                              |illuminate-commands|
+6. Functions                                            |illuminate-functions|
+7. Vim Users                                            |illuminate-vim-users|
 
-  1. Introduction.........................|illuminate-introduction|
-  2. LSP Integration......................|illuminate-lsp|
-  3. Configuration........................|illuminate-configuration|
-  4. Commands.............................|illuminate-commands|
+==============================================================================
+1. Overview                                              *illuminate-overview*
 
-===============================================================================
-1. Introduction                                       *illuminate-introduction*
+Vim plugin for automatically highlighting other uses of the word under the
+cursor using either LSP, Tree-sitter, or regex matching.
 
-This plugin is a tool for illuminating the other uses of the current word
-under the cursor.
+<div class="figure">
+<img src="https://media.giphy.com/media/mSG0nwAHDt3Fl7WyoL/giphy.gif" title="fig:"/>
+<p class="caption">gif</p>
+</div>
 
-If you are using Neovim's builtin LSP client (and https://github.com/neovim/nvim-lspconfig)
-then this can be used to intelligently highlight the symbol under the cursor,
-see |illuminate-lsp| for more info. Otherwise a simple regex will be used.
+==============================================================================
+2. Quickstart                                          *illuminate-quickstart*
 
-vim-illuminate will by default highlight all uses of the word under the cursor,
-but with a little bit of configuration it can easily only highlight what you
-want it to highlight based on the filetype and highlight-groups.
+Just install the plugin and things will work _just work_, no configuration
+needed.
 
-vim-illuminate will also do a few other niceties such as delaying the highlight
-for a user-defined amount of time based on `g:Illuminate_delay` (by default
-0), it will interact nicely with search highlighting, jumping around
-between buffers, jumping around between windows, and won't illuminate
-while in insert mode (unless told to).
+You’ll also get `<a-n\>` and `<a-p\>` as keymaps to move between references
+and `<a-i\>` as a textobject for the reference illuminated under the cursor.
 
-===============================================================================
-2. LSP Integration                                            *illuminate-lsp*
+==============================================================================
+3. Configuration                                    *illuminate-configuration*
 
-vim-illuminate can use Neovim's builtin LSP client to intelligently highlight.
-This is not compatible with |illuminate-configuration| with a few exceptions
-explained below.
-
-To set it up, simply call `on_attach` when the LSP client attaches to a
-buffer. For example, if you want `gopls` to be used by vim-illuminate:
 >
-  require'lspconfig'.gopls.setup {
-    on_attach = function(client)
-      -- [[ other on_attach code ]]
-      require 'illuminate'.on_attach(client)
-    end,
-  }
+    -- default configuration
+    require('illuminate').configure({
+        -- providers: provider used to get references in the buffer, ordered by priority
+        providers = {
+            'lsp',
+            'treesitter',
+            'regex',
+        },
+        -- delay: delay in milliseconds
+        delay = 100,
+        -- filetypes_denylist: filetypes to not illuminate, this overrides filetypes_allowlist
+        filetypes_denylist = {
+            'dirvish',
+            'fugitive',
+        },
+        -- filetypes_allowlist: filetypes to illuminate, this is overriden by filetypes_denylist
+        filetypes_allowlist = {},
+        -- modes_denylist: modes to not illuminate, this overrides modes_allowlist
+        modes_denylist = {},
+        -- modes_allowlist: modes to illuminate, this is overriden by modes_denylist
+        modes_allowlist = {},
+        -- providers_regex_syntax_denylist: syntax to not illuminate, this overrides providers_regex_syntax_allowlist
+        -- Only applies to the 'regex' provider
+        -- Use :echom synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')
+        providers_regex_syntax_denylist = {},
+        -- providers_regex_syntax_allowlist: syntax to illuminate, this is overriden by providers_regex_syntax_denylist
+        -- Only applies to the 'regex' provider
+        -- Use :echom synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')
+        providers_regex_syntax_allowlist = {},
+        -- under_cursor: whether or not to illuminate under the cursor
+        under_cursor = true,
+    })
 <
-Highlighting is done using the same highlight groups as the builtin LSP which
-is `LspReferenceText`, `LspReferenceRead`, and `LspReferenceWrite`.
+
+
+==============================================================================
+4. Highlight Groups                              *illuminate-highlight-groups*
+
+                                              *illuminate-IlluminatedWordText*
+
+IlluminatedWordText                    Default highlight group used for
+                                       references if no kind information is
+                                       available.
+
+
 >
-  vim.api.nvim_command [[ hi def link LspReferenceText CursorLine ]]
-  vim.api.nvim_command [[ hi def link LspReferenceWrite CursorLine ]]
-  vim.api.nvim_command [[ hi def link LspReferenceRead CursorLine ]]
-<
-The other additional configuration currently supported is |g:Illuminate_delay|.
-
-*illuminate.next_reference()*
-You can cycle through these document highlights with these mappings: >
-	vim.api.nvim_set_keymap('n', '<a-n>', '<cmd>lua require"illuminate".next_reference{wrap=true}<cr>', {noremap=true})
-	vim.api.nvim_set_keymap('n', '<a-p>', '<cmd>lua require"illuminate".next_reference{reverse=true,wrap=true}<cr>', {noremap=true})
+    hi def IlluminatedWordText gui=underline
 <
 
-*illuminate.toggle_pause()*
-You can pause LSP functionality and leave the highlighting in place until it is resumed: >
-	vim.api.nvim_set_keymap('n', '<a-i>', '<cmd>lua require"illuminate".toggle_pause()<cr>', {noremap=true})
+
+                                              *illuminate-IlluminatedWordRead*
+
+IlluminatedWordRead                    Highlight group used for references of
+                                       kind read.
+
+
+>
+    hi def IlluminatedWordRead gui=underline
 <
 
-===============================================================================
-3. Configuration                                     *illuminate-configuration*
 
-*g:Illuminate_ftHighlightGroups*
+                                             *illuminate-IlluminatedWordWrite*
 
-                Type: |Dict| of |String| to |List| of |String|
+IlluminatedWordWrite                   Highlight group used for references of
+                                       kind write.
 
-                Which highlight groups to match for a given filetype.  The
-                keys should be |'filetype'| (or a regex to match filetypes).
-                If you append `:blacklist` to the filetype key, then the
-                ensuing values will be blacklisted rather than whitelisted.
 
-                The list of strings provided are highlight groups which you
-                can determine using either of the following: >
-                  :echo synIDattr(synID(line("."), col("."), 1), "name")
-                  :echo synIDattr(synIDtrans(synID(line("."), col("."), 1)), "name")
+>
+    hi def IlluminatedWordWrite gui=underline
 <
-                Default value: >
-                  let g:Illuminate_ftHighlightGroups = {}
+
+
+==============================================================================
+5. Commands                                              *illuminate-commands*
+
+                                                 *illuminate-:IlluminatePause*
+
+:IlluminatePause                       Globally pause vim-illuminate.
+
+
+                                                *illuminate-:IlluminateResume*
+
+:IlluminateResume                      Globally resume vim-illuminate.
+
+
+                                                *illuminate-:IlluminateToggle*
+
+:IlluminateToggle                      Globally toggle the pause/resume for
+                                       vim-illuminate.
+
+
+                                              *illuminate-:IlluminatePauseBuf*
+
+:IlluminatePauseBuf                    Buffer-local pause of vim-illuminate.
+
+
+                                             *illuminate-:IlluminateResumeBuf*
+
+:IlluminateResumeBuf                   Buffer-local resume of vim-illuminate.
+
+
+                                             *illuminate-:IlluminateToggleBuf*
+
+:IlluminateToggleBuf                   Buffer-local toggle of the pause/resume
+                                       for vim-illuminate.
+
+
+==============================================================================
+6. Functions                                            *illuminate-functions*
+
+                          *illuminate-require('illuminate').configure(config)*
+
+require('illuminate').configure(config) Override the default configuration with
+                                       `config`
+
+
+                                    *illuminate-require('illuminate').pause()*
+
+require('illuminate').pause()          Globally pause vim-illuminate.
+
+
+                                   *illuminate-require('illuminate').resume()*
+
+require('illuminate').resume()         Globally resume vim-illuminate.
+
+
+                                   *illuminate-require('illuminate').toggle()*
+
+require('illuminate').toggle()         Globally toggle the pause/resume for
+                                       vim-illuminate.
+
+
+                               *illuminate-require('illuminate').toggle_buf()*
+
+require('illuminate').toggle_buf()     Buffer-local toggle of the pause/resume
+                                       for vim-illuminate.
+
+
+                                *illuminate-require('illuminate').pause_buf()*
+
+require('illuminate').pause_buf()      Buffer-local pause of vim-illuminate.
+
+
+                               *illuminate-require('illuminate').resume_buf()*
+
+require('illuminate').resume_buf()     Buffer-local resume of vim-illuminate.
+
+
+                               *illuminate-require('illuminate').freeze_buf()*
+
+require('illuminate').freeze_buf()     Freeze the illumination on the buffer,
+                                       this won’t clear the highlights.
+
+
+                             *illuminate-require('illuminate').unfreeze_buf()*
+
+require('illuminate').unfreeze_buf()   Unfreeze the illumination on the buffer.
+
+
+                      *illuminate-require('illuminate').goto_next_reference()*
+
+require('illuminate').goto_next_reference() Move the cursor to the closest
+                                       references after the cursor which it is
+                                       not currently on. Wraps the buffer if on
+                                       the last reference.
+
+
+                      *illuminate-require('illuminate').goto_prev_reference()*
+
+require('illuminate').goto_prev_reference() Move the cursor to the closest
+                                       references before the cursor which it is
+                                       not currently on. Wraps the buffer if on
+                                       the first reference.
+
+
+                           *illuminate-require('illuminate').textobj_select()*
+
+require('illuminate').textobj_select() Selects the reference the cursor is
+                                       currently on for use as a text-object.
+
+
+==============================================================================
+7. Vim Users                                            *illuminate-vim-users*
+
+**Note:** This section is deprecated for Neovim users, Neovim users can use the
+newer version of the plugin. Neovim users can force this old version of the
+plugin by adding `let g:Illuminate_useDeprecated = 1` to their `init.vim`.
+
+Illuminate will delay before highlighting, this is not lag, it is to avoid the
+jarring experience of things illuminating too fast. This can be controlled with
+`g:Illuminate_delay` (which is default to 0 milliseconds):
+
+**Note**: Delay only works for Vim8 and Neovim.
+
+>
+    " Time in milliseconds (default 0)
+    let g:Illuminate_delay = 0
 <
-                Sample values: >
-                  " match the following three vimscript highlight groups
-                  " Don't match strings for python filetypes
-                  let g:Illuminate_ftHighlightGroups = {
-                          \ 'vim': ['vimVar', 'vimString', 'vimLineComment'],
-                          \ 'python:blacklist': ['String'],
-                          \ }
+
+
+Illuminate will by default highlight the word under the cursor to match the
+behaviour seen in Intellij and VSCode. However, to make it not highlight the
+word under the cursor, use the following:
+
+>
+    " Don't highlight word under cursor (default: 1)
+    let g:Illuminate_highlightUnderCursor = 0
 <
-*illuminatedWord*
 
-                Type: |highlight-groups|
 
-                Defines how to highlight other words (not under cursor).
+By default illuminate will highlight all words the cursor passes over, but for
+many languages, you will only want to highlight certain highlight-groups. You
+can determine the highlight-group of a symbol under your cursor with `:echo
+synIDattr(synID(line("."), col("."), 1), "name")`.
 
-                Default value: >
-                  autocmd VimEnter * hi link illuminatedWord cursorline
+You can define which highlight groups you want the illuminating to apply to.
+This can be done with a dict mapping a filetype to a list of highlight-groups
+in your vimrc such as:
+
+>
+    let g:Illuminate_ftHighlightGroups = {
+          \ 'vim': ['vimVar', 'vimString', 'vimLineComment',
+          \         'vimFuncName', 'vimFunction', 'vimUserFunc', 'vimFunc']
+          \ }
 <
-                Sample value: >
-                  autocmd VimEnter * hi illuminatedWord cterm=underline gui=underline
+
+
+A blacklist of highlight groups can also be setup by adding the suffix
+`:blacklist` to the filetype. However, if the whitelist for that filetype
+already exists, it will override the blacklist.
+
+>
+    let g:Illuminate_ftHighlightGroups = {
+          \ 'vim:blacklist': ['vimVar', 'vimString', 'vimLineComment',
+          \         'vimFuncName', 'vimFunction', 'vimUserFunc', 'vimFunc']
+          \ }
 <
-*illuminatedCurWord*
 
-                Type: |highlight-groups|
 
-                Defines how to highlight word under cursor.
+illuminate can also be disabled for various filetypes using the following:
 
-                Default value: >
-                  autocmd VimEnter * hi link illuminatedCurWord cursorline
+>
+    let g:Illuminate_ftblacklist = ['nerdtree']
 <
-                Sample value: >
-                  autocmd VimEnter * hi illuminatedCurWord cterm=underline gui=underline
+
+
+Or you can enable it only for certain filetypes with:
+
+>
+    let g:Illuminate_ftwhitelist = ['vim', 'sh', 'python']
 <
-*g:Illuminate_ftblacklist*
 
-                Type: |List| of |String|
 
-                Which |'filetype'| to fully ignore. Can provide a regex.
+By default the highlighting will be done with the highlight-group `CursorLine`
+since that is in my opinion the nicest. It can however be overridden using the
+following (use standard Vim highlighting syntax): Note: It must be in an
+autocmd to get around a weird Neovim behaviour.
 
-                Default value: >
-                  let g:Illuminate_ftblacklist = []
+>
+    augroup illuminate_augroup
+        autocmd!
+        autocmd VimEnter * hi link illuminatedWord CursorLine
+    augroup END
+    
+    augroup illuminate_augroup
+        autocmd!
+        autocmd VimEnter * hi illuminatedWord cterm=underline gui=underline
+    augroup END
 <
-*g:Illuminate_ftwhitelist* = ['python', 'sh', 'nerdtree']
 
-                Type: |List| of |String|
 
-                Which |'filetype'| to exclusively highlight. This overrides
-                the blacklist. Can provide a regex.
+Lastly, you can also specify a specific highlight for the word under the cursor
+so it differs from all other matches using the following higlight group:
 
-                Default value: >
-                  let g:Illuminate_ftwhitelist = []
+>
+    augroup illuminate_augroup
+        autocmd!
+        autocmd VimEnter * hi illuminatedCurWord cterm=italic gui=italic
+    augroup END
 <
-*g:Illuminate_delay*
 
-                Type: |Number|
-                Amount of time to wait before highlighting
 
-                Default value: >
-                  let g:Illuminate_delay = 0
+Generated by panvimdoc <https://github.com/kdheepak/panvimdoc>
 
-*g:Illuminate_highlightUnderCursor*
-
-                Type: |Number|
-                Whether or not to highlight the word under the cursor.
-
-                Default value: >
-                  let g:Illuminate_highlightUnderCursor = 1
-
-*g:Illuminate_highlightPriority*
-
-                Type: |Number|
-                Priority for the highlighting according to |matchadd|
-
-                Default value: >
-                  let g:Illuminate_highlightPriority = -1
-
-*g:Illuminate_insert_mode_highlight*
-
-                Type: |Number|
-
-                Whether or not to highlight in insert mode.
-
-                Default value: >
-                  let g:Illuminate_insert_mode_highlight = 0
-<
-===============================================================================
-4. Commands                                               *illuminate-commands*
-
-Supplying a `!` after any of the following commands will cause them to act on
-the current buffer rather than globally.
-
- ----------------------+-------------------------------------------------
- Command               | List                                                                  ~
- ----------------------+-------------------------------------------------
-  `IlluminationDisable[!]`  | Disable the illumination
-  `IlluminationEnable[!]`   | Enable the previously disabled illumination
-  `IlluminationToggle[!]`   | Toggle the illumination
- ----------------------+-------------------------------------------------
-
-===============================================================================
-  vim:tw=78:ts=2:sts=2:sw=2:ft=help:norl:
+vim:tw=78:ts=8:noet:ft=help:norl:
