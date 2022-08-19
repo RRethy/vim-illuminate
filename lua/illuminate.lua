@@ -44,7 +44,7 @@ local function cursor_in_references(bufnr)
     crow = crow - 1 -- reference ranges are (0,0)-indexed for (row,col)
     for _, reference in pairs(references[bufnr]) do
         local range = reference.range
-        if point_in_range({row=crow,col=ccol}, range) then
+        if point_in_range({ row = crow, col = ccol }, range) then
             return true
         end
     end
@@ -66,7 +66,6 @@ local function handle_document_highlight(result, bufnr, client_id)
         vim.lsp.util.buf_clear_references(bufnr)
         if cursor_in_references(bufnr) then
             local client = vim.lsp.get_client_by_id(client_id)
-            vim.lsp.util.buf_highlight_references(bufnr, result, client.offset_encoding)
             if client then
                 vim.lsp.util.buf_highlight_references(bufnr, result, client.offset_encoding)
             end
@@ -85,7 +84,7 @@ local function valid(bufnr, range)
 end
 
 local function augroup(bufnr, autocmds)
-    vim.cmd('augroup vim_illuminate_lsp'..bufnr)
+    vim.cmd('augroup vim_illuminate_lsp' .. bufnr)
     vim.cmd('autocmd!')
     if autocmds then
         vim.b.illuminate_lsp_enabled = true
@@ -97,21 +96,23 @@ local function augroup(bufnr, autocmds)
 end
 
 local function autocmd(bufnr)
-    vim.cmd(string.format('autocmd CursorMoved,CursorMovedI <buffer=%d> lua require"illuminate".on_cursor_moved(%d)', bufnr, bufnr))
+    vim.cmd(string.format('autocmd CursorMoved,CursorMovedI <buffer=%d> lua require"illuminate".on_cursor_moved(%d)',
+        bufnr, bufnr))
 end
 
 local function move_cursor(row, col)
     if not paused_bufs[vim.api.nvim_get_current_buf()] then
         augroup(vim.api.nvim_get_current_buf(), function()
-            vim.api.nvim_win_set_cursor(0, {row, col})
+            vim.api.nvim_win_set_cursor(0, { row, col })
             autocmd(vim.api.nvim_get_current_buf())
         end)
     else
-        vim.api.nvim_win_set_cursor(0, {row, col})
+        vim.api.nvim_win_set_cursor(0, { row, col })
     end
 end
 
 function M.on_attach(client)
+    M.stop_buf()
     if client and not client.supports_method('textDocument/documentHighlight') then
         return
     end
@@ -157,7 +158,7 @@ function M.get_document_highlights(bufnr)
 end
 
 function M.next_reference(opt)
-    opt = vim.tbl_extend('force', {reverse=false, wrap=false, range_ordering='start', silent=false}, opt or {})
+    opt = vim.tbl_extend('force', { reverse = false, wrap = false, range_ordering = 'start', silent = false }, opt or {})
 
     local before
     if opt.range_ordering == 'start' then
@@ -165,14 +166,14 @@ function M.next_reference(opt)
     else
         before = before_disjoint
     end
-	local bufnr = vim.api.nvim_get_current_buf()
+    local bufnr = vim.api.nvim_get_current_buf()
     local refs = M.get_document_highlights(bufnr)
     if not refs or #refs == 0 then return nil end
 
-	local next = nil
+    local next = nil
     local nexti = nil
-	local crow, ccol = unpack(vim.api.nvim_win_get_cursor(0))
-	local crange = {start={line=crow-1,character=ccol}}
+    local crow, ccol = unpack(vim.api.nvim_win_get_cursor(0))
+    local crange = { start = { line = crow - 1, character = ccol } }
 
     for i, ref in ipairs(refs) do
         local range = ref.range
@@ -197,7 +198,7 @@ function M.next_reference(opt)
     if next then
         move_cursor(next.start.line + 1, next.start.character)
         if not opt.silent then
-            print('['..nexti..'/'..#refs..']')
+            print('[' .. nexti .. '/' .. #refs .. ']')
         end
     end
     return next
@@ -214,6 +215,50 @@ function M.toggle_pause()
         paused_bufs[vim.api.nvim_get_current_buf()] = true
         augroup(vim.api.nvim_get_current_buf(), nil)
     end
+end
+
+function M.configure(config)
+    require('illuminate.config').set(config)
+end
+
+function M.pause()
+    require('illuminate.engine').pause()
+end
+
+function M.resume()
+    require('illuminate.engine').resume()
+end
+
+function M.toggle()
+    require('illuminate.engine').toggle()
+end
+
+function M.toggle_buf()
+    require('illuminate.engine').toggle_buf()
+end
+
+function M.pause_buf()
+    require('illuminate.engine').pause_buf()
+end
+
+function M.stop_buf()
+    require('illuminate.engine').stop_buf()
+end
+
+function M.resume_buf()
+    require('illuminate.engine').resume_buf()
+end
+
+function M.goto_next_reference()
+    require('illuminate.goto').goto_next_reference()
+end
+
+function M.goto_prev_reference()
+    require('illuminate.goto').goto_prev_reference()
+end
+
+function M.textobj_select()
+    require('illuminate.textobj').select()
 end
 
 return M
