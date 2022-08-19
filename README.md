@@ -1,4 +1,4 @@
-# vim-illuminate
+# Overview
 
 Vim plugin for automatically highlighting other uses of the word under the cursor using either LSP, Tree-sitter, or regex matching.
 
@@ -49,7 +49,7 @@ require('illuminate').configure({
 
 # Highlight Groups
 
-### IlluminatedWordText
+#### :IlluminatedWordText
 
 Default highlight group used for references if no kind information is available.
 
@@ -57,7 +57,7 @@ Default highlight group used for references if no kind information is available.
 hi def IlluminatedWordText gui=underline
 ```
 
-### IlluminatedWordRead
+#### :IlluminatedWordRead
 
 Highlight group used for references of kind read.
 
@@ -65,7 +65,7 @@ Highlight group used for references of kind read.
 hi def IlluminatedWordRead gui=underline
 ```
 
-### IlluminatedWordWrite
+#### :IlluminatedWordWrite
 
 Highlight group used for references of kind write.
 
@@ -75,77 +75,77 @@ hi def IlluminatedWordWrite gui=underline
 
 # Commands
 
-### :IlluminatePause
+#### :IlluminatePause
 
 Globally pause vim-illuminate.
 
-### :IlluminateResume
+#### :IlluminateResume
 
 Globally resume vim-illuminate.
 
-### :IlluminateToggle
+#### :IlluminateToggle
 
 Globally toggle the pause/resume for vim-illuminate.
 
-### :IlluminatePauseBuf
+#### :IlluminatePauseBuf
 
 Buffer-local pause of vim-illuminate.
 
-### :IlluminateResumeBuf
+#### :IlluminateResumeBuf
 
 Buffer-local resume of vim-illuminate.
 
-### :IlluminateToggleBuf
+#### :IlluminateToggleBuf
 
 Buffer-local toggle of the pause/resume for vim-illuminate.
 
 # Functions
 
-> require('illuminate').configure(config)
+#### require('illuminate').configure(config)
 
 Override the default configuration with `config`
 
-> require('illuminate').pause()
+#### require('illuminate').pause()
 
 Globally pause vim-illuminate.
 
-> require('illuminate').resume()
+#### require('illuminate').resume()
 
 Globally resume vim-illuminate.
 
-> require('illuminate').toggle()
+#### require('illuminate').toggle()
 
 Globally toggle the pause/resume for vim-illuminate.
 
-> require('illuminate').toggle_buf()
+#### require('illuminate').toggle_buf()
 
 Buffer-local toggle of the pause/resume for vim-illuminate.
 
-> require('illuminate').pause_buf()
+#### require('illuminate').pause_buf()
 
 Buffer-local pause of vim-illuminate.
 
-> require('illuminate').resume_buf()
+#### require('illuminate').resume_buf()
 
 Buffer-local resume of vim-illuminate.
 
-> require('illuminate').freeze_buf()
+#### require('illuminate').freeze_buf()
 
 Freeze the illumination on the buffer, this won't clear the highlights.
 
-> require('illuminate').unfreeze_buf()
+#### require('illuminate').unfreeze_buf()
 
 Unfreeze the illumination on the buffer.
 
-> require('illuminate').goto_next_reference()
+#### require('illuminate').goto_next_reference()
 
 Move the cursor to the closest references after the cursor which it is not currently on. Wraps the buffer if on the last reference.
 
-> require('illuminate').goto_prev_reference()
+#### require('illuminate').goto_prev_reference()
 
 Move the cursor to the closest references before the cursor which it is not currently on. Wraps the buffer if on the first reference.
 
-> require('illuminate').textobj_select()
+#### require('illuminate').textobj_select()
 
 Selects the reference the cursor is currently on for use as a text-object.
 
@@ -168,7 +168,8 @@ Illuminate will by default highlight the word under the cursor to match the beha
 let g:Illuminate_highlightUnderCursor = 0
 ```
 
-By default illuminate will highlight all words the cursor passes over, but for many languages, you will only want to highlight certain highlight-groups (you can determine the highlight-group of a symbol under your cursor with `:echo synIDattr(synID(line("."), col("."), 1), "name")`).
+By default illuminate will highlight all words the cursor passes over, but for many languages, you will only want to highlight certain highlight-groups.
+You can determine the highlight-group of a symbol under your cursor with `:echo synIDattr(synID(line("."), col("."), 1), "name")`.
 
 You can define which highlight groups you want the illuminating to apply to. This can be done with a dict mapping a filetype to a list of highlight-groups in your vimrc such as:
 ```vim
