@@ -23,7 +23,7 @@ local config = {
 
 function M.set(config_overrides)
     if config_overrides then
-        if config_overrides['delay'] < 17 then
+        if config_overrides['delay'] and config_overrides['delay'] < 17 then
             config_overrides['delay'] = 17
         end
 
