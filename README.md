@@ -8,7 +8,7 @@ Vim plugin for automatically highlighting other uses of the word under the curso
 
 Just install the plugin and things will work *just work*, no configuration needed.
 
-You'll also get `<a-n\>` and `<a-p\>` as keymaps to move between references and `<a-i\>` as a textobject for the reference illuminated under the cursor.
+You'll also get `<a-n>` and `<a-p>` as keymaps to move between references and `<a-i>` as a textobject for the reference illuminated under the cursor.
 
 # Configuration
 
