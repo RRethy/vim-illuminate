@@ -19,12 +19,15 @@ local function buf_should_illuminate(bufnr)
         return false
     end
 
-    return util.is_allowed(config.modes_allowlist(), config.modes_denylist(), vim.api.nvim_get_mode().mode)
-        and util.is_allowed(
-            config.filetypes_allowlist(),
-            config.filetypes_denylist(),
-            vim.api.nvim_buf_get_option(bufnr, 'filetype')
-        )
+    return util.is_allowed(
+        config.modes_allowlist(bufnr),
+        config.modes_denylist(bufnr),
+        vim.api.nvim_get_mode().mode
+    ) and util.is_allowed(
+        config.filetypes_allowlist(),
+        config.filetypes_denylist(),
+        vim.api.nvim_buf_get_option(bufnr, 'filetype')
+    )
 end
 
 local function stop_timer(timer)
@@ -97,7 +100,7 @@ function M.refresh_references(bufnr, winid)
 
     local timer = vim.loop.new_timer()
     timers[bufnr] = timer
-    timer:start(config.get().delay, 17, vim.schedule_wrap(function()
+    timer:start(config.delay(bufnr), 17, vim.schedule_wrap(function()
         local ok, err = pcall(function()
             if not bufnr or not vim.api.nvim_buf_is_loaded(bufnr) then
                 stop_timer(timer)
@@ -152,15 +155,8 @@ function M.refresh_references(bufnr, winid)
 end
 
 function M.get_provider(bufnr)
-    for _, provider in ipairs(config.get().providers) do
-        local name
-        if type(provider) == 'string' then
-            name = provider
-        else
-            name = provider.name
-        end
-
-        local ok, providerModule = pcall(require, string.format('illuminate.providers.%s', name))
+    for _, provider in ipairs(config.providers(bufnr)) do
+        local ok, providerModule = pcall(require, string.format('illuminate.providers.%s', provider))
         if ok and providerModule.is_ready(bufnr) then
             return providerModule
         end

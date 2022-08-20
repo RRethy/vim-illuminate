@@ -1,5 +1,3 @@
-local util = require('illuminate.util')
-
 local M = {}
 
 local config = {
@@ -9,6 +7,7 @@ local config = {
         'regex',
     },
     delay = 100,
+    filetype_overrides = {},
     filetypes_denylist = {
         'dirvish',
         'fugitive',
@@ -22,24 +21,6 @@ local config = {
 }
 
 function M.set(config_overrides)
-    if config_overrides then
-        if config_overrides['delay'] and config_overrides['delay'] < 17 then
-            config_overrides['delay'] = 17
-        end
-
-        if config_overrides['providers'] then
-            for _, provider in ipairs(config_overrides['providers']) do
-                if type(provider) == 'table' then
-                    for k, v in pairs(provider) do
-                        if k ~= 'name' then
-                            config_overrides['providers'][string.format('providers_%s_%s', provider.name, k)] = v
-                        end
-                    end
-                end
-            end
-        end
-    end
-
     config = vim.tbl_extend('force', config, config_overrides or {})
 end
 
@@ -47,8 +28,13 @@ function M.debug()
     print(vim.inspect(config))
 end
 
-function M.get()
-    return config
+function M.filetype_override(bufnr)
+    local ft = vim.api.nvim_buf_get_option(bufnr, 'filetype')
+    return config['filetype_overrides'] and config['filetype_overrides'][ft] or {}
+end
+
+function M.providers(bufnr)
+    return M.filetype_override(bufnr)['providers'] or config['providers']
 end
 
 function M.filetypes_denylist()
@@ -59,24 +45,39 @@ function M.filetypes_allowlist()
     return config['filetypes_allowlist'] or {}
 end
 
-function M.modes_denylist()
-    return config['modes_denylist'] or {}
+function M.modes_denylist(bufnr)
+    return M.filetype_override(bufnr)['modes_denylist'] or config['modes_denylist'] or {}
 end
 
-function M.modes_allowlist()
-    return config['modes_allowlist'] or {}
+function M.modes_allowlist(bufnr)
+    return M.filetype_override(bufnr)['modes_allowlist'] or config['modes_allowlist'] or {}
 end
 
-function M.provider_regex_syntax_denylist()
-    return util.tbl_get(config, 'table', 'providers_regex_syntax_denylist') or {}
+function M.provider_regex_syntax_denylist(bufnr)
+    return M.filetype_override(bufnr)['providers_regex_syntax_denylist']
+        or config['providers_regex_syntax_denylist']
+        or {}
 end
 
-function M.provider_regex_syntax_allowlist()
-    return util.tbl_get(config, 'table', 'providers_regex_syntax_allowlist') or {}
+function M.provider_regex_syntax_allowlist(bufnr)
+    return M.filetype_override(bufnr)['providers_regex_syntax_allowlist']
+        or config['providers_regex_syntax_allowlist']
+        or {}
 end
 
-function M.under_cursor()
+function M.under_cursor(bufnr)
+    if M.filetype_override(bufnr)['under_cursor'] ~= nil then
+        return M.filetype_override(bufnr)['under_cursor'] ~= nil
+    end
     return config['under_cursor']
+end
+
+function M.delay(bufnr)
+    local delay = M.filetype_override(bufnr)['delay'] or config['delay'] or 17
+    if delay < 17 then
+        return 17
+    end
+    return delay
 end
 
 return M

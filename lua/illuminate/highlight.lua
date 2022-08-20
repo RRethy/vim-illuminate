@@ -16,7 +16,7 @@ end
 function M.buf_highlight_references(bufnr, references)
     local cursor_pos = util.get_cursor_pos()
     for _, reference in ipairs(references) do
-        if config.under_cursor() or not ref.is_pos_in_ref(cursor_pos, reference) then
+        if config.under_cursor(bufnr) or not ref.is_pos_in_ref(cursor_pos, reference) then
             M.range(
                 bufnr,
                 reference[1],

@@ -39,7 +39,7 @@ function M.get_references(bufnr, cursor)
     return refs
 end
 
-function M.is_ready()
+function M.is_ready(bufnr)
     local name = vim.fn.synIDattr(
         vim.fn.synIDtrans(
             vim.fn.synID(vim.fn.line('.'), vim.fn.col('.'), 1)
@@ -47,8 +47,8 @@ function M.is_ready()
         'name'
     )
     if util.is_allowed(
-        config.provider_regex_syntax_allowlist(),
-        config.provider_regex_syntax_denylist(),
+        config.provider_regex_syntax_allowlist(bufnr),
+        config.provider_regex_syntax_denylist(bufnr),
         name
     ) then
         return true
