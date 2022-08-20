@@ -10,6 +10,7 @@ local function kind_to_hl_group(kind)
     return kind == vim.lsp.protocol.DocumentHighlightKind.Text and 'IlluminatedWordText'
         or kind == vim.lsp.protocol.DocumentHighlightKind.Read and 'IlluminatedWordRead'
         or kind == vim.lsp.protocol.DocumentHighlightKind.Write and 'IlluminatedWordWrite'
+        or 'IlluminatedWordText'
 end
 
 function M.buf_highlight_references(bufnr, references)
@@ -20,14 +21,13 @@ function M.buf_highlight_references(bufnr, references)
                 bufnr,
                 reference[1],
                 reference[2],
-                reference[3],
-                reference[4]
+                reference[3]
             )
         end
     end
 end
 
-function M.range(bufnr, start, finish, kind, offset_encoding)
+function M.range(bufnr, start, finish, kind)
     local region = vim.region(bufnr, start, finish, 'v', false)
     for linenr, cols in pairs(region) do
         local end_row
