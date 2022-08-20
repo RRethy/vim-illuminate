@@ -22,25 +22,25 @@ local config = {
 }
 
 function M.set(config_overrides)
-    if config_overrides then
-        if config_overrides['delay'] < 17 then
-            config_overrides['delay'] = 17
+    config = vim.tbl_extend('force', config, config_overrides or {})
+
+    if config then
+        if config['delay'] < 17 then
+            config['delay'] = 17
         end
 
-        if config_overrides['providers'] then
-            for _, provider in ipairs(config_overrides['providers']) do
+        if config['providers'] then
+            for _, provider in ipairs(config['providers']) do
                 if type(provider) == 'table' then
                     for k, v in pairs(provider) do
                         if k ~= 'name' then
-                            config_overrides['providers'][string.format('providers_%s_%s', provider.name, k)] = v
+                            config['providers'][string.format('providers_%s_%s', provider.name, k)] = v
                         end
                     end
                 end
             end
         end
     end
-
-    config = vim.tbl_extend('force', config, config_overrides or {})
 end
 
 function M.debug()
