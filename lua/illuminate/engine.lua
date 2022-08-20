@@ -136,7 +136,7 @@ function M.refresh_references(bufnr, winid)
             local time = vim.loop.hrtime()
             if #error_timestamps == 5 then
                 vim.notify(
-                    'vim-illuminate: An internal error has occured: ' + vim.inspect(ok) + vim.inspect(err),
+                    'vim-illuminate: An internal error has occured: ' .. vim.inspect(ok) .. vim.inspect(err),
                     vim.log.levels.ERROR,
                     {}
                 )
