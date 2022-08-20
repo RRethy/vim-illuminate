@@ -116,7 +116,7 @@ function M.on_attach(client)
     if client and not client.supports_method('textDocument/documentHighlight') then
         return
     end
-    vim.api.nvim_command [[ IlluminationDisable! ]]
+    pcall(vim.api.nvim_command, 'IlluminationDisable!')
     augroup(vim.api.nvim_get_current_buf(), function()
         autocmd(vim.api.nvim_get_current_buf())
     end)
