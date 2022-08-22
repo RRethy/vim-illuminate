@@ -22,12 +22,12 @@ lua << EOF
         })
     end
     require('illuminate.engine').start()
-    vim.api.nvim_create_user_command('IlluminatePause', require('illuminate').pause, {})
-    vim.api.nvim_create_user_command('IlluminateResume', require('illuminate').resume, {})
-    vim.api.nvim_create_user_command('IlluminateToggle', require('illuminate').toggle, {})
-    vim.api.nvim_create_user_command('IlluminatePauseBuf', require('illuminate').pause_buf, {})
-    vim.api.nvim_create_user_command('IlluminateResumeBuf', require('illuminate').resume_buf, {})
-    vim.api.nvim_create_user_command('IlluminateToggleBuf', require('illuminate').toggle_buf, {})
+    vim.api.nvim_create_user_command('IlluminatePause', require('illuminate').pause, { ['bang'] = true })
+    vim.api.nvim_create_user_command('IlluminateResume', require('illuminate').resume, { ['bang'] = true })
+    vim.api.nvim_create_user_command('IlluminateToggle', require('illuminate').toggle, { ['bang'] = true })
+    vim.api.nvim_create_user_command('IlluminatePauseBuf', require('illuminate').pause_buf, { ['bang'] = true })
+    vim.api.nvim_create_user_command('IlluminateResumeBuf', require('illuminate').resume_buf, { ['bang'] = true })
+    vim.api.nvim_create_user_command('IlluminateToggleBuf', require('illuminate').toggle_buf, { ['bang'] = true })
 
     if not require('illuminate.util').has_keymap('n', '<a-n>') then
         vim.keymap.set('n', '<a-n>', require('illuminate').goto_next_reference)
