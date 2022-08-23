@@ -9,6 +9,7 @@ local config = {
     delay = 100,
     filetype_overrides = {},
     filetypes_denylist = {
+        'dirbuf',
         'dirvish',
         'fugitive',
     },
