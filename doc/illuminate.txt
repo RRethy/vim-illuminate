@@ -199,7 +199,8 @@ require('illuminate').unfreeze_buf()   Unfreeze the illumination on the buffer.
 require('illuminate').goto_next_reference() Move the cursor to the closest
                                        references after the cursor which it is
                                        not currently on. Wraps the buffer if on
-                                       the last reference.
+                                       the last reference and *wrapscan* is
+                                       on.
 
 
                       *illuminate-require('illuminate').goto_prev_reference()*
@@ -207,7 +208,8 @@ require('illuminate').goto_next_reference() Move the cursor to the closest
 require('illuminate').goto_prev_reference() Move the cursor to the closest
                                        references before the cursor which it is
                                        not currently on. Wraps the buffer if on
-                                       the first reference.
+                                       the first reference and *wrapscan* is
+                                       on.
 
 
                            *illuminate-require('illuminate').textobj_select()*
