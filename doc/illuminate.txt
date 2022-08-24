@@ -1,4 +1,4 @@
-*illuminate.txt*          For NVIM v0.8.0          Last change: 2022 August 19
+*illuminate.txt*          For NVIM v0.8.0          Last change: 2022 August 24
 
 ==============================================================================
 Table of Contents                               *illuminate-table-of-contents*
@@ -28,8 +28,8 @@ cursor using either LSP, Tree-sitter, or regex matching.
 Just install the plugin and things will work _just work_, no configuration
 needed.
 
-You’ll also get `<a-n\>` and `<a-p\>` as keymaps to move between references
-and `<a-i\>` as a textobject for the reference illuminated under the cursor.
+You’ll also get `<a-n>` and `<a-p>` as keymaps to move between references and
+`<a-i>` as a textobject for the reference illuminated under the cursor.
 
 ==============================================================================
 3. Configuration                                    *illuminate-configuration*
@@ -45,6 +45,10 @@ and `<a-i\>` as a textobject for the reference illuminated under the cursor.
         },
         -- delay: delay in milliseconds
         delay = 100,
+        -- filetype_overrides: filetype specific overrides.
+        -- The keys are strings to represent the filetype while the values are tables that
+        -- supports the same keys passed to .configure except for filetypes_denylist and filetypes_allowlist
+        filetype_overrides = {},
         -- filetypes_denylist: filetypes to not illuminate, this overrides filetypes_allowlist
         filetypes_denylist = {
             'dirvish',
@@ -194,21 +198,31 @@ require('illuminate').freeze_buf()     Freeze the illumination on the buffer,
 require('illuminate').unfreeze_buf()   Unfreeze the illumination on the buffer.
 
 
-                      *illuminate-require('illuminate').goto_next_reference()*
+                        *illuminate-require('illuminate').toggle_freeze_buf()*
 
-require('illuminate').goto_next_reference() Move the cursor to the closest
+require('illuminate').toggle_freeze_buf() Toggle the frozen state of the
+                                       buffer.
+
+
+                  *illuminate-require('illuminate').goto_next_reference(wrap)*
+
+require('illuminate').goto_next_reference(wrap) Move the cursor to the closest
                                        references after the cursor which it is
                                        not currently on. Wraps the buffer if on
                                        the last reference.
 
 
-                      *illuminate-require('illuminate').goto_prev_reference()*
+Wraps the references unless `wrap` is false (defaults to **'wrapscan'**).
 
-require('illuminate').goto_prev_reference() Move the cursor to the closest
+                  *illuminate-require('illuminate').goto_prev_reference(wrap)*
+
+require('illuminate').goto_prev_reference(wrap) Move the cursor to the closest
                                        references before the cursor which it is
                                        not currently on. Wraps the buffer if on
                                        the first reference.
 
+
+Wraps the references unless `wrap` is false (defaults to **'wrapscan'**).
 
                            *illuminate-require('illuminate').textobj_select()*
 
