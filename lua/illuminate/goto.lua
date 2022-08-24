@@ -14,9 +14,12 @@ function M.goto_next_reference()
     end
 
     local i = ref.bisect_left(ref.buf_get_references(bufnr), cursor_pos)
-    i = i + 1
-    if i > #ref.buf_get_references(bufnr) then
-        i = 1
+    if i + 1 > #ref.buf_get_references(bufnr) then
+        if vim.api.nvim_get_option('wrapscan') then
+            i = 1
+        end
+    else
+        i = i + 1
     end
 
     local pos, _ = unpack(ref.buf_get_references(bufnr)[i])
@@ -37,9 +40,12 @@ function M.goto_prev_reference()
     end
 
     local i = ref.bisect_left(ref.buf_get_references(bufnr), cursor_pos)
-    i = i - 1
-    if i == 0 then
-        i = #ref.buf_get_references(bufnr)
+    if i == 1 then
+        if vim.api.nvim_get_option('wrapscan') then
+            i = #ref.buf_get_references(bufnr)
+        end
+    else
+        i = i - 1
     end
 
     local pos, _ = unpack(ref.buf_get_references(bufnr)[i])
