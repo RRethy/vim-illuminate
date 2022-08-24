@@ -17,11 +17,12 @@ function M.goto_next_reference()
     if i + 1 > #ref.buf_get_references(bufnr) then
         if vim.api.nvim_get_option('wrapscan') then
             i = 1
+        else
+            vim.api.nvim_err_writeln("E384: vim-illuminate: cannot go beyond LAST reference")
         end
     else
         i = i + 1
     end
-
     local pos, _ = unpack(ref.buf_get_references(bufnr)[i])
     local new_cursor_pos = { pos[1] + 1, pos[2] }
     vim.cmd('normal! m`')
@@ -43,6 +44,8 @@ function M.goto_prev_reference()
     if i == 1 then
         if vim.api.nvim_get_option('wrapscan') then
             i = #ref.buf_get_references(bufnr)
+        else
+            vim.api.nvim_err_writeln("E384: vim-illuminate: cannot go beyond FIRST reference")
         end
     else
         i = i - 1
