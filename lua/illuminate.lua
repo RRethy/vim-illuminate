@@ -257,6 +257,10 @@ function M.unfreeze_buf()
     require('illuminate.engine').unfreeze_buf()
 end
 
+function M.toggle_freeze_buf()
+    require('illuminate.engine').toggle_freeze_buf()
+end
+
 function M.goto_next_reference(wrap)
     if wrap == nil then
         wrap = vim.o.wrapscan

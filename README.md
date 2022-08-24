@@ -141,6 +141,10 @@ Freeze the illumination on the buffer, this won't clear the highlights.
 
 Unfreeze the illumination on the buffer.
 
+#### require('illuminate').toggle_freeze_buf()
+
+Toggle the frozen state of the buffer.
+
 #### require('illuminate').goto_next_reference(wrap)
 
 Move the cursor to the closest references after the cursor which it is not currently on. Wraps the buffer if on the last reference.

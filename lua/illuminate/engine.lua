@@ -212,4 +212,8 @@ function M.unfreeze_buf(bufnr)
     frozen_bufs[bufnr or vim.api.nvim_get_current_buf()] = nil
 end
 
+function M.toggle_freeze_buf(bufnr)
+    frozen_bufs[bufnr or vim.api.nvim_get_current_buf()] = not frozen_bufs[bufnr or vim.api.nvim_get_current_buf()]
+end
+
 return M
