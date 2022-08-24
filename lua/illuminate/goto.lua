@@ -4,7 +4,7 @@ local engine = require('illuminate.engine')
 
 local M = {}
 
-function M.goto_next_reference()
+function M.goto_next_reference(wrap)
     local bufnr = vim.api.nvim_get_current_buf()
     local winid = vim.api.nvim_get_current_win()
     local cursor_pos = util.get_cursor_pos(winid)
@@ -16,7 +16,12 @@ function M.goto_next_reference()
     local i = ref.bisect_left(ref.buf_get_references(bufnr), cursor_pos)
     i = i + 1
     if i > #ref.buf_get_references(bufnr) then
-        i = 1
+        if wrap then
+            i = 1
+        else
+            vim.api.nvim_err_writeln("E9999: vim-illuminate: goto_next_reference hit BOTTOM of the references")
+            return
+        end
     end
 
     local pos, _ = unpack(ref.buf_get_references(bufnr)[i])
@@ -27,7 +32,7 @@ function M.goto_next_reference()
     engine.unfreeze_buf(bufnr)
 end
 
-function M.goto_prev_reference()
+function M.goto_prev_reference(wrap)
     local bufnr = vim.api.nvim_get_current_buf()
     local winid = vim.api.nvim_get_current_win()
     local cursor_pos = util.get_cursor_pos(winid)
@@ -39,7 +44,12 @@ function M.goto_prev_reference()
     local i = ref.bisect_left(ref.buf_get_references(bufnr), cursor_pos)
     i = i - 1
     if i == 0 then
-        i = #ref.buf_get_references(bufnr)
+        if wrap then
+            i = #ref.buf_get_references(bufnr)
+        else
+            vim.api.nvim_err_writeln("E9999: vim-illuminate: goto_prev_reference hit TOP of the references")
+            return
+        end
     end
 
     local pos, _ = unpack(ref.buf_get_references(bufnr)[i])

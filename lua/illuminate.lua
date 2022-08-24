@@ -257,12 +257,18 @@ function M.unfreeze_buf()
     require('illuminate.engine').unfreeze_buf()
 end
 
-function M.goto_next_reference()
-    require('illuminate.goto').goto_next_reference()
+function M.goto_next_reference(wrap)
+    if wrap == nil then
+        wrap = vim.o.wrapscan
+    end
+    require('illuminate.goto').goto_next_reference(wrap)
 end
 
-function M.goto_prev_reference()
-    require('illuminate.goto').goto_prev_reference()
+function M.goto_prev_reference(wrap)
+    if wrap == nil then
+        wrap = vim.o.wrapscan
+    end
+    require('illuminate.goto').goto_prev_reference(wrap)
 end
 
 function M.textobj_select()
