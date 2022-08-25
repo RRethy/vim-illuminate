@@ -19,7 +19,7 @@ function M.goto_next_reference(wrap)
         if wrap then
             i = 1
         else
-            vim.api.nvim_err_writeln("E9999: vim-illuminate: goto_next_reference hit BOTTOM of the references")
+            vim.api.nvim_err_writeln("E384: vim-illuminate: goto_next_reference hit BOTTOM of the references")
             return
         end
     end
@@ -47,7 +47,7 @@ function M.goto_prev_reference(wrap)
         if wrap then
             i = #ref.buf_get_references(bufnr)
         else
-            vim.api.nvim_err_writeln("E9999: vim-illuminate: goto_prev_reference hit TOP of the references")
+            vim.api.nvim_err_writeln("E384: vim-illuminate: goto_prev_reference hit TOP of the references")
             return
         end
     end
