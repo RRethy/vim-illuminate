@@ -71,6 +71,10 @@ function M.initiate_request(bufnr, winid)
             if bufs[bufnr][1] ~= id then
                 return
             end
+            if not vim.api.nvim_buf_is_valid(bufnr) then
+                bufs[bufnr][3] = {}
+                return
+            end
 
             local references = {}
             for client_id, results in pairs(client_results) do
