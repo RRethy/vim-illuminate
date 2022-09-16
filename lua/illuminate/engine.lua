@@ -13,6 +13,7 @@ local is_paused = false
 local written = {}
 local error_timestamps = {}
 local frozen_bufs = {}
+local started = false
 
 local function buf_should_illuminate(bufnr)
     if is_paused or paused_bufs[bufnr] or stopped_bufs[bufnr] then
@@ -38,6 +39,7 @@ local function stop_timer(timer)
 end
 
 function M.start()
+    started = true
     vim.api.nvim_create_augroup(AUGROUP, { clear = true })
     vim.api.nvim_create_autocmd({ 'VimEnter', 'CursorMoved', 'CursorMovedI', 'ModeChanged', 'TextChanged' }, {
         group = AUGROUP,
@@ -58,6 +60,7 @@ function M.start()
 end
 
 function M.stop()
+    started = false
     vim.api.nvim_create_augroup(AUGROUP, { clear = true })
 end
 
@@ -158,7 +161,7 @@ function M.get_provider(bufnr)
     for _, provider in ipairs(config.providers(bufnr)) do
         local ok, providerModule = pcall(require, string.format('illuminate.providers.%s', provider))
         if ok and providerModule.is_ready(bufnr) then
-            return providerModule
+            return providerModule, provider
         end
     end
     return nil
@@ -214,6 +217,14 @@ end
 
 function M.toggle_freeze_buf(bufnr)
     frozen_bufs[bufnr or vim.api.nvim_get_current_buf()] = not frozen_bufs[bufnr or vim.api.nvim_get_current_buf()]
+end
+
+function M.debug()
+    local bufnr = vim.api.nvim_get_current_buf()
+    print('buf_should_illuminate', bufnr, buf_should_illuminate(bufnr))
+    print('config', vim.inspect(config.get()))
+    print('started', started)
+    print('provider', M.get_provider(bufnr))
 end
 
 return M

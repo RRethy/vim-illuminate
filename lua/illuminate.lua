@@ -279,4 +279,8 @@ function M.textobj_select()
     require('illuminate.textobj').select()
 end
 
+function M.debug()
+    require('illuminate.engine').debug()
+end
+
 return M

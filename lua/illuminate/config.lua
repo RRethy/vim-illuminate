@@ -25,8 +25,8 @@ function M.set(config_overrides)
     config = vim.tbl_extend('force', config, config_overrides or {})
 end
 
-function M.debug()
-    print(vim.inspect(config))
+function M.get()
+    return config
 end
 
 function M.filetype_override(bufnr)
