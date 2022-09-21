@@ -1,4 +1,4 @@
-*illuminate.txt*         For NVIM v0.8.0        Last change: 2022 September 16
+*illuminate.txt*         For NVIM v0.8.0        Last change: 2022 September 21
 
 ==============================================================================
 Table of Contents                               *illuminate-table-of-contents*
@@ -70,6 +70,8 @@ You’ll also get `<a-n>` and `<a-p>` as keymaps to move between references and
         providers_regex_syntax_allowlist = {},
         -- under_cursor: whether or not to illuminate under the cursor
         under_cursor = true,
+        -- max_file_lines: max number of lines in a file to illuminate
+        max_file_lines = nil,
     })
 <
 
