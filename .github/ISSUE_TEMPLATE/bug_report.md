@@ -16,6 +16,8 @@ Steps to reproduce the behavior (include minimal `init.vim` or `.vimrc`):
 
 **Note** Omitting a minimal `init.vim`/`init.lua`/`.vimrc` will likely result in the issue being closed without explanation.
 
+**Output from `:IlluminateDebug`**
+
 **Expected behavior**
 A clear and concise description of what you expected to happen.
 
