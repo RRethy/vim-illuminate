@@ -19,6 +19,7 @@ local config = {
     providers_regex_syntax_denylist = {},
     providers_regex_syntax_allowlist = {},
     under_cursor = true,
+    max_file_lines = nil,
 }
 
 function M.set(config_overrides)
@@ -79,6 +80,10 @@ function M.delay(bufnr)
         return 17
     end
     return delay
+end
+
+function M.max_file_lines()
+    return config['max_file_lines']
 end
 
 return M

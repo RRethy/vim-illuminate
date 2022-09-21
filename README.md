@@ -48,6 +48,8 @@ require('illuminate').configure({
     providers_regex_syntax_allowlist = {},
     -- under_cursor: whether or not to illuminate under the cursor
     under_cursor = true,
+    -- max_file_lines: max number of lines in a file to illuminate
+    max_file_lines = nil,
 })
 ```
 

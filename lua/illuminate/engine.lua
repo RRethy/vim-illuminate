@@ -20,15 +20,16 @@ local function buf_should_illuminate(bufnr)
         return false
     end
 
-    return util.is_allowed(
-        config.modes_allowlist(bufnr),
-        config.modes_denylist(bufnr),
-        vim.api.nvim_get_mode().mode
-    ) and util.is_allowed(
-        config.filetypes_allowlist(),
-        config.filetypes_denylist(),
-        vim.api.nvim_buf_get_option(bufnr, 'filetype')
-    )
+    return (config.max_file_lines() == nil or vim.fn.line('$') <= config.max_file_lines())
+        and util.is_allowed(
+            config.modes_allowlist(bufnr),
+            config.modes_denylist(bufnr),
+            vim.api.nvim_get_mode().mode
+        ) and util.is_allowed(
+            config.filetypes_allowlist(),
+            config.filetypes_denylist(),
+            vim.api.nvim_buf_get_option(bufnr, 'filetype')
+        )
 end
 
 local function stop_timer(timer)
