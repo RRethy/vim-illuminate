@@ -29,8 +29,17 @@ require('illuminate').configure({
     filetype_overrides = {},
     -- filetypes_denylist: filetypes to not illuminate, this overrides filetypes_allowlist
     filetypes_denylist = {
-        'dirvish',
+        'dirbuf',
+        'dirvish
         'fugitive',
+        "startify",
+        "packer",
+        "NvimTree",
+        "Trouble",
+        "dashboard",
+        "alpha",
+        "TelescopePrompt",
+        "TelescopeResults",
     },
     -- filetypes_allowlist: filetypes to illuminate, this is overriden by filetypes_denylist
     filetypes_allowlist = {},

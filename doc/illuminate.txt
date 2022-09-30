@@ -50,10 +50,19 @@ You’ll also get `<a-n>` and `<a-p>` as keymaps to move between references and
         -- supports the same keys passed to .configure except for filetypes_denylist and filetypes_allowlist
         filetype_overrides = {},
         -- filetypes_denylist: filetypes to not illuminate, this overrides filetypes_allowlist
-        filetypes_denylist = {
-            'dirvish',
-            'fugitive',
-        },
+	filetypes_denylist = {
+	    'dirbuf',
+	    'dirvish
+	    'fugitive',
+	    "startify",
+	    "packer",
+	    "NvimTree",
+	    "Trouble",
+	    "dashboard",
+	    "alpha",
+	    "TelescopePrompt",
+	    "TelescopeResults",
+	},
         -- filetypes_allowlist: filetypes to illuminate, this is overriden by filetypes_denylist
         filetypes_allowlist = {},
         -- modes_denylist: modes to not illuminate, this overrides modes_allowlist
