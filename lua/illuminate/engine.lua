@@ -225,7 +225,7 @@ end
 function M.debug()
     local bufnr = vim.api.nvim_get_current_buf()
     print('buf_should_illuminate', bufnr, buf_should_illuminate(bufnr))
-    print('config', vim.inspect(config.get()))
+    print('config', vim.inspect(config.get_raw()))
     print('started', started)
     print('provider', M.get_provider(bufnr))
 end
