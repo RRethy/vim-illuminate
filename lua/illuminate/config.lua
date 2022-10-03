@@ -20,6 +20,8 @@ local config = {
     providers_regex_syntax_allowlist = {},
     under_cursor = true,
     max_file_lines = nil,
+    large_file_cutoff = nil,
+    large_file_config = nil,
 }
 
 function M.set(config_overrides)
@@ -27,7 +29,13 @@ function M.set(config_overrides)
 end
 
 function M.get()
-    return config
+    return (
+        M.large_file_cutoff() == nil
+            or vim.fn.line('$') <= config.large_file_cutoff()
+            or M.large_file_config() == nil
+        )
+        and config
+        or M.large_file_config()
 end
 
 function M.filetype_override(bufnr)
@@ -84,6 +92,16 @@ end
 
 function M.max_file_lines()
     return config['max_file_lines']
+end
+
+function M.large_file_cutoff()
+    return config['large_file_cutoff']
+end
+
+function M.large_file_config()
+    return config['large_file_config'] or {
+        filetypes_allowlist = { '_none' }
+    }
 end
 
 return M

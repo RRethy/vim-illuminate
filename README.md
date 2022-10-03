@@ -48,8 +48,11 @@ require('illuminate').configure({
     providers_regex_syntax_allowlist = {},
     -- under_cursor: whether or not to illuminate under the cursor
     under_cursor = true,
-    -- max_file_lines: max number of lines in a file to illuminate
-    max_file_lines = nil,
+    -- large_file_cutoff: number of lines at which to use large_file_config
+    large_file_cutoff = nil,
+    -- large_file_config: config to use for large files (based on large_file_cutoff).
+    -- If nil, vim-illuminate will be disabled for large files.
+    large_file_config = nil,
 })
 ```
 
