@@ -49,6 +49,7 @@ require('illuminate').configure({
     -- under_cursor: whether or not to illuminate under the cursor
     under_cursor = true,
     -- large_file_cutoff: number of lines at which to use large_file_config
+    -- The `under_cursor` option is disabled when this cutoff is hit
     large_file_cutoff = nil,
     -- large_file_config: config to use for large files (based on large_file_cutoff).
     -- If nil, vim-illuminate will be disabled for large files.

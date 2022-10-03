@@ -89,6 +89,8 @@ function M.refresh_references(bufnr, winid)
     if written[bufnr] or not ref.buf_cursor_in_references(bufnr, util.get_cursor_pos(winid)) then
         hl.buf_clear_references(bufnr)
         ref.buf_set_references(bufnr, {})
+    elseif config.large_file_cutoff() ~= nil and vim.fn.line('$') > config.large_file_cutoff() then
+        return
     end
     written[bufnr] = nil
 
