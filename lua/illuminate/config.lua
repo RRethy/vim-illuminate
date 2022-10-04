@@ -88,6 +88,9 @@ end
 
 function M.delay(bufnr)
     local delay = M.filetype_override(bufnr)['delay'] or M.get()['delay'] or 17
+    if string.sub(vim.api.nvim_get_mode().mode, 1, 1) == 'i' then
+        delay = delay + 100
+    end
     if delay < 17 then
         return 17
     end
