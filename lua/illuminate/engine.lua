@@ -228,6 +228,7 @@ function M.debug()
     print('config', vim.inspect(config.get_raw()))
     print('started', started)
     print('provider', M.get_provider(bufnr))
+    print('`termguicolors`', vim.opt.termguicolors:get())
 end
 
 return M
