@@ -58,6 +58,14 @@ function M.start()
             written[vim.api.nvim_get_current_buf()] = true
         end,
     })
+    vim.api.nvim_create_autocmd({ 'VimLeave' }, {
+        group = AUGROUP,
+        callback = function()
+            for _, timer in pairs(timers) do
+                stop_timer(timer)
+            end
+        end,
+    })
 end
 
 function M.stop()
