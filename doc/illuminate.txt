@@ -1,4 +1,4 @@
-*illuminate.txt*          For NVIM v0.8.0         Last change: 2022 October 04
+*illuminate.txt*         For NVIM v0.8.0         Last change: 2022 November 01
 
 ==============================================================================
 Table of Contents                               *illuminate-table-of-contents*
@@ -57,8 +57,10 @@ You’ll also get `<a-n>` and `<a-p>` as keymaps to move between references and
         -- filetypes_allowlist: filetypes to illuminate, this is overriden by filetypes_denylist
         filetypes_allowlist = {},
         -- modes_denylist: modes to not illuminate, this overrides modes_allowlist
+        -- See `:help mode()` for possible values
         modes_denylist = {},
         -- modes_allowlist: modes to illuminate, this is overriden by modes_denylist
+        -- See `:help mode()` for possible values
         modes_allowlist = {},
         -- providers_regex_syntax_denylist: syntax to not illuminate, this overrides providers_regex_syntax_allowlist
         -- Only applies to the 'regex' provider
