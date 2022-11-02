@@ -1,4 +1,4 @@
-*illuminate.txt*         For NVIM v0.8.0         Last change: 2022 November 01
+*illuminate.txt*         For NVIM v0.8.0         Last change: 2022 November 02
 
 ==============================================================================
 Table of Contents                               *illuminate-table-of-contents*
@@ -79,6 +79,8 @@ You’ll also get `<a-n>` and `<a-p>` as keymaps to move between references and
         -- Supports the same keys passed to .configure
         -- If nil, vim-illuminate will be disabled for large files.
         large_file_overrides = nil,
+        -- min_count_to_highlight: minimum number of matches required to perform highlighting
+        min_count_to_highlight = 1,
     })
 <
 
