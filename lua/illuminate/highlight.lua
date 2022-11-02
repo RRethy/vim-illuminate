@@ -14,6 +14,10 @@ local function kind_to_hl_group(kind)
 end
 
 function M.buf_highlight_references(bufnr, references)
+    if config.min_count_to_highlight() > #references then
+        return
+    end
+
     local cursor_pos = util.get_cursor_pos()
     for _, reference in ipairs(references) do
         if config.under_cursor(bufnr) or not ref.is_pos_in_ref(cursor_pos, reference) then

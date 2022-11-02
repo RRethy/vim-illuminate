@@ -22,6 +22,7 @@ local config = {
     max_file_lines = nil,
     large_file_cutoff = nil,
     large_file_config = nil,
+    min_count_to_highlight = 1,
 }
 
 function M.set(config_overrides)
@@ -115,6 +116,10 @@ function M.large_file_overrides()
     return {
         filetypes_allowlist = { '_none' }
     }
+end
+
+function M.min_count_to_highlight()
+    return M.get()['min_count_to_highlight']
 end
 
 return M
