@@ -119,7 +119,7 @@ function M.large_file_overrides()
 end
 
 function M.min_count_to_highlight()
-    return M.get()['min_count_to_highlight']
+    return M.get()['min_count_to_highlight'] or 1
 end
 
 return M
