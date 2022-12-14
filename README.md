@@ -241,3 +241,22 @@ augroup illuminate_augroup
     autocmd VimEnter * hi illuminatedCurWord cterm=italic gui=italic
 augroup END
 ```
+# Troubleshooting
+
+If the highlighting you get is an underline instead of the smooth background color change, include the following in your configuration:
+
+## vimscript
+
+```viml
+hi link IlluminatedWordText Visual
+hi link IlluminatedWordRead Visual
+hi link IlluminatedWordWrite Visual
+```
+
+## lua
+
+```lua
+vim.api.nvim_set_hl(0, "IlluminatedWordText", { link = "Visual" })
+vim.api.nvim_set_hl(0, "IlluminatedWordRead", { link = "Visual" })
+vim.api.nvim_set_hl(0, "IlluminatedWordWrite", { link = "Visual" })
+```
