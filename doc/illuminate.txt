@@ -1,4 +1,4 @@
-*illuminate.txt*         For NVIM v0.8.0         Last change: 2022 November 11
+*illuminate.txt*          For NVIM v0.8.0         Last change: 2023 January 11
 
 ==============================================================================
 Table of Contents                               *illuminate-table-of-contents*
