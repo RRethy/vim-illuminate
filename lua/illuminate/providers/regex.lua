@@ -18,7 +18,11 @@ end
 
 function M.get_references(bufnr, cursor)
     local refs = {}
-    local re = vim.regex(get_cur_word(bufnr, cursor))
+    local ok, re = pcall(vim.regex, get_cur_word(bufnr, cursor))
+    if not ok then
+        return refs
+    end
+
     local line_count = vim.api.nvim_buf_line_count(bufnr)
     for i = 0, line_count - 1 do
         local start_byte, end_byte = 0, 0
