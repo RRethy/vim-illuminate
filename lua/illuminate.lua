@@ -283,4 +283,8 @@ function M.debug()
     require('illuminate.engine').debug()
 end
 
+function M.is_paused()
+    return require('illuminate.engine').is_paused()
+end
+
 return M
