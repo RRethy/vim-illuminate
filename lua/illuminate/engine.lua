@@ -239,4 +239,8 @@ function M.debug()
     print('`termguicolors`', vim.opt.termguicolors:get())
 end
 
+function M.is_paused()
+    return is_paused
+end
+
 return M
