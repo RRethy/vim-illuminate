@@ -36,7 +36,7 @@ You’ll also get `<a-n>` and `<a-p>` as keymaps to move between references and
 
 >
     -- default configuration
-    require('illuminate').configure({
+    require('illuminate').configure({  -- or require('illuminate').setup({...})
         -- providers: provider used to get references in the buffer, ordered by priority
         providers = {
             'lsp',
@@ -47,7 +47,7 @@ You’ll also get `<a-n>` and `<a-p>` as keymaps to move between references and
         delay = 100,
         -- filetype_overrides: filetype specific overrides.
         -- The keys are strings to represent the filetype while the values are tables that
-        -- supports the same keys passed to .configure except for filetypes_denylist and filetypes_allowlist
+        -- supports the same keys passed to .configure / .setup except for filetypes_denylist and filetypes_allowlist
         filetype_overrides = {},
         -- filetypes_denylist: filetypes to not illuminate, this overrides filetypes_allowlist
         filetypes_denylist = {
@@ -76,7 +76,7 @@ You’ll also get `<a-n>` and `<a-p>` as keymaps to move between references and
         -- The `under_cursor` option is disabled when this cutoff is hit
         large_file_cutoff = nil,
         -- large_file_config: config to use for large files (based on large_file_cutoff).
-        -- Supports the same keys passed to .configure
+        -- Supports the same keys passed to .configure / .setup
         -- If nil, vim-illuminate will be disabled for large files.
         large_file_overrides = nil,
         -- min_count_to_highlight: minimum number of matches required to perform highlighting
@@ -164,6 +164,11 @@ IlluminatedWordWrite                   Highlight group used for references of
 
 require('illuminate').configure(config) Override the default configuration with
                                        `config`
+
+                              *illuminate-require('illuminate').setup(config)*
+
+require('illuminate').setup(config) Override the default configuration with
+                                   `config`
 
 
                                     *illuminate-require('illuminate').pause()*

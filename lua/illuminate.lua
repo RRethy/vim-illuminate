@@ -221,6 +221,10 @@ function M.configure(config)
     require('illuminate.config').set(config)
 end
 
+function M.setup(config)
+    M.configure(config)
+end
+
 function M.pause()
     require('illuminate.engine').pause()
 end
