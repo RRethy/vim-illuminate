@@ -287,4 +287,12 @@ function M.is_paused()
     return require('illuminate.engine').is_paused()
 end
 
+function M.set_highlight_defaults()
+    vim.cmd [[
+    hi def IlluminatedWordText guifg=none guibg=none gui=underline
+    hi def IlluminatedWordRead guifg=none guibg=none gui=underline
+    hi def IlluminatedWordWrite guifg=none guibg=none gui=underline
+    ]]
+end
+
 return M
