@@ -44,9 +44,12 @@ lua << EOF
     end
 EOF
 
-hi def IlluminatedWordText gui=underline
-hi def IlluminatedWordRead gui=underline
-hi def IlluminatedWordWrite gui=underline
+hi def link IlluminatedWordText CursorLine
+hi def link IlluminatedWordRead CursorLine
+hi def link IlluminatedWordWrite CursorLine
+hi IlluminatedWordText gui=underline
+hi IlluminatedWordRead gui=underline
+hi IlluminatedWordWrite gui=underline
 
 finish
 end
