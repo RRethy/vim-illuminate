@@ -56,7 +56,7 @@ local function handle_document_highlight(result, bufnr, client_id)
     local btimer = timers[bufnr]
     if btimer then
         vim.loop.timer_stop(btimer)
-        vim.loop.close(btimer)
+        -- vim.loop.close(btimer)
     end
     if type(result) ~= 'table' then
         vim.lsp.util.buf_clear_references(bufnr)
