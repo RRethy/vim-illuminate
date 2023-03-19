@@ -156,6 +156,18 @@ Unfreeze the illumination on the buffer.
 
 Toggle the frozen state of the buffer.
 
+#### require('illuminate').invisible_buf()
+
+Turn off the highlighting for the buffer, this won't stop the engine from running so you can still use `<c-n>` and `<c-p>`.
+
+#### require('illuminate').visible_buf()
+
+Turn on the highlighting for the buffer, this is only needed if you've previous called `require('illuminate').invisible_buf()`.
+
+#### require('illuminate').toggle_visibility_buf()
+
+Toggle the visibility of highlights in the buffer.
+
 #### require('illuminate').goto_next_reference(wrap)
 
 Move the cursor to the closest references after the cursor which it is not currently on. Wraps the buffer if on the last reference.

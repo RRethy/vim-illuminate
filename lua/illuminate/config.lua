@@ -36,8 +36,8 @@ end
 function M.get()
     return (
         M.large_file_cutoff() == nil
-            or vim.fn.line('$') <= M.large_file_cutoff()
-            or M.large_file_overrides() == nil
+        or vim.fn.line('$') <= M.large_file_cutoff()
+        or M.large_file_overrides() == nil
         )
         and config
         or M.large_file_overrides()

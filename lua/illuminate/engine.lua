@@ -13,6 +13,7 @@ local is_paused = false
 local written = {}
 local error_timestamps = {}
 local frozen_bufs = {}
+local invisible_bufs = {}
 local started = false
 
 local function buf_should_illuminate(bufnr)
@@ -141,7 +142,9 @@ function M.refresh_references(bufnr, winid)
             if references ~= nil then
                 ref.buf_set_references(bufnr, references)
                 if ref.buf_cursor_in_references(bufnr, util.get_cursor_pos(winid)) then
-                    hl.buf_highlight_references(bufnr, ref.buf_get_references(bufnr))
+                    if not invisible_bufs[bufnr] == true then
+                        hl.buf_highlight_references(bufnr, ref.buf_get_references(bufnr))
+                    end
                 else
                     ref.buf_set_references(bufnr, {})
                 end
@@ -227,7 +230,24 @@ function M.unfreeze_buf(bufnr)
 end
 
 function M.toggle_freeze_buf(bufnr)
-    frozen_bufs[bufnr or vim.api.nvim_get_current_buf()] = not frozen_bufs[bufnr or vim.api.nvim_get_current_buf()]
+    bufnr = bufnr or vim.api.nvim_get_current_buf()
+    frozen_bufs[bufnr] = not frozen_bufs[bufnr]
+end
+
+function M.invisible_buf(bufnr)
+    invisible_bufs[bufnr or vim.api.nvim_get_current_buf()] = true
+    M.refresh_references()
+end
+
+function M.visible_buf(bufnr)
+    invisible_bufs[bufnr or vim.api.nvim_get_current_buf()] = nil
+    M.refresh_references()
+end
+
+function M.toggle_visibility_buf(bufnr)
+    bufnr = bufnr or vim.api.nvim_get_current_buf()
+    invisible_bufs[bufnr] = not invisible_bufs[bufnr]
+    M.refresh_references()
 end
 
 function M.debug()

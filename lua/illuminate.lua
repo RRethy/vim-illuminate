@@ -150,7 +150,8 @@ function M.on_cursor_moved(bufnr)
     if supported == nil or supported then
         vim.lsp.buf.document_highlight()
     else
-        augroup(vim.api.nvim_get_current_buf(), function() end)
+        augroup(vim.api.nvim_get_current_buf(), function()
+        end)
     end
 end
 
@@ -260,6 +261,18 @@ end
 
 function M.toggle_freeze_buf()
     require('illuminate.engine').toggle_freeze_buf()
+end
+
+function M.invisible_buf()
+    require('illuminate.engine').invisible_buf()
+end
+
+function M.visible_buf()
+    require('illuminate.engine').visible_buf()
+end
+
+function M.toggle_visibility_buf()
+    require('illuminate.engine').toggle_visibility_buf()
 end
 
 function M.goto_next_reference(wrap)
