@@ -1,12 +1,11 @@
-local ts_utils = require('nvim-treesitter.ts_utils')
-local locals = require('nvim-treesitter.locals')
+local locals = require("nvim-treesitter.locals")
 
 local M = {}
 
 local buf_attached = {}
 
 function M.get_references(bufnr)
-    local node_at_point = ts_utils.get_node_at_cursor()
+    local node_at_point = vim.treesitter.get_node()
     if not node_at_point then
         return
     end
@@ -37,7 +36,7 @@ function M.get_references(bufnr)
 end
 
 function M.is_ready(bufnr)
-    return buf_attached[bufnr] and vim.api.nvim_buf_get_option(bufnr, 'filetype') ~= 'yaml'
+    return buf_attached[bufnr] and vim.api.nvim_buf_get_option(bufnr, "filetype") ~= "yaml"
 end
 
 function M.attach(bufnr)
