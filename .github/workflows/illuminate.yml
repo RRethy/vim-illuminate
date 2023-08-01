@@ -22,7 +22,7 @@ jobs:
         id: changes
         uses: UnicornGlobal/has-changes-action@v1.0.11
         with:
-          path: '.'
+          path: 'doc/'
       - uses: stefanzweifel/git-auto-commit-action@v4
         if: steps.changes.outputs.has_changes == 'true'
         with:
