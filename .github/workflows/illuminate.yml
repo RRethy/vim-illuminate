@@ -18,7 +18,13 @@ jobs:
           pandoc: "README.md"
           toc: true
           version: "NVIM v0.8.0"
+      - name: Check for Changes
+        id: changes
+        uses: UnicornGlobal/has-changes-action@v1.0.11
+        with:
+          path: '.'
       - uses: stefanzweifel/git-auto-commit-action@v4
+        if: steps.changes.outputs.has_changes == 'true'
         with:
           commit_message: 'Auto generate docs'
           branch: ${{ github.head_ref }}
