@@ -63,6 +63,8 @@ require('illuminate').configure({
     -- enable/disable illumination. This will be called a lot so don't do
     -- anything expensive in it.
     should_enable = function(bufnr) return true end,
+    -- case_insensitive_regex: sets regex case sensitivity
+    case_insensitive_regex = false,
 })
 ```
 

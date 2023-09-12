@@ -6,6 +6,10 @@ local M = {}
 local START_WORD_REGEX = vim.regex([[^\k*]])
 local END_WORD_REGEX = vim.regex([[\k*$]])
 
+-- foo
+-- foo
+-- Foo
+-- fOo
 local function get_cur_word(bufnr, cursor)
     local line = vim.api.nvim_buf_get_lines(bufnr, cursor[1], cursor[1] + 1, false)[1]
     local left_part = string.sub(line, 0, cursor[2] + 1)
@@ -13,7 +17,11 @@ local function get_cur_word(bufnr, cursor)
     local start_idx, _ = END_WORD_REGEX:match_str(left_part)
     local _, end_idx = START_WORD_REGEX:match_str(right_part)
     local word = string.format('%s%s', string.sub(left_part, start_idx + 1), string.sub(right_part, 2, end_idx))
-    return [[\V\<]] .. vim.fn.escape(word, [[/\]]) .. [[\>]]
+    local modifiers = [[\V]]
+    if config.case_insensitive_regex() then
+        modifiers = modifiers .. [[\c]]
+    end
+    return modifiers .. [[\<]] .. vim.fn.escape(word, [[/\]]) .. [[\>]]
 end
 
 function M.get_references(bufnr, cursor)
@@ -51,10 +59,10 @@ function M.is_ready(bufnr)
         'name'
     )
     if util.is_allowed(
-        config.provider_regex_syntax_allowlist(bufnr),
-        config.provider_regex_syntax_denylist(bufnr),
-        name
-    ) then
+            config.provider_regex_syntax_allowlist(bufnr),
+            config.provider_regex_syntax_denylist(bufnr),
+            name
+        ) then
         return true
     end
     return false

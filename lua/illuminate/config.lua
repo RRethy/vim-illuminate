@@ -24,6 +24,7 @@ local config = {
     large_file_config = nil,
     min_count_to_highlight = 1,
     should_enable = nil,
+    case_insensitive_regex = false,
 }
 
 function M.set(config_overrides)
@@ -127,6 +128,10 @@ function M.should_enable()
     return M.get()['should_enable'] or function(_)
         return true
     end
+end
+
+function M.case_insensitive_regex()
+    return M.get()['case_insensitive_regex']
 end
 
 return M
