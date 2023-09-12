@@ -21,7 +21,8 @@ local function buf_should_illuminate(bufnr)
         return false
     end
 
-    return (config.max_file_lines() == nil or vim.fn.line('$') <= config.max_file_lines())
+    return config.should_enable()(bufnr)
+        and (config.max_file_lines() == nil or vim.fn.line('$') <= config.max_file_lines())
         and util.is_allowed(
             config.modes_allowlist(bufnr),
             config.modes_denylist(bufnr),
