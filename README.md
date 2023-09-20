@@ -29,10 +29,12 @@ require('illuminate').configure({
     filetype_overrides = {},
     -- filetypes_denylist: filetypes to not illuminate, this overrides filetypes_allowlist
     filetypes_denylist = {
+        'dirbuf',
         'dirvish',
         'fugitive',
     },
     -- filetypes_allowlist: filetypes to illuminate, this is overridden by filetypes_denylist
+    -- You must set filetypes_denylist = {} to override the defaults to allow filetypes_allowlist to take effect
     filetypes_allowlist = {},
     -- modes_denylist: modes to not illuminate, this overrides modes_allowlist
     -- See `:help mode()` for possible values
