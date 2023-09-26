@@ -173,7 +173,7 @@ function M.refresh_references(bufnr, winid)
 end
 
 function M.get_provider(bufnr)
-    for _, provider in ipairs(config.providers(bufnr)) do
+    for _, provider in ipairs(config.providers(bufnr) or {}) do
         local ok, providerModule = pcall(require, string.format('illuminate.providers.%s', provider))
         if ok and providerModule.is_ready(bufnr) then
             return providerModule, provider
