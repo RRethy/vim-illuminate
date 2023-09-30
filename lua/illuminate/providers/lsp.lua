@@ -39,7 +39,12 @@ local function get_line_byte_from_position(bufnr, line, col, offset_encoding)
 end
 
 function M.get_references(bufnr)
-    return bufs[bufnr] and bufs[bufnr][3]
+    if not bufs[bufnr] or not bufs[bufnr][3] then
+        return nil
+    end
+
+    bufs[bufnr][4] = true
+    return bufs[bufnr][3]
 end
 
 function M.is_ready(bufnr)
@@ -58,8 +63,10 @@ end
 function M.initiate_request(bufnr, winid)
     local id = 1
     if bufs[bufnr] then
-        local prev_id, cancel_fn, _ = unpack(bufs[bufnr])
-        pcall(cancel_fn)
+        local prev_id, cancel_fn, _, completed = unpack(bufs[bufnr])
+        if not completed then
+            pcall(cancel_fn)
+        end
         id = prev_id + 1
     end
 
@@ -95,7 +102,7 @@ function M.initiate_request(bufnr, winid)
                         )
                         table.insert(references, {
                             { res['range']['start']['line'], start_col },
-                            { res['range']['end']['line'], end_col },
+                            { res['range']['end']['line'],   end_col },
                             res['kind'],
                         })
                     end
