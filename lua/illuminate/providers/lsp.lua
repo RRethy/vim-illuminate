@@ -43,7 +43,6 @@ function M.get_references(bufnr)
         return nil
     end
 
-    bufs[bufnr][4] = true
     return bufs[bufnr][3]
 end
 
@@ -63,8 +62,8 @@ end
 function M.initiate_request(bufnr, winid)
     local id = 1
     if bufs[bufnr] then
-        local prev_id, cancel_fn, _, completed = unpack(bufs[bufnr])
-        if not completed then
+        local prev_id, cancel_fn, references = unpack(bufs[bufnr])
+        if references == nil then
             pcall(cancel_fn)
         end
         id = prev_id + 1
