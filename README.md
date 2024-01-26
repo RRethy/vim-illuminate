@@ -1,6 +1,6 @@
 # Overview
 
-Vim plugin for automatically highlighting other uses of the word under the cursor using either LSP, Tree-sitter, or regex matching.
+Neovim plugin for automatically highlighting other uses of the word under the cursor using either LSP, Tree-sitter, or regex matching.
 
 ![gif](https://media.giphy.com/media/mSG0nwAHDt3Fl7WyoL/giphy.gif)
 
@@ -9,6 +9,8 @@ Vim plugin for automatically highlighting other uses of the word under the curso
 Just install the plugin and things will work *just work*, no configuration needed.
 
 You'll also get `<a-n>` and `<a-p>` as keymaps to move between references and `<a-i>` as a textobject for the reference illuminated under the cursor.
+
+*Note: Vim users should refer to the [docs](https://github.com/RRethy/vim-illuminate?tab=readme-ov-file#vim-users) for the Vimscript implementation of this plugin.*
 
 # Configuration
 
