@@ -46,7 +46,7 @@ function M.range(bufnr, start, finish, kind)
             hl_group = kind_to_hl_group(kind),
             end_row = end_row,
             end_col = cols[2],
-            priority = 1000,
+            priority = 199,
             strict = false,
         })
     end
