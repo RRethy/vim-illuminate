@@ -21,7 +21,10 @@ local function get_cur_word(bufnr, cursor)
     if config.case_insensitive_regex() then
         modifiers = modifiers .. [[\c]]
     end
-    return modifiers .. [[\<]] .. vim.fn.escape(word, [[/\]]) .. [[\>]]
+    local ok, escaped = pcall(vim.fn.escape, word, [[/\]])
+    if ok then
+      return modifiers .. [[\<]] .. escaped .. [[\>]]
+    end
 end
 
 function M.get_references(bufnr, cursor)
