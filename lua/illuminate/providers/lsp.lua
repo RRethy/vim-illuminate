@@ -48,7 +48,16 @@ end
 
 function M.is_ready(bufnr)
     local supported = false
-    if vim.lsp.for_each_buffer_client then
+    -- For nvim 0.10+
+    if vim.lsp.get_clients then
+        supported = false
+        for _, client in ipairs(vim.lsp.get_clients({bufnr = bufnr})) do
+            if client and client.supports_method('textDocument/documentHighlight') then
+                supported = true
+            end
+        end
+    -- For older versions
+    elseif vim.lsp.for_each_buffer_client then
         supported = false
         vim.lsp.for_each_buffer_client(bufnr, function(client)
             if client and client.supports_method('textDocument/documentHighlight') then
