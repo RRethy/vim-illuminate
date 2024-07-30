@@ -101,6 +101,9 @@ function M.refresh_references(bufnr, winid)
         ref.buf_set_references(bufnr, {})
     elseif config.large_file_cutoff() ~= nil and vim.fn.line('$') > config.large_file_cutoff() then
         return
+    elseif config.large_file_cutoff_kilobytes() ~= nil 
+        and vim.fn.getfsize(vim.api.nvim_buf_get_name(bufnr)) > config.large_file_cutoff_kilobytes() * 1024 then
+        return
     end
     written[bufnr] = nil
 

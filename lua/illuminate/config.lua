@@ -21,6 +21,7 @@ local config = {
     under_cursor = true,
     max_file_lines = nil,
     large_file_cutoff = nil,
+    large_file_cutoff_kilobytes = 50,
     large_file_config = nil,
     min_count_to_highlight = 1,
     should_enable = nil,
@@ -37,12 +38,13 @@ end
 
 function M.get()
     return (
-            M.large_file_cutoff() == nil
-            or vim.fn.line('$') <= M.large_file_cutoff()
-            or M.large_file_overrides() == nil
-        )
-        and config
-        or M.large_file_overrides()
+        (M.large_file_cutoff() == nil
+        or vim.fn.line('$') <= M.large_file_cutoff())
+        and (M.large_file_cutoff_kilobytes() == nil
+        or vim.fn.getfsize(vim.api.nvim_buf_get_name(0)) <= M.large_file_cutoff_kilobytes() * 1024)
+    )
+    and config
+    or M.large_file_overrides()
 end
 
 function M.filetype_override(bufnr)
@@ -106,6 +108,10 @@ end
 
 function M.large_file_cutoff()
     return config['large_file_cutoff']
+end
+
+function M.large_file_cutoff_kilobytes()
+    return config['large_file_cutoff_kilobytes']
 end
 
 function M.large_file_overrides()
