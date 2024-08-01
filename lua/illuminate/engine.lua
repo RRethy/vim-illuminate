@@ -50,6 +50,26 @@ function M.start()
             M.refresh_references()
         end,
     })
+
+    -- Set up auto-attach/detach for the treesitter module.
+    -- Only make the autocmds if nvim-treesitter won't attach/detach for us (i.e. doesn't have modules) and
+    -- we can use vim.treesitter methods from nvim v0.9 onwards.
+    if not vim.g.illuminate_ts_module_defined and vim.fn.has('nvim-0.9') == 1 then
+        vim.api.nvim_create_autocmd({ 'FileType' }, {
+            callback = function(details)
+                if not vim.treesitter.language.get_lang(details.match) then
+                    return
+                end
+                require('illuminate.providers.treesitter').attach(details.buf)
+            end,
+        })
+        vim.api.nvim_create_autocmd({ 'BufUnload' }, {
+            callback = function(details)
+                require('illuminate.providers.treesitter').detach(details.buf)
+            end,
+        })
+    end
+
     -- If vim.lsp.buf.format is called, this will call vim.api.nvim_buf_set_text which messes up extmarks.
     -- By using this `written` variable, we can ensure refresh_references doesn't terminate early based on
     -- ref.buf_cursor_in_references being incorrect (we have references but they're not actually showing
