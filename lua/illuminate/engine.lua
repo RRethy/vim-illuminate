@@ -51,7 +51,7 @@ function M.start()
         end,
     })
 
-    -- Set up auto-attach/detach for the treesitter module.
+    -- Set up auto-attach/detach for the treesitter provider.
     -- Only make the autocmds if nvim-treesitter won't attach/detach for us (i.e. doesn't have modules) and
     -- we can use vim.treesitter methods from nvim v0.9 onwards.
     if not vim.g.illuminate_ts_module_defined and vim.fn.has('nvim-0.9') == 1 then
