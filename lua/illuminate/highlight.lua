@@ -32,20 +32,19 @@ function M.buf_highlight_references(bufnr, references)
 end
 
 function M.range(bufnr, start, finish, kind)
-    local region = vim.region(bufnr, start, finish, 'v', false)
-    for linenr, cols in pairs(region) do
-        if linenr == -1 then
-            linenr = 0
-        end
-        local end_row
-        if cols[2] == -1 then
-            end_row = linenr + 1
-            cols[2] = 0
-        end
-        vim.api.nvim_buf_set_extmark(bufnr, HL_NAMESPACE, linenr, cols[1], {
+    local start_l, start_col = unpack(start)
+    local finish_l, finish_col = unpack(finish)
+    start = { bufnr, start_l + 1, start_col + 1 }
+    finish = { bufnr, finish_l + 1, finish_col + 1 }
+
+    local region = vim.fn.getregionpos(start, finish, { type = "v", exclusive = true })
+
+    for _, segment in ipairs(region) do
+        local start_pos, finish_pos = unpack(segment)
+
+        vim.api.nvim_buf_set_extmark(bufnr, HL_NAMESPACE, start_pos[2] - 1, start_pos[3] - 1, {
             hl_group = kind_to_hl_group(kind),
-            end_row = end_row,
-            end_col = cols[2],
+            end_col = finish_pos[3],
             priority = 199,
             strict = false,
         })
