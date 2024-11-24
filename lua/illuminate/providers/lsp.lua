@@ -78,10 +78,14 @@ function M.initiate_request(bufnr, winid)
         id = prev_id + 1
     end
 
+    local params = vim.fn.has('nvim-0.11') == 1 and function(client)
+        return vim.lsp.util.make_position_params(winid, client.offset_encoding)
+    end or vim.lsp.util.make_position_params(winid)
+
     local cancel_fn = vim.lsp.buf_request_all(
         bufnr,
         'textDocument/documentHighlight',
-        vim.lsp.util.make_position_params(winid),
+        params,
         function(client_results)
             if bufs[bufnr][1] ~= id then
                 return
