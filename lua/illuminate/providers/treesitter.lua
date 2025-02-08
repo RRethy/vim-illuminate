@@ -38,7 +38,7 @@ function M.get_references(bufnr)
 end
 
 function M.is_ready(bufnr)
-    return buf_attached[bufnr] and vim.api.nvim_buf_get_option(bufnr, 'filetype') ~= 'yaml'
+    return buf_attached[bufnr] and vim.api.nvim_buf_get_option(bufnr, 'filetype') ~= 'yaml' and vim.treesitter.highlighter.active[bufnr]
 end
 
 function M.attach(bufnr)
