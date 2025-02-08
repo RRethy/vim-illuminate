@@ -69,6 +69,8 @@ require('illuminate').configure({
     should_enable = function(bufnr) return true end,
     -- case_insensitive_regex: sets regex case sensitivity
     case_insensitive_regex = false,
+    -- disable_keymaps: disable default keymaps
+    disable_keymaps = false,
 })
 ```
 
