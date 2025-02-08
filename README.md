@@ -79,7 +79,7 @@ require('illuminate').configure({
 Default highlight group used for references if no kind information is available.
 
 ```vim
-hi def IlluminatedWordText gui=underline
+hi def IlluminatedWordText gui=underline cterm=underline
 ```
 
 #### IlluminatedWordRead
@@ -87,7 +87,7 @@ hi def IlluminatedWordText gui=underline
 Highlight group used for references of kind read.
 
 ```vim
-hi def IlluminatedWordRead gui=underline
+hi def IlluminatedWordRead gui=underline cterm=underline
 ```
 
 #### IlluminatedWordWrite
@@ -95,7 +95,7 @@ hi def IlluminatedWordRead gui=underline
 Highlight group used for references of kind write.
 
 ```vim
-hi def IlluminatedWordWrite gui=underline
+hi def IlluminatedWordWrite gui=underline cterm=underline
 ```
 
 # Commands
