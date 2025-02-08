@@ -1,12 +1,13 @@
-local ts_utils = require('nvim-treesitter.ts_utils')
 local locals = require('nvim-treesitter.locals')
 
 local M = {}
 
 local buf_attached = {}
 
+-- get_node is builtin in v0.9+, get_node_at_cursor is for older versions
+local get_node_at_cursor = vim.treesitter.get_node or require('nvim-treesitter.ts_utils').get_node_at_cursor
 function M.get_references(bufnr)
-    local node_at_point = ts_utils.get_node_at_cursor()
+    local node_at_point = get_node_at_cursor()
     if not node_at_point then
         return
     end

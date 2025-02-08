@@ -10,16 +10,19 @@ let g:loaded_illuminate = 1
 
 if has('nvim-0.7.2') && get(g:, 'Illuminate_useDeprecated', 0) != 1
 lua << EOF
-    local ok, ts = pcall(require, 'nvim-treesitter')
-    if ok then
-        ts.define_modules({
-            illuminate = {
-                module_path = 'illuminate.providers.treesitter',
-                enable = true,
-                disable = {},
-                is_supported = require('nvim-treesitter.query').has_locals,
-            }
-        })
+    if vim.fn.has('nvim-0.9') == 0 then
+        -- fallback to nvim-treesitter modules
+        local ok, ts = pcall(require, 'nvim-treesitter')
+        if ok then
+            ts.define_modules({
+                illuminate = {
+                    module_path = 'illuminate.providers.treesitter',
+                    enable = true,
+                    disable = {},
+                    is_supported = require('nvim-treesitter.query').has_locals,
+                }
+            })
+        end
     end
     require('illuminate.engine').start()
     vim.api.nvim_create_user_command('IlluminatePause', require('illuminate').pause, { bang = true })
