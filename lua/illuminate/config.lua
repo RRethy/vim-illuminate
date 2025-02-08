@@ -47,8 +47,11 @@ function M.get()
 end
 
 function M.filetype_override(bufnr)
-    local ft = vim.api.nvim_buf_get_option(bufnr, 'filetype')
-    return M.get()['filetype_overrides'] and M.get()['filetype_overrides'][ft] or {}
+    if type(bufnr) == 'number' and vim.api.nvim_buf_is_valid(bufnr) then
+        local ft = vim.api.nvim_buf_get_option(bufnr, 'filetype')
+        return M.get()['filetype_overrides'] and M.get()['filetype_overrides'][ft] or {}
+    end
+    return {}
 end
 
 function M.providers(bufnr)
