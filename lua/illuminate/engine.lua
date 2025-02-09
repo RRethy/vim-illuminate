@@ -137,18 +137,6 @@ function M.refresh_references(bufnr, winid)
     timers[bufnr] = timer
     timer:start(config.delay(bufnr), 17, vim.schedule_wrap(function()
         local ok, err = pcall(function()
-            if frozen_bufs[bufnr] then
-                stop_timer(timer)
-                return
-            end
-
-            if not buf_should_illuminate(bufnr) then
-                hl.buf_clear_references(bufnr)
-                ref.buf_set_references(bufnr, {})
-                stop_timer(timer)
-                return
-            end
-
             if not bufnr or not vim.api.nvim_buf_is_loaded(bufnr) then
                 stop_timer(timer)
                 return
@@ -156,6 +144,11 @@ function M.refresh_references(bufnr, winid)
 
             hl.buf_clear_references(bufnr)
             ref.buf_set_references(bufnr, {})
+
+            if not buf_should_illuminate(bufnr) then
+                stop_timer(timer)
+                return
+            end
 
             if vim.api.nvim_buf_get_changedtick(bufnr) ~= changedtick
                 or vim.api.nvim_get_current_win() ~= winid
