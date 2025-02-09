@@ -2,7 +2,7 @@
 
 Neovim plugin for automatically highlighting other uses of the word under the cursor using either LSP, Tree-sitter, or regex matching.
 
-![gif](https://media.giphy.com/media/mSG0nwAHDt3Fl7WyoL/giphy.gif)
+https://github.com/user-attachments/assets/7a34a2e0-7177-4c03-8085-5488224ff020
 
 # Quickstart
 
