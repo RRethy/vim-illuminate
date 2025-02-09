@@ -56,9 +56,18 @@ function M.start()
     if vim.fn.has('nvim-0.9') == 1 then
         vim.api.nvim_create_autocmd({ 'FileType' }, {
             callback = function(details)
-                if not vim.treesitter.language.get_lang(details.match) then
+                require('illuminate.providers.treesitter').detach(details.buf)
+
+                local lang = vim.treesitter.language.get_lang(details.match)
+                local ok, parsers = pcall(require, 'nvim-treesitter.parsers')
+                if not ok then
                     return
                 end
+
+                if not lang or not parsers.has_parser(lang) then
+                    return
+                end
+
                 require('illuminate.providers.treesitter').attach(details.buf)
             end,
         })
