@@ -59,12 +59,12 @@ function M.start()
                 require('illuminate.providers.treesitter').detach(details.buf)
 
                 local lang = vim.treesitter.language.get_lang(details.match)
-                local ok, parsers = pcall(require, 'nvim-treesitter.parsers')
+                local ok, query = pcall(require, 'nvim-treesitter.query')
                 if not ok then
                     return
                 end
 
-                if not lang or not parsers.has_parser(lang) then
+                if not lang or not query.has_locals(lang) then
                     return
                 end
 
