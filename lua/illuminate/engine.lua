@@ -64,6 +64,16 @@ function M.start()
                     return
                 end
 
+                local parsers
+                ok, parsers = pcall(require, 'nvim-treesitter.parsers')
+                if not ok then
+                    return
+                end
+
+                if not parsers.has_parser(lang) then
+                    return false
+                end
+
                 if not lang or not query.has_locals(lang) then
                     return
                 end
