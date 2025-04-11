@@ -7,6 +7,10 @@ local function _str_byteindex_enc(line, col, encoding)
         encoding = 'utf-16'
     end
 
+    if vim.fn.has('nvim-0.11') == 1 then
+        return vim.str_byteindx(line, encoding, col, false)
+    end
+
     if encoding == 'utf-8' then
         if col then
             return col
