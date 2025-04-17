@@ -56,8 +56,9 @@ function M.is_ready(bufnr)
     if vim.lsp.get_clients then
         supported = false
         for _, client in ipairs(vim.lsp.get_clients({ bufnr = bufnr })) do
-            if client and client:supports_method('textDocument/documentHighlight') then
-                supported = true
+            if client then
+                supported = vim.fn.has('nvim-0.11') == 1 and client:supports_method('textDocument/documentHighlight')
+                    or vim.fn.has('nvim-0.11') == 0 and client.supports_method('textDocument/documentHighlight')
             end
         end
         -- For older versions
