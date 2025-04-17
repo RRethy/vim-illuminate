@@ -59,6 +59,9 @@ function M.is_ready(bufnr)
             if client then
                 supported = vim.fn.has('nvim-0.11') == 1 and client:supports_method('textDocument/documentHighlight')
                     or vim.fn.has('nvim-0.11') == 0 and client.supports_method('textDocument/documentHighlight')
+                if supported then
+                    break
+                end
             end
         end
         -- For older versions
