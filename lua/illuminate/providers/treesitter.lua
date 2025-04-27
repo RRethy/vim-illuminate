@@ -29,7 +29,7 @@ function M.get_references(bufnr)
 
     local usages = locals.find_usages(def_node, scope, bufnr)
     for _, node in ipairs(usages) do
-        if node ~= def_node then
+        if node ~= def_node or node == node_at_point then
             local range = { node:range() }
             table.insert(refs, {
                 { range[1], range[2] },
