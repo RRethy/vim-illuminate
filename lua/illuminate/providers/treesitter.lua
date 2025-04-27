@@ -16,20 +16,17 @@ function M.get_references(bufnr)
     end
 
     local refs = {}
-
-    local def_node, scope = locals.find_definition(node_at_point, bufnr)
-    if def_node ~= node_at_point then
-        local range = { def_node:range() }
-        table.insert(refs, {
-            { range[1], range[2] },
-            { range[3], range[4] },
-            vim.lsp.protocol.DocumentHighlightKind.Write,
-        })
-    end
-
+    local def_node, scope, kind = locals.find_definition(node_at_point, bufnr)
     local usages = locals.find_usages(def_node, scope, bufnr)
     for _, node in ipairs(usages) do
-        if node ~= def_node or node == node_at_point then
+        if node == def_node then
+            local range = { def_node:range() }
+            table.insert(refs, {
+                { range[1], range[2] },
+                { range[3], range[4] },
+                vim.lsp.protocol.DocumentHighlightKind.Write,
+            })
+        else
             local range = { node:range() }
             table.insert(refs, {
                 { range[1], range[2] },
