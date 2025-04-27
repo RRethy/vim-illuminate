@@ -29,12 +29,14 @@ function M.get_references(bufnr)
 
     local usages = locals.find_usages(def_node, scope, bufnr)
     for _, node in ipairs(usages) do
-        local range = { node:range() }
-        table.insert(refs, {
-            { range[1], range[2] },
-            { range[3], range[4] },
-            vim.lsp.protocol.DocumentHighlightKind.Read,
-        })
+        if node ~= def_node then
+            local range = { node:range() }
+            table.insert(refs, {
+                { range[1], range[2] },
+                { range[3], range[4] },
+                vim.lsp.protocol.DocumentHighlightKind.Read,
+            })
+        end
     end
 
     return refs
