@@ -19,7 +19,7 @@ function M.get_references(bufnr)
     local def_node, scope, kind = locals.find_definition(node_at_point, bufnr)
     local usages = locals.find_usages(def_node, scope, bufnr)
     for _, node in ipairs(usages) do
-        if node == def_node then
+        if kind ~= nil and node == def_node then
             local range = { def_node:range() }
             table.insert(refs, {
                 { range[1], range[2] },
