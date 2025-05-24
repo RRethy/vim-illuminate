@@ -32,7 +32,7 @@ function M.buf_highlight_references(bufnr, references)
 end
 
 function M.range(bufnr, start, finish, kind)
-    if vim.region == nil then
+    if vim.fn.has('nvim-0.11') == 1 then
         local start_l, start_col = unpack(start)
         local finish_l, finish_col = unpack(finish)
         start = { bufnr, start_l + 1, start_col + 1 }
