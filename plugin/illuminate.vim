@@ -56,6 +56,10 @@ augroup vim_illuminate_autocmds
 augroup END
 
 finish
+else
+  command! -nargs=0 -bang IlluminateDisable call illuminate#disable_illumination(<bang>0)
+  command! -nargs=0 -bang IlluminateEnable call illuminate#enable_illumination(<bang>0)
+  command! -nargs=0 -bang IlluminateToggle call illuminate#toggle_illumination(<bang>0)
 end
 
 " Highlight group(s) {{{
@@ -84,10 +88,5 @@ else
 endif
 " }}}
 
-" Commands {{{
-command! -nargs=0 -bang IlluminationDisable call illuminate#disable_illumination(<bang>0)
-command! -nargs=0 -bang IlluminationEnable call illuminate#enable_illumination(<bang>0)
-command! -nargs=0 -bang IlluminationToggle call illuminate#toggle_illumination(<bang>0)
-" }}} Commands:
 
 " vim: foldlevel=1 foldmethod=marker
