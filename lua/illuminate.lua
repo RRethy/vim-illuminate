@@ -114,7 +114,7 @@ end
 
 function M.on_attach(client)
     M.stop_buf()
-    if client and not client.supports_method('textDocument/documentHighlight') then
+    if client and not client:supports_method('textDocument/documentHighlight') then
         return
     end
     pcall(vim.api.nvim_command, 'IlluminationDisable!')
@@ -142,7 +142,7 @@ function M.on_cursor_moved(bufnr)
     if vim.lsp.get_clients then
         supported = false
         for _, client in ipairs(vim.lsp.get_clients({bufnr = bufnr})) do
-            if client and client.supports_method('textDocument/documentHighlight') then
+            if client and client:supports_method('textDocument/documentHighlight') then
                 supported = true
             end
         end
@@ -150,7 +150,7 @@ function M.on_cursor_moved(bufnr)
     elseif vim.lsp.for_each_buffer_client then
         supported = false
         vim.lsp.for_each_buffer_client(bufnr, function(client)
-            if client.supports_method('textDocument/documentHighlight') then
+            if client:supports_method('textDocument/documentHighlight') then
                 supported = true
             end
         end)
