@@ -6,7 +6,14 @@ local M = {}
 
 local HL_NAMESPACE = vim.api.nvim_create_namespace('illuminate.highlight')
 
-local function kind_to_hl_group(kind)
+local function kind_to_hl_group(kind, is_under_cursor)
+    if is_under_cursor then
+        return kind == vim.lsp.protocol.DocumentHighlightKind.Text and 'IlluminatedWordCursor'
+            or kind == vim.lsp.protocol.DocumentHighlightKind.Read and 'IlluminatedWordCursorRead'
+            or kind == vim.lsp.protocol.DocumentHighlightKind.Write and 'IlluminatedWordCursorWrite'
+            or 'IlluminatedWordCursor'
+    end
+    
     return kind == vim.lsp.protocol.DocumentHighlightKind.Text and 'IlluminatedWordText'
         or kind == vim.lsp.protocol.DocumentHighlightKind.Read and 'IlluminatedWordRead'
         or kind == vim.lsp.protocol.DocumentHighlightKind.Write and 'IlluminatedWordWrite'
@@ -20,18 +27,20 @@ function M.buf_highlight_references(bufnr, references)
 
     local cursor_pos = util.get_cursor_pos()
     for _, reference in ipairs(references) do
-        if config.under_cursor(bufnr) or not ref.is_pos_in_ref(cursor_pos, reference) then
+        local is_under_cursor = ref.is_pos_in_ref(cursor_pos, reference)
+        if config.under_cursor(bufnr) or not is_under_cursor then
             M.range(
                 bufnr,
                 reference[1],
                 reference[2],
-                reference[3]
+                reference[3],
+                is_under_cursor
             )
         end
     end
 end
 
-function M.range(bufnr, start, finish, kind)
+function M.range(bufnr, start, finish, kind, is_under_cursor)
     if vim.fn.has('nvim-0.11') == 1 then
         local start_l, start_col = unpack(start)
         local finish_l, finish_col = unpack(finish)
@@ -43,7 +52,7 @@ function M.range(bufnr, start, finish, kind)
         for _, segment in ipairs(region) do
             local start_pos, finish_pos = unpack(segment)
             vim.api.nvim_buf_set_extmark(bufnr, HL_NAMESPACE, start_pos[2] - 1, start_pos[3] - 1, {
-                hl_group = kind_to_hl_group(kind),
+                hl_group = kind_to_hl_group(kind, is_under_cursor),
                 end_col = finish_pos[3],
                 priority = 199,
                 strict = false,
@@ -61,7 +70,7 @@ function M.range(bufnr, start, finish, kind)
                 cols[2] = 0
             end
             vim.api.nvim_buf_set_extmark(bufnr, HL_NAMESPACE, linenr, cols[1], {
-                hl_group = kind_to_hl_group(kind),
+                hl_group = kind_to_hl_group(kind, is_under_cursor),
                 end_row = end_row,
                 end_col = cols[2],
                 priority = 199,

@@ -1,4 +1,4 @@
-*illuminate.txt*           For NVIM v0.8.0          Last change: 2023 March 19
+*illuminate.txt*           For NVIM v0.8.0          Last change: 2025 December 27
 
 ==============================================================================
 Table of Contents                               *illuminate-table-of-contents*
@@ -111,6 +111,42 @@ Highlight group used for references of kind write.
 
 >vim
     hi def IlluminatedWordWrite gui=underline
+<
+
+
+ILLUMINATEDWORDCURSOR                                    *IlluminatedWordCursor*
+
+Highlight group used for references under the cursor (Text kind). By default,
+links to IlluminatedWordText.
+
+>vim
+    hi def link IlluminatedWordCursor IlluminatedWordText
+<
+
+To customize:
+
+>lua
+    vim.api.nvim_set_hl(0, 'IlluminatedWordCursor', { bg = '#4a4a4a', bold = true })
+<
+
+
+ILLUMINATEDWORDCURSORREAD                            *IlluminatedWordCursorRead*
+
+Highlight group used for references under the cursor (Read kind). By default,
+links to IlluminatedWordRead.
+
+>vim
+    hi def link IlluminatedWordCursorRead IlluminatedWordRead
+<
+
+
+ILLUMINATEDWORDCURSORWRITE                          *IlluminatedWordCursorWrite*
+
+Highlight group used for references under the cursor (Write kind). By default,
+links to IlluminatedWordWrite.
+
+>vim
+    hi def link IlluminatedWordCursorWrite IlluminatedWordWrite
 <
 
 

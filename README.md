@@ -100,6 +100,36 @@ Highlight group used for references of kind write.
 hi def IlluminatedWordWrite gui=underline cterm=underline
 ```
 
+#### IlluminatedWordCursor
+
+Highlight group used for references under the cursor (Text kind). By default, links to IlluminatedWordText.
+
+```vim
+hi def link IlluminatedWordCursor IlluminatedWordText
+```
+
+To customize:
+
+```lua
+vim.api.nvim_set_hl(0, 'IlluminatedWordCursor', { bg = '#4a4a4a', bold = true })
+```
+
+#### IlluminatedWordCursorRead
+
+Highlight group used for references under the cursor (Read kind). By default, links to IlluminatedWordRead.
+
+```vim
+hi def link IlluminatedWordCursorRead IlluminatedWordRead
+```
+
+#### IlluminatedWordCursorWrite
+
+Highlight group used for references under the cursor (Write kind). By default, links to IlluminatedWordWrite.
+
+```vim
+hi def link IlluminatedWordCursorWrite IlluminatedWordWrite
+```
+
 # Commands
 
 #### :IlluminatePause
