@@ -6,7 +6,7 @@ https://github.com/user-attachments/assets/fc1487cf-aa19-4238-af23-ab1ac2f5744a
 
 # Quickstart
 
-Just install the plugin and things will work *just work*, no configuration needed.
+Just install this plugin along with [nvim-treesitter-locals](https://github.com/nvim-treesitter/nvim-treesitter-locals) and things will work *just work*, no configuration needed.
 
 You'll also get `<a-n>` and `<a-p>` as keymaps to move between references and `<a-i>` as a textobject for the reference illuminated under the cursor.
 

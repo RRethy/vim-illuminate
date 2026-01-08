@@ -13,7 +13,7 @@ lua << EOF
     if vim.fn.has('nvim-0.9') == 0 then
         -- fallback to nvim-treesitter modules
         local ok, ts = pcall(require, 'nvim-treesitter')
-        if ok then
+        if ok and ts.define_modules then
             ts.define_modules({
                 illuminate = {
                     module_path = 'illuminate.providers.treesitter',

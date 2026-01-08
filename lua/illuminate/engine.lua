@@ -59,22 +59,17 @@ function M.start()
                 require('illuminate.providers.treesitter').detach(details.buf)
 
                 local lang = vim.treesitter.language.get_lang(details.match)
-                local ok, query = pcall(require, 'nvim-treesitter.query')
-                if not ok then
+                if not lang then
                     return
                 end
 
-                local parsers
-                ok, parsers = pcall(require, 'nvim-treesitter.parsers')
-                if not ok then
+                local ok, parser = pcall(vim.treesitter.get_parser, details.buf, lang, { error = false })
+                if not ok or not parser then
                     return
                 end
 
-                if not parsers.has_parser(lang) then
-                    return false
-                end
-
-                if not lang or not query.has_locals(lang) then
+                local locals = vim.api.nvim_get_runtime_file(string.format('queries/%s/locals.scm', lang), false)
+                if #locals == 0 then
                     return
                 end
 
@@ -200,7 +195,7 @@ function M.refresh_references(bufnr, winid)
             local time = vim.loop.hrtime()
             if #error_timestamps == 5 then
                 vim.notify(
-                    'vim-illuminate: An internal error has occured: ' .. vim.inspect(ok) .. vim.inspect(err),
+                    'vim-illuminate: An internal error has occured: ' .. vim.inspect(err),
                     vim.log.levels.ERROR,
                     {}
                 )
