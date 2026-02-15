@@ -63,13 +63,11 @@ function M.start()
                     return
                 end
 
-                local ok, parser = pcall(vim.treesitter.get_parser, details.buf, lang, { error = false })
-                if not ok or not parser then
+                if not vim.treesitter.language.add(lang) then
                     return
                 end
 
-                local locals = vim.api.nvim_get_runtime_file(string.format('queries/%s/locals.scm', lang), false)
-                if #locals == 0 then
+                if not vim.treesitter.query.get(lang, 'locals') then
                     return
                 end
 
