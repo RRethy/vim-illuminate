@@ -70,7 +70,7 @@ function M.start()
                     return
                 end
 
-                if not parsers.has_parser(lang) then
+                if not parsers[lang] then
                     return false
                 end
 
