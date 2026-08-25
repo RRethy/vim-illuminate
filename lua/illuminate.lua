@@ -315,6 +315,9 @@ function M.set_highlight_defaults()
     hi def IlluminatedWordText guifg=none guibg=none gui=underline
     hi def IlluminatedWordRead guifg=none guibg=none gui=underline
     hi def IlluminatedWordWrite guifg=none guibg=none gui=underline
+    hi def link IlluminatedWordCursor IlluminatedWordText
+    hi def link IlluminatedWordCursorRead IlluminatedWordRead
+    hi def link IlluminatedWordCursorWrite IlluminatedWordWrite
     ]]
 end
 
