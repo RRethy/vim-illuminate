@@ -230,6 +230,23 @@ end
 
 function M.configure(config)
     require('illuminate.config').set(config)
+
+    if not require('illuminate.config').disable_keymaps() then
+        if not require('illuminate.util').has_keymap('n', '<a-n>') then
+            vim.keymap.set('n', '<a-n>', require('illuminate').goto_next_reference,
+                                                { desc = "Move to next reference" })
+        end
+        if not require('illuminate.util').has_keymap('n', '<a-p>') then
+            vim.keymap.set('n', '<a-p>', require('illuminate').goto_prev_reference,
+                                            { desc = "Move to previous reference" })
+        end
+        if not require('illuminate.util').has_keymap('o', '<a-i>') then
+            vim.keymap.set('o', '<a-i>', require('illuminate').textobj_select)
+        end
+        if not require('illuminate.util').has_keymap('x', '<a-i>') then
+            vim.keymap.set('x', '<a-i>', require('illuminate').textobj_select)
+        end
+    end
 end
 
 function M.pause()
