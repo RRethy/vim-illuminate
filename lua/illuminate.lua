@@ -4,6 +4,14 @@ local timers = {}
 local references = {}
 local paused_bufs = {}
 
+local function client_supports_method(client, method)
+    if vim.fn.has('nvim-0.11') == 1 then
+        return client:supports_method(method)
+    else
+        return client.supports_method(method)
+    end
+end
+
 -- returns r1 < r2 based on start of range
 local function before_by_start(r1, r2)
     if r1['start'].line < r2['start'].line then return true end
@@ -114,7 +122,7 @@ end
 
 function M.on_attach(client)
     M.stop_buf()
-    if client and not client.supports_method('textDocument/documentHighlight') then
+    if client and not client_supports_method(client, 'textDocument/documentHighlight') then
         return
     end
     pcall(vim.api.nvim_command, 'IlluminationDisable!')
@@ -142,15 +150,16 @@ function M.on_cursor_moved(bufnr)
     if vim.lsp.get_clients then
         supported = false
         for _, client in ipairs(vim.lsp.get_clients({bufnr = bufnr})) do
-            if client and client.supports_method('textDocument/documentHighlight') then
+            if client and client_supports_method(client, 'textDocument/documentHighlight') then
                 supported = true
+                break
             end
         end
     -- For older versions
     elseif vim.lsp.for_each_buffer_client then
         supported = false
         vim.lsp.for_each_buffer_client(bufnr, function(client)
-            if client.supports_method('textDocument/documentHighlight') then
+            if client_supports_method(client, 'textDocument/documentHighlight') then
                 supported = true
             end
         end)
