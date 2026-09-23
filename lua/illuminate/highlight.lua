@@ -4,12 +4,14 @@ local ref = require('illuminate.reference')
 
 local M = {}
 
+local CURWORD = "CURWORD"
 local HL_NAMESPACE = vim.api.nvim_create_namespace('illuminate.highlight')
 
 local function kind_to_hl_group(kind)
     return kind == vim.lsp.protocol.DocumentHighlightKind.Text and 'IlluminatedWordText'
         or kind == vim.lsp.protocol.DocumentHighlightKind.Read and 'IlluminatedWordRead'
         or kind == vim.lsp.protocol.DocumentHighlightKind.Write and 'IlluminatedWordWrite'
+        or kind == CURWORD and 'IlluminatedCurWord'
         or 'IlluminatedWordText'
 end
 
@@ -20,14 +22,19 @@ function M.buf_highlight_references(bufnr, references)
 
     local cursor_pos = util.get_cursor_pos()
     for _, reference in ipairs(references) do
-        if config.under_cursor(bufnr) or not ref.is_pos_in_ref(cursor_pos, reference) then
-            M.range(
-                bufnr,
-                reference[1],
-                reference[2],
-                reference[3]
-            )
+        local pos_in_ref = ref.is_pos_in_ref(cursor_pos, reference)
+        local kind = pos_in_ref and CURWORD or reference[3]
+        if config.under_cursor(bufnr) or not pos_in_ref then
+            M.range(bufnr, reference[1], reference[2], kind)
         end
+        -- if config.under_cursor(bufnr) or not ref.is_pos_in_ref(cursor_pos, reference) then
+        --     M.range(
+        --         bufnr,
+        --         reference[1],
+        --         reference[2],
+        --         reference[3]
+        --     )
+        -- end
     end
 end
 
