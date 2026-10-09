@@ -267,6 +267,14 @@ word under the cursor, use the following:
     let g:Illuminate_highlightUnderCursor = 0
 <
 
+Illuminate matches case-sensitively unless 'ignorecase' is set. To always
+ignore case, use the following:
+
+>vim
+    " Ignore case when matching (default: 0)
+    let g:Illuminate_caseInsensitiveRegex = 1
+<
+
 By default illuminate will highlight all words the cursor passes over, but for
 many languages, you will only want to highlight certain highlight-groups. You
 can determine the highlight-group of a symbol under your cursor with `:echo

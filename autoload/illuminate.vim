@@ -8,6 +8,7 @@ let s:enabled = 1
 let g:Illuminate_delay = get(g:, 'Illuminate_delay', 0)
 let g:Illuminate_highlightUnderCursor = get(g:, 'Illuminate_highlightUnderCursor', 1)
 let g:Illuminate_highlightPriority = get(g:, 'Illuminate_highlightPriority', -1)
+let g:Illuminate_caseInsensitiveRegex = get(g:, 'Illuminate_caseInsensitiveRegex', 0)
 
 fun! illuminate#on_cursor_moved() abort
   if !s:should_illuminate_file()
@@ -106,7 +107,8 @@ fun! s:illuminate(...) abort
 endf
 
 fun! s:match_word(word) abort
-  if (a:word ==# '\<\>')
+  " Empty word, possibly with a trailing \c
+  if (stridx(a:word, '\<\>') == 0)
     return
   endif
   if g:Illuminate_highlightUnderCursor
@@ -128,7 +130,7 @@ fun! s:get_cur_word() abort
   let right_part = strpart(line, col, col('$'))
   let word = matchstr(left_part, '\k*$') . matchstr(right_part, '^\k*')[1:]
 
-  return '\<' . escape(word, '/\') . '\>'
+  return '\<' . escape(word, '/\') . '\>' . (g:Illuminate_caseInsensitiveRegex ? '\c' : '')
 endf
 
 fun! s:remove_illumination() abort
